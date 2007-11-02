@@ -1,8 +1,8 @@
-.TH git-amb 1 "ndim-git-utils 0.0.0" "2007-11-02" "ndim's git utils"
+.TH git\-amb 1 "@PACKAGE_TARNAME@ @PACKAGE_VERSION@" "2007\-11\-02" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
 .SH NAME
-git-amb - git automake build utitilty
+git-amb \- git automake build utitilty
 .SH SYNOPSIS
-.BI git-amb command params
+.BI git\-amb command params
 .SH DESCRIPTION
 Build automake based git checkout in branch specific build and install trees.
 That makes it easy to compare build results from different branches.
@@ -39,5 +39,5 @@ Print ${builddir}.
 Print ${installdir}.
 .SH AUTHORS
 .nf
-Hans Ulrich Niedermann   \fIhun@n-dimensional.de\fP
+Hans Ulrich Niedermann   \fIhun@n\-dimensional.de\fP
 .fi
