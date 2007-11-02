@@ -1,0 +1,4 @@
+ $ autoreconf -vis .
+ $ ./configure --prefix=/what/ever
+ $ make
+ $ make install
