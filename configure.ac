@@ -1,6 +1,6 @@
 AC_PREREQ(2.61)
 AC_INIT([ndims git utilities],
-	[1.1.1],
+	[1.2],
 	[hun@n-dimensional.de],
 	[ndim-git-utils])
 AC_CONFIG_SRCDIR([src/git-amb.1.in])
