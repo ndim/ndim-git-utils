@@ -37,6 +37,11 @@ Print ${builddir}.
 .TP 13
 .B installdir
 Print ${installdir}.
+.SH CONFIGURATION
+.SS amb.builddir
+Relative to top checkout dir, or absolute.
+.SS amb.installdir
+Relative to top checkout dir, or absolute.
 .SH AUTHORS
 .nf
 Hans Ulrich Niedermann   \fIhun@n\-dimensional.de\fP
