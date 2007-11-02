@@ -1,0 +1,43 @@
+.TH git-amb 1 "ndim-git-utils 0.0.0" "2007-11-02" "ndim's git utils"
+.SH NAME
+git-amb - git automake build utitilty
+.SH SYNOPSIS
+.BI git-amb command params
+.SH DESCRIPTION
+Build automake based git checkout in branch specific build and install trees.
+That makes it easy to compare build results from different branches.
+The params are passed to the respective command called.
+.TP 13
+.B autoreconf
+Run autoreconf on ${top_srcdir}.
+.TP 13
+.B configure
+Run configure in ${top_builddir}.
+.TP 13
+.B make
+Run make in ${top_builddir}.
+.TP 13
+.B sh
+Start shell in ${top_builddir}.
+.TP 13
+.B clean
+Run 'make clean' in ${top_builddir}.
+.TP 13
+.B distclean
+Run 'make distclean' in ${top_builddir}.
+.TP 13
+.B purge
+Remove both build and install tree.
+.TP 13
+.B uninstall
+Remove ${installdir}.
+.TP 13
+.B builddir
+Print ${builddir}.
+.TP 13
+.B installdir
+Print ${installdir}.
+.SH AUTHORS
+.nf
+Hans Ulrich Niedermann   \fIhun@n-dimensional.de\fP
+.fi

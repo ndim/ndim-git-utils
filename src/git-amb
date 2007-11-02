@@ -1,0 +1,208 @@
+#!/bin/sh
+# git-amb - git automake build utility
+# Build automake based git checkout in branch specific build and install trees.
+# That makes it easy to compare build results from different branches.
+#
+# Copyright (C) 2007 Hans Ulrich Niedermann <hun@n-dimensional.de>
+#
+
+USAGE="<command> [params...]"
+
+LONG_USAGE="\
+Build automake based git checkout in branch specific build and install trees.
+
+Commands:
+  autoreconf  Run autoreconf on \${top_srcdir}.
+  configure   Run configure in \${top_builddir}.
+  make        Run make in \${top_builddir}.
+  sh          Start shell in \${top_builddir}.
+  clean       Run 'make clean' in \${top_builddir}.
+  distclean   Run 'make distclean' in \${top_builddir}.
+  purge       Remove both build and install tree.
+  uninstall   Remove \${installdir}.
+  builddir    Print \${builddir}.
+  installdir  Print \${installdir}.
+
+The params are passed to the respective command called.
+"
+. git-sh-setup
+
+require_work_tree
+
+self="$(basename "$0")"
+
+amb_detect_configure() {
+    for configure_ac in \
+	"${top_srcdir}/configure.ac" \
+	"${top_srcdir}/configure.in"
+    do
+	if test -s "${configure_ac}"; then
+	    break
+	fi
+	configure_ac=""
+    done
+    test -z "${configure_ac}" && die "configure.{ac,in} not found"
+    configure="$top_srcdir/configure"
+    test -x "$configure"
+}
+
+cond_cat_path() {
+    path="."
+    for dir
+    do
+	if echo "$dir" | grep '^/' > /dev/null; then
+	    path="$dir"
+	else
+	    path="$path/$dir"
+	fi
+    done
+    echo "$path"
+}
+
+amb_init() {
+    git_branch="$(git branch | sed -n 's/^* //p')"
+    test "x.git" = "x$(basename "$GIT_DIR")"
+    top_srcdir="$(cd_to_toplevel && pwd)"
+
+    tmp="$(git config amb.builddir)" || tmp="$GIT_DIR/amb/build"
+    top_builddir="$(cond_cat_path "${top_srcdir}" "$tmp" "${git_branch}")"
+
+    tmp="$(git config amb.installdir)" || tmp="$GIT_DIR/amb/install"
+    top_installdir="$(cond_cat_path "${top_srcdir}" "$tmp" "$git_branch")"
+
+    amb_detect_configure
+}
+
+amb_autoreconf() {
+    echo "$self: Running autoreconf for branch ${git_branch}"
+    autoreconf -vis "$@" "$top_srcdir"
+}
+
+amb_cond_autoreconf() {
+    if test ! -s "$configure" || test "$configure_ac" -nt "$configure"; then
+	    amb_autoreconf
+    fi
+}
+
+amb_configure() {
+    amb_cond_autoreconf
+    echo "$self: Running configure for branch ${git_branch}"
+    mkdir -p "$top_builddir"
+    cd "$top_builddir"
+    "$top_srcdir/configure" --prefix="$top_installdir" --enable-maintainer-mode "$@"
+}
+
+amb_cond_configure() {
+    test -s "$top_builddir/Makefile" || amb_configure
+}
+
+amb_make() {
+    amb_cond_configure
+    echo "$self: Running make for branch ${git_branch}"
+    cd "$top_builddir"
+    make "$@"
+}
+
+amb_printvars() {
+    echo "$self: Settings for branch ${git_branch}"
+    echo "$self:  source dir $top_srcdir"
+    echo "$self:   build dir $top_builddir"
+    echo "$self: install dir $top_installdir"
+}
+
+amb_purge() {
+    echo "$self: Purging branch ${git_branch} build and install"
+    echo "$self: Purging $top_builddir..."
+    rm -rf "$top_builddir"
+    echo "$self: Purging $top_installdir..."
+    rm -rf "$top_installdir"
+    echo "$self: Finished."
+}
+
+amb_uninstall() {
+    echo "$self: Uninstalling branch ${git_branch}"
+    echo "$self: Purging $top_builddir..."
+    rm -rf "$top_installdir"
+    echo "$self: Finished."
+}
+
+amb_shell() {
+    if test -d "$top_builddir"; then :; else
+	die "Build directory does not exist yet: ${top_builddir}"
+    fi
+    echo "$self: Starting shell for branch ${git_branch}"
+    export git_amb_srcdir="top_srcdir"
+    export git_amb_builddir="top_builddir"
+    export git_amb_installdir="top_installdir"
+    amb_printvars
+    export PS1="\
+[Ctrl-D or 'exit' to quit $self shell for branch ${git_branch}]\n\
+[<$self> \w]\n\
+[<$(echo "$self" | sed 's/./-/g')> \u@\h \W]\$ \
+"
+    cd "$top_builddir" && ${SHELL} "$@"
+}
+
+# Abort on error
+set -e
+
+# The great command case
+command="$1"
+if shift; then
+    case "$command" in
+	builddir)
+	    amb_init
+	    echo "$top_builddir"
+	    ;;
+	installdir)
+	    amb_init
+	    echo "$top_installdir"
+	    ;;
+	autoreconf)
+	    amb_init
+	    amb_autoreconf "$@"
+	    amb_printvars
+	    ;;
+	configure)
+	    amb_init
+	    amb_configure "$@"
+	    amb_printvars
+	    ;;
+	make)
+	    amb_init
+	    amb_make "$@"
+	    amb_printvars
+	    ;;
+	clean)
+	    amb_init
+	    amb_make "$@" clean
+	    amb_printvars
+	    ;;
+	distclean)
+	    amb_init
+	    amb_make "$@" distclean
+	    amb_printvars
+	    ;;
+	purge)
+	    amb_init
+	    amb_purge "$@"
+	    ;;
+	uninstall)
+	    amb_init
+	    amb_uninstall "$@"
+	    ;;
+	sh)
+	    amb_init
+	    amb_shell "$@"
+	    amb_printvars
+	    ;;
+	*)
+	    die "Invalid command line parameter: \"$command\""
+	    ;;
+    esac
+else
+    amb_init
+    amb_printvars
+fi
+
+# End of file.
