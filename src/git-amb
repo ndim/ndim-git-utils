@@ -46,7 +46,6 @@ amb_detect_configure() {
     done
     test -z "${configure_ac}" && die "configure.{ac,in} not found"
     configure="$top_srcdir/configure"
-    test -x "$configure"
 }
 
 cond_cat_path() {
@@ -70,7 +69,7 @@ amb_init() {
     else
 	die "Invalid branch \"$1\" given."
     fi
-    test "x.git" = "x$(basename "$GIT_DIR")"
+    test "x.git" = "x$(basename "$GIT_DIR")" || die "GIT_DIR=$GIT_DIR is not foo/.git"
     top_srcdir="$(cd_to_toplevel && pwd)"
 
     tmp="$(git-config amb.builddir)" || tmp="$GIT_DIR/amb/build"
