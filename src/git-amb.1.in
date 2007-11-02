@@ -75,6 +75,20 @@ The branch name will be appended to it.
   $ git-amb sh
   <----> [...] $ ls *.tar.gz
 .fi
+.SH "TODO"
+.TP
+.B "Access to build results"
+Could be better.
+.TP
+.B "User Interface"
+Should be more consistent, smaller.
+.TP
+.B "Concurrent Usage"
+Exhibits problems, e.g. starting
+.B "git\-amb sh"
+and then running
+.B "git checkout other\-branch"
+from another terminal.
 .SH AUTHORS
 .B "git\-amb"
 was written by Hans Ulrich Niedermann.

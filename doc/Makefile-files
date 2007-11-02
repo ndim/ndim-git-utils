@@ -1,0 +1,2 @@
+# -*- Makefile -*-
+EXTRA_DIST += doc/ndim-git-cheatsheet.txt

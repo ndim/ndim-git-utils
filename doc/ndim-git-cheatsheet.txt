@@ -1,0 +1,44 @@
+Set up colorful output:
+  $ git config --global color.diff auto
+  $ git config --global color.status=auto
+  $ git config --global color.branch=auto
+
+How *NOT* to update from upstream (unless you want merge commits):
+  $ git pull
+
+How to update from upstream:
+  $ git fetch
+  $ git rebase origin
+
+How do local master and upstream differ?
+  $ git diff --color origin
+
+How to create patches for submission to upstream:
+  $ git format-patch origin
+
+What happened in the last few commits:
+  $ git log -p --color
+
+What happened in the last N commits:
+  $ git log -p --color -N
+
+What happened in the commit before the last:
+  $ git diff --color HEAD^^ HEAD^
+
+
+Publishing copy of own repo (for upstream to merge from):
+  @local  $ git clone --bare my-dir moo
+  @local  $ rsync -avz moo user@public:dir/moo.git
+  @public $ cd moo
+  @public $ GIT_DIR=. git-update-server-info
+  @public $ vi description
+  @local  $ vi my-dir/.git/config
+  # Add this
+  [remote "public"]
+        url = ssh://user@public/~/moo.git
+        push = ref/heads/*:ref/heads/*
+  @local  $ git push public
+
+In cases when you have removed patches from a branch (breaks people's merges):
+  @local  $ git push -f public
+

@@ -4,3 +4,8 @@ EXTRA_DIST  += src/git-amb
 
 man_MANS   += src/git-amb.1
 EXTRA_DIST += src/git-amb.1.in
+
+EXTRA_DIST += src/git-amb.txt
+if HAVE_NDIM_MAN2TXT
+UPDATE_SOURCE_FILES += src/git-amb.txt
+endif
