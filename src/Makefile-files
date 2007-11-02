@@ -1,6 +1,7 @@
 # -*- makefile -*-
-bin_SCRIPTS += src/git-amb
-EXTRA_DIST  += src/git-amb
+bin_SCRIPTS  += src/git-amb
+EXTRA_DIST   += src/git-amb
+UPLOAD_FILES += src/git-amb
 
 man_MANS   += src/git-amb.1
 EXTRA_DIST += src/git-amb.1.in
@@ -8,4 +9,5 @@ EXTRA_DIST += src/git-amb.1.in
 if HAVE_NDIM_MAN2TXT
 dist_doc_DATA += src/git-amb.txt
 CLEANFILES    += src/git-amb.txt
+UPLOAD_FILES  += src/git-amb.txt
 endif
