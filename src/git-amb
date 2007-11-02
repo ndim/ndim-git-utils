@@ -23,21 +23,7 @@ USAGE="<command> [params...]"
 
 LONG_USAGE="\
 Build automake based git checkout in branch specific build and install trees.
-
-Commands:
-  autoreconf  Run autoreconf on \${top_srcdir}.
-  configure   Run configure in \${top_builddir}.
-  make        Run make in \${top_builddir}.
-  sh          Start shell in \${top_builddir}.
-  clean       Run 'make clean' in \${top_builddir}.
-  distclean   Run 'make distclean' in \${top_builddir}.
-  purge       Remove both build and install tree.
-  uninstall   Remove \${installdir}.
-  builddir    Print \${builddir}.
-  installdir  Print \${installdir}.
-
-The params are passed to the respective command called.
-"
+For more details, see the git-amb(1) man page."
 . git-sh-setup
 
 require_work_tree
