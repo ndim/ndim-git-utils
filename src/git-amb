@@ -73,14 +73,20 @@ cond_cat_path() {
 }
 
 amb_init() {
-    git_branch="$(git branch | sed -n 's/^* //p')"
+    if test "x$1" = "x"; then
+	git_branch="$(git branch | sed -n 's/^* //p')"
+    elif git branch | sed 's/^[ *] //' | grep "$1" > /dev/null; then
+	git_branch="${1}"
+    else
+	die "Invalid branch \"$1\" given."
+    fi
     test "x.git" = "x$(basename "$GIT_DIR")"
     top_srcdir="$(cd_to_toplevel && pwd)"
 
-    tmp="$(git config amb.builddir)" || tmp="$GIT_DIR/amb/build"
+    tmp="$(git-config amb.builddir)" || tmp="$GIT_DIR/amb/build"
     top_builddir="$(cond_cat_path "${top_srcdir}" "$tmp" "${git_branch}")"
 
-    tmp="$(git config amb.installdir)" || tmp="$GIT_DIR/amb/install"
+    tmp="$(git-config amb.installdir)" || tmp="$GIT_DIR/amb/install"
     top_installdir="$(cond_cat_path "${top_srcdir}" "$tmp" "$git_branch")"
 
     amb_detect_configure
@@ -164,11 +170,11 @@ command="$1"
 if shift; then
     case "$command" in
 	builddir)
-	    amb_init
+	    amb_init "$@"
 	    echo "$top_builddir"
 	    ;;
 	installdir)
-	    amb_init
+	    amb_init "$@"
 	    echo "$top_installdir"
 	    ;;
 	autoreconf)
@@ -187,22 +193,22 @@ if shift; then
 	    amb_printvars
 	    ;;
 	clean)
-	    amb_init
-	    amb_make "$@" clean
+	    amb_init "$@"
+	    amb_make clean
 	    amb_printvars
 	    ;;
 	distclean)
-	    amb_init
-	    amb_make "$@" distclean
+	    amb_init "$@"
+	    amb_make distclean
 	    amb_printvars
 	    ;;
 	purge)
-	    amb_init
-	    amb_purge "$@"
+	    amb_init "$@"
+	    amb_purge
 	    ;;
 	uninstall)
-	    amb_init
-	    amb_uninstall "$@"
+	    amb_init "$@"
+	    amb_uninstall
 	    ;;
 	sh)
 	    amb_init
