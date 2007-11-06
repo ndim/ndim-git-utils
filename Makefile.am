@@ -22,7 +22,7 @@ endif
 
 tag:
 	test -d "$(top_srcdir)/.git"
-	cd "$(top_srcdir)" && git status
+	cd "$(top_srcdir)" && git status;:
 	@echo "Do you really want to tag this as rel-$(PACKAGE_VERSION)? Enter to continue, Ctrl-C to abort."
 	@read
 	cd "$(top_srcdir)" && git tag "rel-$(PACKAGE_VERSION)"
