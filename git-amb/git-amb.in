@@ -24,6 +24,8 @@
 #  - git 1.5.3.4
 unset CDPATH
 
+SED="${SED-sed}"
+
 if test "x$(pwd)" = "x`pwd`" && test "y$(echo "foobar")" = "y`echo foobar`"
 then :;
 else
@@ -65,6 +67,7 @@ case "$1" in
 	;;
 esac
 
+SUBDIRECTORY_OK="yes"
 USAGE="<command> [params...]"
 
 LONG_USAGE="\
@@ -105,13 +108,15 @@ amb_init() {
     # Equivalent bzr code:
     #   bzr log -r -1.. | sed -n 's/^branch nick: //p'
     if test "x$1" = "x"; then
-	git_branch="$(git branch | sed -n 's/^* //p')"
-    elif git branch | sed 's/^[ *] //' | grep "$1" > /dev/null; then
+	# determine currently checked out branch
+	git_branch="$(git-symbolic-ref HEAD | $SED -n 's|^refs/heads/||p')"
+    elif git-rev-parse "$1" > /dev/null 2>&1; then
+	# $1 is valid branch: use it
 	git_branch="${1}"
     else
 	die "Invalid branch \"$1\" given."
     fi
-    test "x.git" = "x$(basename "$GIT_DIR")" || die "GIT_DIR=$GIT_DIR is not foo/.git"
+    test "x$(git-rev-parse --is-inside-work-tree 2> /dev/null)" = "xtrue"
     top_srcdir="$(cd_to_toplevel && pwd)"
 
     tmp="$(git-config amb.builddir)" || tmp="$GIT_DIR/amb/build"
