@@ -1,3 +1,9 @@
+AddDescription "GNU GENERAL PUBLIC LICENSE" COPYING
+AddDescription "General description of ndim-git-utils" README
+AddDescription "The git-amb man page" git-amb.txt
+AddDescription "The git-amb script" git-amb
+AddDescription "ndim's git cheatsheet" ndim-git-cheatsheet.txt
+AddDescription "source tarball distribution" ndim-git-utils-*.tar.bz2
 ReadmeName FOOTER.html
 HeaderName HEADER.html
 IndexIgnore FOOTER.html HEADER.html
