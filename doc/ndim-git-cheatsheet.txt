@@ -25,13 +25,13 @@ What happened in the last N commits:
 What happened in the commit before the last:
   $ git diff --color HEAD^^ HEAD^
 
-
 Publishing copy of own repo (for upstream to merge from):
   @local  $ git clone --bare my-dir moo
   @local  $ rsync -avz moo user@public:dir/moo.git
   @public $ cd moo
   @public $ GIT_DIR=. git-update-server-info
   @public $ vi description
+  @public $ chmod +x hooks/post-update
   @local  $ vi my-dir/.git/config
   # Add this
   [remote "public"]
