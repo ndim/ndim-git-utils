@@ -1,4 +1,10 @@
- $ autoreconf -vis .
- $ ./configure --prefix=/what/ever
- $ make
- $ make install
+If this is a git repository checkout:
+
+  $ autoreconf -vis .
+
+Regardless of whether this is a git repo checkout or an extracted
+source tarball:
+
+  $ ./configure --prefix=/what/ever
+  $ make
+  $ make install

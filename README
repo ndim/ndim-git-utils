@@ -1,7 +1,11 @@
 ========================================================================
 ndim's git utilities - a collection of scripts and docs around git
-Copyright (C) 2007 Hans Ulrich Niedermann
+Copyright (C) 2007 Hans Ulrich Niedermann <hun@n-dimensional.de>
 ========================================================================
+
+
+The utilities in detail
+=======================
 
   git-amb
     Makes building, installing, and testing multiple git branches of
@@ -9,7 +13,17 @@ Copyright (C) 2007 Hans Ulrich Niedermann
     The name stands for "git *a*uto*m*ake *b*uild". For details, see
     git-amb(1) man page.
 
+
+Updates
+=======
+
+  Home page:
+    http://nix.lauft.net/ndim-git-utils.git/
+
+  Git repository:
+    $ git clone http://nix.lauft.net/ndim-git-utils.git/
+
+
 ========================================================================
-ndim's git utilities - a collection of scripts and docs around git
-Copyright (C) 2007 Hans Ulrich Niedermann
+End of README for ndim's git utilities.
 ========================================================================

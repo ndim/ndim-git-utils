@@ -1,4 +1,7 @@
 # -*- makefile -*-
 
 dist_doc_DATA += COPYING
+UPLOAD_FILES  += COPYING
+
 dist_doc_DATA += README
+UPLOAD_FILES  += README
