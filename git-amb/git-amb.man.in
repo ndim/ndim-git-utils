@@ -82,19 +82,33 @@ The branch name will be appended to it.
 Location of installation, relative to top checkout (source) dir, or absolute.
 The branch name will be appended to it.
 .SH EXAMPLES
+Define local build dirs, relative to top source tree dir.
 .nf
   $ git config amb.builddir _builds
   $ git config amb.installdir _installs
 .fi
 .PP
+In the following example, we build two branches and compare their
+resulting installation trees. Please note that
+.I "git\-amb make"
+automatically runs the necessary precursor steps.
 .nf
   $ git checkout master
   $ git\-amb make install
   $ git checkout foo/bar
   $ git\-amb make dist install
   $ diff \-ru $(git\-amb installdir) $(git\-amb installdir master)
+.fi
+.PP
+The following example builds a dist tarball with all the checks and we
+then examine the files in the dist tarball.
+.nf
+  $ git\-amb make distcheck
   $ git\-amb sh
   <\-\-\-\-> [...] $ ls *.tar.gz
+  <\-\-\-\-> [...] $ tar tvfz moo-1.2.3.tar.gz
+  <\-\-\-\-> [...] $ exit
+  $
 .fi
 .SH "BUGS"
 .TP
