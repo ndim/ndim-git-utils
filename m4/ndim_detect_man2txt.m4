@@ -1,4 +1,21 @@
-# serial 1.1
+# serial 1.6.3
+dnl
+dnl NDIM_DETECT_MAN2TXT
+dnl
+dnl Syntax:
+dnl
+dnl   configure.ac:
+dnl     NDIM_DETECT_MAN2TXT()dnl
+dnl
+dnl   Makefile.am:
+dnl     if HAVE_NDIM_MAN2TXT
+dnl     .txt.man:
+dnl          $(NDIM_MAN2TXT) $< > $@
+dnl     endif
+dnl
+dnl Define AM_CONDITIONAL HAVE_NDIM_MAN2TXT.
+dnl If that is true, define NDIM_MAN2TXT.
+dnl
 m4_pattern_forbid([NDIM_DETECT_MAN2TXT])dnl
 AC_DEFUN([NDIM_DETECT_MAN2TXT], [dnl
 AC_ARG_VAR([MAN])
@@ -12,10 +29,12 @@ AM_CONDITIONAL([HAVE_NDIM_MAN2TXT],
 AC_MSG_CHECKING([man and col -b work correctly])
 if test "x$HAVE_NDIM_MAN2TXT_FALSE" = "x#"; then
 	AC_MSG_RESULT([yes])
-	AC_SUBST([NDIM_MAN2TXT], ['m2t(){ $(MAN) "$$(dirname "$$][1")/$$(basename "$$][1")"|$(COL) -b; }; m2t'])dnl
+	NDIM_MAN2TXT='m2t(){ $(MAN) "$$(dirname "[$$]1")/$$(basename "[$$]1")"|$(COL) -b; }; m2t'
 else
 	AC_MSG_RESULT([no $(echo "ABXY" | $COL -b)])
+	NDIM_MAN2TXT='false'
 fi
+AC_SUBST([NDIM_MAN2TXT])
 ])dnl
 dnl
 dnl Local Variables:

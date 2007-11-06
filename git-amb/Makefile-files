@@ -3,8 +3,8 @@ bin_SCRIPTS  += git-amb/git-amb
 EXTRA_DIST   += git-amb/git-amb.in
 UPLOAD_FILES += git-amb/git-amb
 
-man_MANS   += git-amb/git-amb.1
-EXTRA_DIST += git-amb/git-amb.1.in
+man1_MANS  += git-amb/git-amb.man
+EXTRA_DIST += git-amb/git-amb.man.in
 
 if HAVE_NDIM_MAN2TXT
 dist_doc_DATA += git-amb/git-amb.txt

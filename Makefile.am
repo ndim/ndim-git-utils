@@ -2,7 +2,7 @@ CLEANFILES =
 BUILT_SOURCES =
 EXTRA_DIST =
 bin_SCRIPTS =
-man_MANS =
+man1_MANS =
 UPLOAD_FILES =
 doc_DATA =
 dist_doc_DATA =
@@ -14,8 +14,8 @@ include doc/Makefile-files
 include git-amb/Makefile-files
 
 if HAVE_NDIM_MAN2TXT
-.1.txt:
-	set -x; $(NDIM_MAN2TXT) "$<" > "$@.new"
+.man.txt:
+	$(NDIM_MAN2TXT) "$<" > "$@.new"
 	test -s "$@.new"
 	mv -f "$@.new" "$@"
 endif
