@@ -69,6 +69,8 @@ cond_cat_path() {
 }
 
 amb_init() {
+    # Equivalent bzr code:
+    #   bzr log -r -1.. | sed -n 's/^branch nick: //p'
     if test "x$1" = "x"; then
 	git_branch="$(git branch | sed -n 's/^* //p')"
     elif git branch | sed 's/^[ *] //' | grep "$1" > /dev/null; then
