@@ -11,7 +11,8 @@ That makes it easy to compare build results from different branches.
 .PP
 This requires an automake based source tree which can build in a
 separate build directory.
-.SH "COMMAND OVERVIEW"
+.SH "COMMANDS"
+.SS "Build Commands"
 .TP
 .B "git\-amb autoreconf [params...]"
 Run autoreconf on ${top_srcdir}.
@@ -34,10 +35,7 @@ Optional params will be passed on to make.
 If necessary, runs
 .I "git\-amb configure"
 first.
-.TP
-.B "git\-amb sh [params...]"
-Start shell in ${top_builddir}.
-Optional params will be passed on to the shell.
+.SS "Cleanup Commands"
 .TP
 .B "git\-amb clean [branch]"
 Run 'make clean' in ${top_builddir}.
@@ -55,6 +53,16 @@ The optional branch is the branch to purge.
 Remove ${installdir}.
 The optional branch is the branch to uninstall.
 .TP
+.B "git\-amb purge\-all"
+Remove build and install trees for
+.I all
+branches.
+.SS "Interactive and Scripting Commands"
+.TP
+.B "git\-amb sh [params...]"
+Start shell in ${top_builddir}.
+Optional params will be passed on to the shell.
+.TP
 .B "git\-amb builddir [branch]"
 Print ${builddir}.
 The optional branch is the branch to print the builddir for.
@@ -62,11 +70,6 @@ The optional branch is the branch to print the builddir for.
 .B "git\-amb installdir [branch]"
 Print ${installdir}.
 The optional branch is the branch to print the installdir for.
-.TP
-.B "git\-amb purge\-all"
-Remove build and install trees for
-.I all
-branches.
 .SH CONFIGURATION
 Use
 .B git\-config
