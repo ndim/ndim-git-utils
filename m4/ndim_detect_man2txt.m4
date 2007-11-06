@@ -18,6 +18,9 @@ dnl If that is true, define NDIM_MAN2TXT.
 dnl
 m4_pattern_forbid([NDIM_DETECT_MAN2TXT])dnl
 AC_DEFUN([NDIM_DETECT_MAN2TXT], [dnl
+NDIM_CHECK_SH_FUNCTIONS([], [dnl
+AC_MSG_ERROR([Sorry, POSIX sh with functions required.])dnl
+])dnl
 AC_ARG_VAR([MAN])
 AC_PATH_PROG([MAN], [man], [false])
 AC_ARG_VAR([COL])
