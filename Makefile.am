@@ -32,7 +32,7 @@ ALL_UPLOAD_FILES = $(UPLOAD_FILES) $(distdir).tar.bz2
 upload: $(UPLOAD_FILES) dist tag
 	rm -rf "$(UPLOAD_DIR)"
 	mkdir -p "$(UPLOAD_DIR)"
-	for f in $(UPLOAD_FILES); do \
+	for f in $(ALL_UPLOAD_FILES); do \
 		ln "$$(test -e "$$f" || echo "$(top_srcdir)/")$$f" "$(UPLOAD_DIR)/"; \
 	done
 	rsync -avz --delete "$(UPLOAD_DIR)/" $(RSYNC_HOST):$(RSYNC_DIR)/$(PACKAGE_TARNAME)/
