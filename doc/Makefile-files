@@ -1,2 +1,10 @@
 # -*- Makefile -*-
-EXTRA_DIST += doc/ndim-git-cheatsheet.txt
+EXTRA_DIST   += doc/ndim-git-cheatsheet.txt
+doc_DATA     += doc/ndim-git-cheatsheet.txt
+UPLOAD_FILES += doc/ndim-git-cheatsheet.txt
+
+UPLOAD_FILES += .htaccess
+EXTRA_DIST   += .htaccess
+
+UPLOAD_FILES += README.html
+EXTRA_DIST   += README.html
