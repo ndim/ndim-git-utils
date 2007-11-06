@@ -1,0 +1,15 @@
+========================================================================
+ndim's git utilities - a collection of scripts and docs around git
+Copyright (C) 2007 Hans Ulrich Niedermann
+========================================================================
+
+  git-amb
+    Makes building, installing, and testing multiple git branches of
+    some source tree built with automake easy, clean and flexible.
+    The name stands for "git *a*uto*m*ake *b*uild". For details, see
+    git-amb(1) man page.
+
+========================================================================
+ndim's git utilities - a collection of scripts and docs around git
+Copyright (C) 2007 Hans Ulrich Niedermann
+========================================================================
