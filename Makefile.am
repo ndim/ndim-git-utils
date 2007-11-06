@@ -28,8 +28,8 @@ tag:
 	cd "$(top_srcdir)" && git tag "rel-$(PACKAGE_VERSION)"
 
 UPLOAD_DIR = upload-dir
-UPLOAD_FILES += $(distdir).tar.bz2
-upload: tag git-amb/git-amb git-amb/git-amb.txt dist
+ALL_UPLOAD_FILES = $(UPLOAD_FILES) $(distdir).tar.bz2
+upload: $(UPLOAD_FILES) dist tag
 	rm -rf "$(UPLOAD_DIR)"
 	mkdir -p "$(UPLOAD_DIR)"
 	for f in $(UPLOAD_FILES); do \
