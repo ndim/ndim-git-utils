@@ -115,9 +115,11 @@ amb_init() {
     top_srcdir="$(cd_to_toplevel && pwd)"
 
     tmp="$(git-config amb.builddir)" || tmp="$GIT_DIR/amb/build"
+    amb_builddir="$(cond_cat_path "${top_srcdir}" "$tmp")"
     top_builddir="$(cond_cat_path "${top_srcdir}" "$tmp" "${git_branch}")"
 
     tmp="$(git-config amb.installdir)" || tmp="$GIT_DIR/amb/install"
+    amb_installdir="$(cond_cat_path "${top_srcdir}" "$tmp")"
     top_installdir="$(cond_cat_path "${top_srcdir}" "$tmp" "$git_branch")"
 
     amb_detect_configure
@@ -166,6 +168,15 @@ amb_purge() {
     rm -rf "$top_builddir"
     echo "$self: Purging $top_installdir..."
     rm -rf "$top_installdir"
+    echo "$self: Finished."
+}
+
+amb_purge_all() {
+    echo "$self: Purging ALL branches"
+    echo "$self: Purging $amb_builddir..."
+    rm -rf "$amb_builddir"
+    echo "$self: Purging $amb_installdir..."
+    rm -rf "$amb_installdir"
     echo "$self: Finished."
 }
 
@@ -236,6 +247,10 @@ if shift; then
 	purge)
 	    amb_init "$@"
 	    amb_purge
+	    ;;
+	purge-all)
+	    amb_init "$@"
+	    amb_purge_all
 	    ;;
 	uninstall)
 	    amb_init "$@"

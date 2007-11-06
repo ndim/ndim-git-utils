@@ -62,6 +62,11 @@ The optional branch is the branch to print the builddir for.
 .B "git\-amb installdir [branch]"
 Print ${installdir}.
 The optional branch is the branch to print the installdir for.
+.TP
+.B "git\-amb purge\-all"
+Remove build and install trees for
+.I all
+branches.
 .SH CONFIGURATION
 Use
 .B git\-config
