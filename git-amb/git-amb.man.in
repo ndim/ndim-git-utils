@@ -8,6 +8,9 @@ git-amb \- git automake build utitilty
 .SH DESCRIPTION
 Build automake based git checkout in branch specific build and install trees.
 That makes it easy to compare build results from different branches.
+.PP
+This requires an automake based source tree which can build in a
+separate build directory.
 .SH "COMMAND OVERVIEW"
 .TP
 .B "git\-amb autoreconf [params...]"
@@ -15,18 +18,22 @@ Run autoreconf on ${top_srcdir}.
 Optional params will be passed on to autoreconf.
 .TP
 .B "git\-amb configure [params...]"
-Run configure in ${top_builddir}.
+Run configure in ${top_builddir} with
+.I "\-\-enable\-maintainer\-mode"
+and
+.I "\-\-prefix"
+set appropriately.
 Optional params will be passed on to configure.
-Runs
+If necessary, runs
 .I "git\-amb autoreconf"
-if necessary.
+first.
 .TP
 .B "git\-amb make [params...]"
 Run make in ${top_builddir}.
 Optional params will be passed on to make.
-Runs
+If necessary, runs
 .I "git\-amb configure"
-if necessary.
+first.
 .TP
 .B "git\-amb sh [params...]"
 Start shell in ${top_builddir}.
@@ -111,19 +118,22 @@ would work equally well for many other SCMs.
 .TP
 .B "Why just automake?"
 Any build system which works in similar stages should work:
-Create BS (autoreconf), configure BS (configure), run build (make).
+Create BS (autoreconf), configure BS (configure), execute BS (make).
+cmake(1) could be one.
 .SH "NON-BUGS"
 .TP
-.B "autogen.sh scripts"
-It is a feature that
-.B git\-amb
-does not support
-.I "autgen.sh"
-scripts.  Custom autogen.sh script are almost always broken in
-multiple aspects: They unnecessarily duplicate the functionality of
-autoreconf(1), they join two independent steps into one (running both
-automake & Co. and ./configure), they do not allow srcdir != builddir
-builds.
+.B "No support for autogen.sh scripts"
+Not supporting
+.I "autogen.sh"
+scripts is a
+.B "git\-amb"
+feature, not a bug.
+.I "autogen.sh"
+scripts are almost always broken in at least one way: They
+unnecessarily duplicate the functionality of autoreconf(1), they join
+two independent steps into one (running both automake &
+Co. and ./configure), they do not allow srcdir != builddir builds, and
+there is no real standard about what exactly they do, and how.
 .SH AUTHORS
 .B "git\-amb"
 was written by Hans Ulrich Niedermann.
