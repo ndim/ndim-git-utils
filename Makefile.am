@@ -20,9 +20,13 @@ if HAVE_NDIM_MAN2TXT
 	mv -f "$@.new" "$@"
 endif
 
+tag:
+	test -d "$(top_srcdir)/.git"
+	cd "$(top_srcdir)" && git tag "rel-$(PACKAGE_VERSION)"
+
 UPLOAD_DIR = upload-dir
 UPLOAD_FILES += $(distdir).tar.bz2
-upload: git-amb/git-amb git-amb/git-amb.txt dist
+upload: tag git-amb/git-amb git-amb/git-amb.txt dist
 	rm -rf "$(UPLOAD_DIR)"
 	mkdir -p "$(UPLOAD_DIR)"
 	for f in $(UPLOAD_FILES); do \

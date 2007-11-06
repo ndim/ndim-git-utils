@@ -113,11 +113,11 @@ It is a feature that
 .B git\-amb
 does not support
 .I "autgen.sh"
- scripts.
-Custom autogen.sh script are almost always broken in multiple aspects:
-They duplicate the functionality of autoreconf(1), they make two
-independent steps into one (running both automake &
-Co. and ./configure), they do not allow srcdir != builddir builds.
+scripts.  Custom autogen.sh script are almost always broken in
+multiple aspects: They unnecessarily duplicate the functionality of
+autoreconf(1), they join two independent steps into one (running both
+automake & Co. and ./configure), they do not allow srcdir != builddir
+builds.
 .SH AUTHORS
 .B "git\-amb"
 was written by Hans Ulrich Niedermann.
