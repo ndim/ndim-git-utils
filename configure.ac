@@ -2,7 +2,7 @@
 
 AC_PREREQ(2.61)
 AC_INIT([ndims git utilities],
-	[1.12.9],
+	[1.12.10],
 	[hun@n-dimensional.de],
 	[ndim-git-utils])
 AC_CONFIG_AUX_DIR([auto-aux])
@@ -13,6 +13,8 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign 1.10 dist-bzip2
                   check-news readme-alpha std-options])
 
 ########################################################################
+
+AC_PROG_SED
 
 m4_pattern_forbid([NDIM_DETECT_MAN2TXT])dnl
 NDIM_DETECT_MAN2TXT()dnl
