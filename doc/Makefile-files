@@ -6,5 +6,5 @@ UPLOAD_FILES += doc/ndim-git-cheatsheet.txt
 UPLOAD_FILES += doc/.htaccess
 EXTRA_DIST   += doc/.htaccess
 
-UPLOAD_FILES += doc/README.html
-EXTRA_DIST   += doc/README.html
+UPLOAD_FILES += doc/HEADER.html doc/FOOTER.html
+EXTRA_DIST   += doc/HEADER.html doc/FOOTER.html
