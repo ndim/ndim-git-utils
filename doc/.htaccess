@@ -6,4 +6,4 @@ AddDescription "ndim's git cheatsheet" ndim-git-cheatsheet.txt
 AddDescription "source tarball distribution" ndim-git-utils-*.tar.bz2
 ReadmeName FOOTER.html
 HeaderName HEADER.html
-IndexIgnore FOOTER.html HEADER.html
+IndexIgnore FOOTER.html HEADER.html ..
