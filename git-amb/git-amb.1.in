@@ -97,6 +97,15 @@ Exhibits problems, e.g. starting
 and then running
 .B "git checkout other\-branch"
 from another terminal.
+.TP
+.B "Why just git?"
+The idea behind
+.B "git\-amb"
+would work equally well for many other SCMs.
+.TP
+.B "Why just automake?"
+Any build system which works in similar stages should work:
+Create BS (autoreconf), configure BS (configure), run build (make).
 .SH "NON-BUGS"
 .TP
 .B "autogen.sh scripts"
