@@ -17,10 +17,16 @@ Optional params will be passed on to autoreconf.
 .B "git\-amb configure [params...]"
 Run configure in ${top_builddir}.
 Optional params will be passed on to configure.
+Runs
+.I "git\-amb autoreconf"
+if necessary.
 .TP
 .B "git\-amb make [params...]"
 Run make in ${top_builddir}.
 Optional params will be passed on to make.
+Runs
+.I "git\-amb configure"
+if necessary.
 .TP
 .B "git\-amb sh [params...]"
 Start shell in ${top_builddir}.
