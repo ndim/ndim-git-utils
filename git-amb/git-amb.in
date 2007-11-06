@@ -23,6 +23,8 @@
 # Known to work and tested with
 #  - git 1.5.3.4
 
+self="$(basename "$0")"
+
 case "$1" in
 	-V|--version)
 	    echo "$self (@PACKAGE_NAME@) @PACKAGE_VERSION@"
@@ -38,8 +40,6 @@ For more details, see the git-amb(1) man page."
 . git-sh-setup
 
 require_work_tree
-
-self="$(basename "$0")"
 
 amb_detect_configure() {
     for configure_ac in \
