@@ -12,10 +12,10 @@ EXTRA_DIST   += doc/HEADER.html
 UPLOAD_FILES  += doc/FOOTER.html
 CLEANFILES    += doc/FOOTER.html
 
-EXTRA_DIST += build-helpers/txt2html.sed
+EXTRA_DIST += build-helpers/text2html.sed
 
-doc/FOOTER.html: $(top_srcdir)/README $(top_srcdir)/build-helpers/txt2html.sed
+doc/FOOTER.html: $(top_srcdir)/README $(top_srcdir)/build-helpers/text2html.sed
 	mkdir -p doc
-	$(SED) -f "$(top_srcdir)/build-helpers/txt2html.sed" $(top_srcdir)/README > "doc/FOOTER.html.new"
+	$(SED) -f "$(top_srcdir)/build-helpers/text2html.sed" $(top_srcdir)/README > "doc/FOOTER.html.new"
 	test -s "doc/FOOTER.html.new"
 	mv -f "doc/FOOTER.html.new" "doc/FOOTER.html"
