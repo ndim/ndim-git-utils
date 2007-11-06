@@ -5,3 +5,4 @@ aclocal.m4
 auto-aux
 autom4te.cache
 configure
+_local-build
