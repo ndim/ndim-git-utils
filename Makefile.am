@@ -11,7 +11,7 @@ ACLOCAL_AMFLAGS = -I m4 --install
 
 include Makefile-files
 include doc/Makefile-files
-include src/Makefile-files
+include git-amb/Makefile-files
 
 if HAVE_NDIM_MAN2TXT
 .1.txt:
@@ -22,7 +22,7 @@ endif
 
 UPLOAD_DIR = upload-dir
 UPLOAD_FILES += $(distdir).tar.bz2
-upload: src/git-amb src/git-amb.txt dist
+upload: git-amb/git-amb git-amb/git-amb.txt dist
 	rm -rf "$(UPLOAD_DIR)"
 	mkdir -p "$(UPLOAD_DIR)"
 	for f in $(UPLOAD_FILES); do \
