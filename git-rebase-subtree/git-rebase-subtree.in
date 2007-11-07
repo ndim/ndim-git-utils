@@ -94,6 +94,10 @@ gf_rebase_tree() {
     oldroot="$2"
     test "x$oldroot" = "x" && die "Need <oldroot> parameter"
     echo
+    echo "CAUTION: ${self} does not handle merge errors yet - that will mess up your repo!"
+    echo "Press Ctrl-C to abort. Or, if you feel adventurous, press ENTER."
+    read
+    echo
     echo "$self: Preparing subtree rebase"
     git config "$configvar" | while read from to restofline; do
 	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi

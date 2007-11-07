@@ -93,5 +93,22 @@ After hypothetical "git\-rebase\-subtree \-\-reverse master Y":
 .TP
 .B "Lacks generality (fixation about 'master')"
 Yes.
+.TP
+.B "Needs complicated config"
+Yes. Auto-generating the graph may be possible.
+.TP
+.B "Needs merge conflict handling"
+Definitely. At the moment, it just messes up your branch tree if some
+error happens during the rebase.
+.TP
+.B "Needs proper error handling"
+Definitely. Possibly just renaming the
+.I rebasetree-old/foo
+branches to
+.I foo
+could do the job. Needs more investigation, though.
+.TP
+.B "Should bail out if old/foo exists and is not equal to foo"
+Yes.
 .SH "SEE ALSO"
 git\-rebase(1).
