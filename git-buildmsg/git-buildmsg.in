@@ -50,11 +50,21 @@ outfile="-"
 print_example=false
 srcdir="$(pwd)"
 
+# Help messages
+USAGE="[<option>...]"
+LONG_USAGE="\
+  -h --help             Print this help message.
+  -V --version          Print version number.
+
+  -x --example          Print complete example program.
+  -o --output FILENAME  Set output file name.
+  -s --srcdir DIRNAME   Set source tree dir name."
+
 # Parse command line parameter, affecting defaults
 while [ "x$1" != "x" ]
 do
     case "$1" in
-        --example)
+        -x|--example)
             print_example=:
             ;;
         -o|--output)
@@ -70,12 +80,16 @@ do
                 exit 1
             fi
             ;;
-        --version)
+        -V|--version)
 	    echo "$self (@PACKAGE_NAME@) @PACKAGE_VERSION@"
 	    exit
 	    ;;
-        --help)
-            echo "Supported params: --help, --example, -o|--output"
+        -h|--help)
+            echo "Usage: ${self} $USAGE"
+	    if test "x$LONG_USAGE" = "x"; then :;
+	    else
+		echo "$LONG_USAGE"
+	    fi
             exit
             ;;
 	-s|--srcdir)
