@@ -1,0 +1,4 @@
+# -*- makefile -*-
+bin_SCRIPTS  += git-follow/git-follow
+EXTRA_DIST   += git-follow/git-follow.in
+UPLOAD_FILES += git-follow/git-follow

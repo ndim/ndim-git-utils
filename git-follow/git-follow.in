@@ -1,0 +1,44 @@
+#!/bin/sh
+
+unset CDPATH
+SED="${SED-sed}"
+
+self=`basename "$0"`
+selfdir=`dirname "$0"`
+selfdir=`cd "$selfdir" && pwd`
+. "$selfdir/git-ndim-sh"
+
+SUBDIRECTORY_OK="yes"
+USAGE="<command> [params...]"
+
+LONG_USAGE="\
+Let a local subtree of branches follow a remote origin without too much merging.
+For more details, see the ${self}(1) man page."
+. git-sh-setup
+
+require_work_tree
+
+# Abort on error
+set -e
+
+gf_init() {
+    git config follow.tree | while read from to restofline; do
+	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
+	echo "ITEM"
+	echo "  From: $from"
+	echo "    To: $to"
+    done
+}
+
+# The great command case
+command="$1"
+if shift; then
+    case "$command" in	*)
+	    die "Invalid command line parameter: \"$command\""
+	    ;;
+    esac
+else
+    die "Command required"
+fi
+
+# End of file.

@@ -1,0 +1,6 @@
+# -*- makefile -*-
+
+bin_SCRIPTS  += git-ndim-sh/git-ndim-sh
+EXTRA_DIST   += git-ndim-sh/git-ndim-sh.in
+UPLOAD_FILES += git-ndim-sh/git-ndim-sh
+AM_INSTALLCHECK_STD_OPTIONS_EXEMPT += git-ndim-sh/git-ndim-sh
