@@ -43,7 +43,7 @@ upload: $(UPLOAD_FILES) dist tag
 	done
 	rsync -avz --delete "$(UPLOAD_DIR)/" $(RSYNC_HOST):$(RSYNC_DIR)/$(PACKAGE_TARNAME)/
 	rm -rf "$(UPLOAD_DIR)"
-	if test -d "$(top_srcdir)/.git"; then git push public master; fi
+	if test -d "$(top_srcdir)/.git"; then cd "$(top_srcdir)" && git push public master; fi
 
 clean-local:
 	rm -rf "$(UPLOAD_DIR)"
