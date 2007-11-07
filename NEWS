@@ -1,2 +1,7 @@
+ndim-git-utils 1.14
+  git-amb:
+    * Use proper lower level git tools (thanks to #git!)
+    * Work anywhere in git working tree.
+
 ndim-git-utils 1.13
   First public release.
