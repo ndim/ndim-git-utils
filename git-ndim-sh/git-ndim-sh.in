@@ -1,4 +1,6 @@
 #!/bin/sh
+# Dual-licensed. Choose LICENSE.MIT or LICENSE.GPL.
+# Contributions to this file will only be accepted under the same license.
 
 # Designed to be sourced.
 case "$(basename "$0")" in

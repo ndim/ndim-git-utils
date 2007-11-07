@@ -24,6 +24,12 @@ Updates
     $ git clone http://nix.lauft.net/ndim-git-utils.git/
 
 
+License
+=======
+
+  Partly MIT, partly GPL. Shared parts dual-licensed.
+
+
 ========================================================================
 End of README for ndim's git utilities.
 ========================================================================

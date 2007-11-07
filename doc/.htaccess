@@ -2,6 +2,10 @@ AddDescription "GNU GENERAL PUBLIC LICENSE" COPYING
 AddDescription "General description of ndim-git-utils" README
 AddDescription "The git-amb(1) man page" git-amb.txt
 AddDescription "The git-amb script" git-amb
+AddDescription "The git-rebase-subtree(1) man page" git-rebase-subtree.txt
+AddDescription "The git-rebase-subtree script" git-rebase-subtree
+AddDescription "The git-buildmsg(1) man page" git-buildmsg.txt
+AddDescription "The git-buildmsg script" git-buildmsg
 AddDescription "ndim's git cheatsheet" ndim-git-cheatsheet.txt
 AddDescription "source tarball distribution" ndim-git-utils-*.tar.bz2
 ReadmeName FOOTER.html
