@@ -40,14 +40,15 @@ set -e
 
 cmd() {
     echo "CMD>" "$@"
-    gitk --all
     "$@"
 }
 
 
 gf_init() {
+    configvar="rebase-subtree.subtree"
     echo "$self: Examining configuration"
-    git config follow.tree | while read from to restofline; do
+    test -n "$(git config "$configvar")" || die "Unset or empty git config var \"$configvar\""
+    git config "$configvar" | while read from to restofline; do
 	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
 	echo ""
 	echo "  From: $from"
@@ -84,50 +85,43 @@ gf_rmbranch() {
 
 
 gf_rebase_tree() {
+    reverse="no"
+    case "$1" in
+	--reverse) reverse=yes; shift ;;
+    esac
     newroot="$1"
     test "x$newroot" = "x" && die "Need <newroot> parameter"
     oldroot="$2"
     test "x$oldroot" = "x" && die "Need <oldroot> parameter"
     echo
     echo "$self: Preparing subtree rebase"
-    git config follow.tree | while read from to restofline; do
+    git config "$configvar" | while read from to restofline; do
 	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
 	gf_branch "$from"
 	gf_branch "$to"
     done
-    gitk --all
     echo
     echo "$self: Executing subtree rebase"
-    git config follow.tree | while read from to restofline; do
+    git config "$configvar" | while read from to restofline; do
 	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
-	cmd git-rebase --onto "$from" "follow-old/$from" "$to"
+	if test "x$reverse" = "xno" && test "x$from" = "x$oldroot"; then
+	    cmd git-rebase --onto "$newroot" "follow-old/$from" "$to"
+	elif test "x$reverse" = "xyes" && test "x$from" = "x$newroot"; then
+	    cmd git-rebase --onto "$newroot" "$oldroot" "$to"
+	else
+	    cmd git-rebase --onto "$from" "follow-old/$from" "$to"
+	fi
     done
-    gitk --all
     echo
     echo "$self: Cleaning up after subtree rebase"
-    git config follow.tree | while read from to restofline; do
+    git config "$configvar" | while read from to restofline; do
 	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
 	gf_rmbranch "$from"
 	gf_rmbranch "$to"
     done
-    gitk --all
 }
 
-
-# The great command case
-command="$1"
-if shift; then
-    case "$command" in
-	rebase-subtree)
-	    gf_init
-	    gf_rebase_tree "$@"
-	    ;;
-	*)
-	    die "Invalid command line parameter: \"$command\""
-	    ;;
-    esac
-else
-    gf_init
-fi
+gf_init
+gf_rebase_tree "$@"
 
 # End of file.

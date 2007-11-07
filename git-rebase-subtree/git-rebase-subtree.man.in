@@ -5,6 +5,11 @@ git\-rebase\-subtree \- rebase set of interdependant git branches
 .B "git\-rebase\-subtree"
 .I "<origin-branch>"
 .I "<master-branch>"
+.PP
+.B "git\-rebase\-subtree"
+.I "\-\-reverse"
+.I "<master-branch>"
+.I "<master-branch-plus-x>"
 .SH DESCRIPTION
 So you are tracking some upstream's git repo and maintain your own set
 of interdependent feature branches ("branch subtree").
@@ -19,13 +24,25 @@ Note: Letters A\-Z are branch names, not revs.
 .PP
 Old tree:
 .nf
-                       *\-\-F
-                      /
+                        *\-\-F
+                       /
     origin=master\-\-A\-\-B\-\-G
                     \\
                      *\-\-D\-\-H
                          \\
                           *\-\-*\-\-K
+.fi
+.PP
+Generate the following configuration using
+.I "git config rebase-subtree.subtree"
+.nf
+  master A
+  A B
+  B F
+  B G
+  A D
+  D H
+  D K
 .fi
 .PP
 After "git\-fetch \-v":
@@ -46,8 +63,35 @@ After hypothetical "git\-rebase\-subtree origin master":
    origin'=master'\-\-A'\-\-B'\-\-G'
                      \\
                       *'\-\-D'\-\-H'
+                           \\
+                            *'\-\-*'\-\-K'
+.fi
+.SS "REVERSE OPERATION"
+.PP
+Old tree:
+.nf
+                        *\-\-F
+                       /
+        master\-\-Y\-\-A\-\-B\-\-G
+                    \\
+                     *\-\-D\-\-H
+                         \\
+                          *\-\-*\-\-K
+.fi
+.PP
+After hypothetical "git\-rebase\-subtree \-\-reverse master Y":
+.nf
+                  Y      *'\-\-F'
+                 /      /
+           master\-\-A'\-\-B'\-\-G'
+                    \\
+                     *'\-\-D'\-\-H'
                           \\
                            *'\-\-*'\-\-K'
 .fi
+.SH "BUGS"
+.TP
+.B "Lacks generality (fixation about 'master')"
+Yes.
 .SH "SEE ALSO"
 git\-rebase(1).
