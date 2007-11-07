@@ -31,6 +31,10 @@
 #     && ./moo
 #   (bash and other seds should also do)
 #
+# Note:
+#   A man page for this script does NOT make sense. It is supposed to be
+#   copied into and shipped with other peoples' source trees.
+#
 # Ideas:
 #  * Output for languages other than C (Erlang, Python, Perl, sh, ...)
 

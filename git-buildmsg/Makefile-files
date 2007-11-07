@@ -7,6 +7,8 @@ TESTS += git-buildmsg-test
 check_PROGRAMS += git-buildmsg-test
 nodist_git_buildmsg_test_SOURCES = git-buildmsg/git-buildmsg-test.c
 
+dist_doc_DATA +=  git-buildmsg/README.git-buildmsg
+
 BUILT_SOURCES += git-buildmsg/git-buildmsg-test.c
 CLEANFILES    += git-buildmsg/git-buildmsg-test.c
 git-buildmsg/git-buildmsg-test.c: git-buildmsg/git-buildmsg
