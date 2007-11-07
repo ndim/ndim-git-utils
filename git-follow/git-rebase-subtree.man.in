@@ -1,0 +1,53 @@
+.TH GIT-REBASE-SUBTREE 1 "@PACKAGE_TARNAME@ @PACKAGE_VERSION@" "2007\-11\-02" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
+.SH NAME
+git\-rebase\-subtree \- rebase set of interdependant git branches
+.SH SYNOPSIS
+.B "git\-rebase\-subtree"
+.I "<origin-branch>"
+.I "<master-branch>"
+.SH DESCRIPTION
+So you are tracking some upstream's git repo and maintain your own set
+of interdependent feature branches ("branch subtree").
+.PP
+And you want to keep that "branch subtree" up-to-date in relation to
+upstream so it stays sweet, small, and clean, increasing the chances
+that upstream will finally pick something up from it.
+.PP
+Initial situation: Local branch master tracks remote origin.
+.PP
+Note: Letters A\-Z are branch names, not revs.
+.PP
+Old tree:
+.nf
+                       *\-\-F
+                      /
+    origin=master\-\-A\-\-B\-\-G
+                    \\
+                     *\-\-D\-\-H
+                         \\
+                          *\-\-*\-\-K
+.fi
+.PP
+After "git\-fetch \-v":
+.nf
+                         *\-\-F
+                        /
+           master\-\-\-A\-\-B\-\-G
+            \\        \\
+             *        *\-\-D\-\-H
+              \\           \\
+               origin'  *\-\-*\-\-K
+.fi
+.PP
+After hypothetical "git\-rebase\-subtree origin master":
+.nf
+                          *'\-\-F'
+                         /
+   origin'=master'\-\-A'\-\-B'\-\-G'
+                     \\
+                      *'\-\-D'\-\-H'
+                          \\
+                           *'\-\-*'\-\-K'
+.fi
+.SH "SEE ALSO"
+git\-rebase(1).

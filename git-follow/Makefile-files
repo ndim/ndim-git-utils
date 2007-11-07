@@ -2,3 +2,12 @@
 bin_SCRIPTS  += git-follow/git-follow
 EXTRA_DIST   += git-follow/git-follow.in
 UPLOAD_FILES += git-follow/git-follow
+
+man1_MANS  += git-follow/git-rebase-subtree.man
+EXTRA_DIST += git-follow/git-rebase-subtree.man.in
+
+if HAVE_NDIM_MAN2TXT
+dist_doc_DATA += git-follow/git-rebase-subtree.txt
+CLEANFILES    += git-follow/git-rebase-subtree.txt
+UPLOAD_FILES  += git-follow/git-rebase-subtree.txt
+endif

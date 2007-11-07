@@ -1,43 +1,5 @@
 #!/bin/sh
 #
-# Note: Letters A-Z are branch names, not revs.
-#
-# Old tree:
-#                        *--F
-#                       /
-#     origin=master--A--B--G
-#                    \
-#                     *--D--H
-#                         \
-#                          *--*--K
-#
-# Set "git config follow.tree" to:
-#   master A
-#   A B
-#   B F
-#   B G
-#   A D
-#   D H
-#   D K
-#
-# After "git-fetch -v":
-#                        *--F
-#                       /
-#           master---A--B--G
-#            \        \
-#             *        *--D--H
-#              \           \
-#               *--origin'  *--*--K
-#
-# After "git-rebase-subtree origin master":
-#
-#                          *'--F'
-#                         /
-#   origin'=master'--A'--B'--G'
-#                     \
-#                      *'--D'--H'
-#                          \
-#                           *'--*'--K'
 
 unset CDPATH
 SED="${SED-sed}"

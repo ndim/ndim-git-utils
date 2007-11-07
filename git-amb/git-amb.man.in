@@ -1,6 +1,6 @@
 .TH GIT-AMB 1 "@PACKAGE_TARNAME@ @PACKAGE_VERSION@" "2007\-11\-02" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
 .SH NAME
-git-amb \- git automake build utitilty
+git\-amb \- git automake build utitilty
 .SH SYNOPSIS
 .B "git\-amb"
 .RB "command"
