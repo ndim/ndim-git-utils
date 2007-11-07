@@ -24,6 +24,7 @@ NDIM_DETECT_MAN2TXT()dnl
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([git-amb/git-amb.man])
 AC_CONFIG_FILES([git-amb/git-amb])
+AC_CONFIG_FILES([git-buildmsg/git-buildmsg])
 AC_CONFIG_FILES([git-follow/git-follow])
 AC_CONFIG_FILES([git-ndim-sh/git-ndim-sh])
 AC_OUTPUT
