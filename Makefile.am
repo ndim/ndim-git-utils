@@ -6,6 +6,8 @@ man1_MANS =
 UPLOAD_FILES =
 doc_DATA =
 dist_doc_DATA =
+check_PROGRAMS =
+TESTS =
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT =
 
 ACLOCAL_AMFLAGS = -I m4 --install
