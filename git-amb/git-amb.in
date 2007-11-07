@@ -22,6 +22,7 @@
 
 # Known to work and tested with
 #  - git 1.5.3.4
+# Should also work with git 1.2 and possibly older.
 unset CDPATH
 
 SED="${SED-sed}"
@@ -110,7 +111,7 @@ amb_init() {
     if test "x$1" = "x"; then
 	# determine currently checked out branch
 	git_branch="$(git-symbolic-ref HEAD | $SED -n 's|^refs/heads/||p')"
-    elif git-rev-parse "$1" > /dev/null 2>&1; then
+    elif git-rev-parse --verify "$1" > /dev/null 2>&1; then
 	# $1 is valid branch: use it
 	git_branch="${1}"
     else
