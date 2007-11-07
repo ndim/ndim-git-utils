@@ -36,7 +36,7 @@ After "git\-fetch \-v":
             \\        \\
              *        *\-\-D\-\-H
               \\           \\
-               origin'  *\-\-*\-\-K
+               origin'     *\-\-*\-\-K
 .fi
 .PP
 After hypothetical "git\-rebase\-subtree origin master":
