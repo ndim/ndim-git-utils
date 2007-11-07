@@ -1,3 +1,10 @@
+ndim-git-utils 1.16
+  git-rebase-subtree:
+    * Warn about using it.
+    * List important bugs.
+  git-buildmsg:
+    * Add README.git-buildmsg
+
 ndim-git-utils 1.15
   New licensing: Partly GPL, partly MIT. Common parts dual-licensed.
   New additions: git-buildmsg, git-rebase-subtree
