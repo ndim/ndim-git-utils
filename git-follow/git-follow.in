@@ -1,4 +1,43 @@
 #!/bin/sh
+#
+# Note: Letters A-Z are branch names, not revs.
+#
+# Old tree:
+#                        *--F
+#                       /
+#     origin=master--A--B--G
+#                    \
+#                     *--D--H
+#                         \
+#                          *--*--K
+#
+# Set "git config follow.tree" to:
+#   master A
+#   A B
+#   B F
+#   B G
+#   A D
+#   D H
+#   D K
+#
+# After "git-fetch -v":
+#                        *--F
+#                       /
+#           master---A--B--G
+#            \        \
+#             *        *--D--H
+#              \           \
+#               *--origin'  *--*--K
+#
+# After "git-rebase-subtree origin master":
+#
+#                          *'--F'
+#                         /
+#   origin'=master'--A'--B'--G'
+#                     \
+#                      *'--D'--H'
+#                          \
+#                           *'--*'--K'
 
 unset CDPATH
 SED="${SED-sed}"
@@ -21,24 +60,97 @@ require_work_tree
 # Abort on error
 set -e
 
+
+cmd() {
+    echo "CMD>" "$@"
+    gitk --all
+    "$@"
+}
+
+
 gf_init() {
+    echo "$self: Examining configuration"
     git config follow.tree | while read from to restofline; do
 	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
-	echo "ITEM"
+	echo ""
 	echo "  From: $from"
 	echo "    To: $to"
     done
 }
 
+gf_branch() {
+    branch="$1"
+    newbranch="follow-old/$branch"
+    if git-rev-parse --verify "$branch" > /dev/null 2>&1; then
+	# valid branch
+	if git-rev-parse --verify "$newbranch" > /dev/null 2>&1; then
+	    : # branch already exists, do nothing
+	else
+	    cmd git-branch "${newbranch}" "${branch}"
+	fi
+    else
+	echo "$self: gf_branch called with invalid branch \"$branch\"" >&2
+	exit 1
+    fi
+}
+
+
+gf_rmbranch() {
+    branch="$1"
+    newbranch="follow-old/$branch"
+    if git-rev-parse --verify "$branch" > /dev/null 2>&1; then
+	if git-rev-parse --verify "$newbranch" > /dev/null 2>&1; then
+	    cmd git-branch -D "${newbranch}"
+	fi
+    fi
+}
+
+
+gf_rebase_tree() {
+    newroot="$1"
+    test "x$newroot" = "x" && die "Need <newroot> parameter"
+    oldroot="$2"
+    test "x$oldroot" = "x" && die "Need <oldroot> parameter"
+    echo
+    echo "$self: Preparing subtree rebase"
+    git config follow.tree | while read from to restofline; do
+	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
+	gf_branch "$from"
+	gf_branch "$to"
+    done
+    gitk --all
+    echo
+    echo "$self: Executing subtree rebase"
+    git config follow.tree | while read from to restofline; do
+	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
+	cmd git-rebase --onto "$from" "follow-old/$from" "$to"
+    done
+    gitk --all
+    echo
+    echo "$self: Cleaning up after subtree rebase"
+    git config follow.tree | while read from to restofline; do
+	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
+	gf_rmbranch "$from"
+	gf_rmbranch "$to"
+    done
+    gitk --all
+}
+
+
 # The great command case
 command="$1"
 if shift; then
-    case "$command" in	*)
+    case "$command" in
+	rebase-subtree)
+	    gf_init
+	    gf_rebase_tree "$@"
+	    ;;
+	*)
 	    die "Invalid command line parameter: \"$command\""
 	    ;;
     esac
 else
-    die "Command required"
+    gf_init
 fi
 
 # End of file.
