@@ -45,7 +45,7 @@ working_dir="$(pwd)"
 self="$(basename "$0")"
 
 # Defaults
-ifndef_symbol="GIT_VERSION_H"
+ifndef_symbol="GIT_BUILDMSG_H"
 outfile="-"
 print_example=false
 srcdir="$(pwd)"
@@ -199,7 +199,7 @@ if "$print_example"
 then
     cat<<EOF
 
-/* example program demonstrating the use of git_version.sh output */
+/* example program demonstrating the use of ${self} output */
 #include <stdio.h>
 #include <string.h>
 
