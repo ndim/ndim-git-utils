@@ -1,5 +1,6 @@
-ndim-git-utils 1.14.4
-
+ndim-git-utils 1.14.5
+  New licensing: Partly GPL, partly MIT. Common parts dual-licensed.
+  New additions: git-buildmsg, git-rebase-subtree
 
 ndim-git-utils 1.14
   git-amb:
