@@ -17,7 +17,7 @@ include doc/Makefile-files
 include git-ndim-sh/Makefile-files
 include git-amb/Makefile-files
 include git-buildmsg/Makefile-files
-include git-follow/Makefile-files
+include git-rebase-subtree/Makefile-files
 
 if HAVE_NDIM_MAN2TXT
 .man.txt:

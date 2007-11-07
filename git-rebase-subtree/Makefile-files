@@ -1,5 +1,5 @@
 # -*- makefile -*-
-bin_SCRIPTS  += git-rebase-subtree/git-follow
+bin_SCRIPTS  += git-rebase-subtree/git-rebase-subtree
 EXTRA_DIST   += git-rebase-subtree/git-rebase-subtree.in
 UPLOAD_FILES += git-rebase-subtree/git-rebase-subtree
 
