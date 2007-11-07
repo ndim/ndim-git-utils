@@ -1,7 +1,7 @@
 # -*- makefile -*-
 bin_SCRIPTS  += git-rebase-subtree/git-rebase-subtree
 EXTRA_DIST   += git-rebase-subtree/git-rebase-subtree.in
-# UPLOAD_FILES += git-rebase-subtree/git-rebase-subtree
+UPLOAD_FILES += git-rebase-subtree/git-rebase-subtree
 
 man1_MANS  += git-rebase-subtree/git-rebase-subtree.man
 EXTRA_DIST += git-rebase-subtree/git-rebase-subtree.man.in
