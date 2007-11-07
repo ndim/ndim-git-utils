@@ -13,6 +13,15 @@ The utilities in detail
     The name stands for "git *a*uto*m*ake *b*uild". For details, see
     git-amb(1) man page.
 
+  git-buildmsg
+    Generate .h file containing information about the current git
+    working tree. Useful for programs' version messages in logs etc.
+
+  git-rebase-subtree
+    Rebase not only a single branch, but a whole "subtree of branches".
+    Useful for maintaining your own subtree of branches close to some
+    upstream's branch
+
 
 Updates
 =======
