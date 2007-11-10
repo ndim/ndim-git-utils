@@ -15,3 +15,44 @@ git-buildmsg/git-buildmsg-test.c: git-buildmsg/git-buildmsg
 	mkdir -p git-buildmsg
 	sh git-buildmsg/git-buildmsg --example --srcdir "$(top_srcdir)" \
 		--output git-buildmsg/git-buildmsg-test.c
+
+BUILT_SOURCES += git-buildmsg.stamp
+GIT_BUILDMSG_CMD = $(SHELL) "git-buildmsg/git-buildmsg" --error-if-no-git
+GIT_BUILDMSG_H = git-buildmsg.h
+CLEANFILES += $(GIT_BUILDMSG_H)
+git-buildmsg.stamp: git-buildmsg/git-buildmsg
+	if env GIT_DIR="$(top_srcdir)/.git" $(GIT_BUILDMSG_CMD) -s "$(top_srcdir)" -o "$(GIT_BUILDMSG_H)"; then \
+		if test -s "$(srcdir)/$(GIT_BUILDMSG_H)"; then \
+			if diff "$(srcdir)/$(GIT_BUILDMSG_H)" "$(GIT_BUILDMSG_H)"; then \
+				echo "New $(GIT_BUILDMSG_H) does not differ from $(srcdir)/$(GIT_BUILDMSG_H)"; \
+				exit 0; \
+			else \
+				echo "Error: $(srcdir)/$(GIT_BUILDMSG_H) and $(GIT_BUILDMSG_H) differ."; \
+				echo "       You probably want to remove the former."; \
+				exit 1; \
+			fi; \
+		fi; \
+	else \
+		if test -s "$(srcdir)/$(GIT_BUILDMSG_H)"; then \
+			echo "Not a git worktree."; \
+			echo "Keep using the $(GIT_BUILDMSG_H) from $(top_srcdir)"; \
+			rm -f "$(GIT_BUILDMSG_H)"; \
+			exit 0; \
+		else \
+			echo "Warning: $(GIT_BUILDMSG_H) without git workdir."; \
+			exit 0; \
+		fi; \
+	fi
+
+TESTS += print-buildmsg
+bin_PROGRAMS += print-buildmsg
+check_PROGRAMS += print-buildmsg
+print_buildmsg_SOURCES = git-buildmsg/print-buildmsg.c
+print_buildmsg_SOURCES += $(GIT_BUILDMSG_H)
+
+dist-hook:
+	if test -e "$(GIT_BUILDMSG_H)"; then \
+		$(SED) -e 's|^#undef GIT_IS_DIST.*|#define GIT_IS_DIST 1|' \
+			"$(GIT_BUILDMSG_H)" > "$(GIT_BUILDMSG_H).new"; \
+		mv -f "$(GIT_BUILDMSG_H).new" "$(GIT_BUILDMSG_H)"; \
+	fi

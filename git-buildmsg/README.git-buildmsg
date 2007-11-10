@@ -7,12 +7,12 @@ EXTRA_DIST += git-buildmsg
 ---[ END top-level Makefile.am ]---
 
 ---[ BEGIN Makefile.am where information is needed ]---
-BUILT_SOURCES += git-buildmsgstamp
+BUILT_SOURCES += git-buildmsg.stamp
 GIT_BUILDMSG_CMD = $(SHELL) "$(top_srcdir)/git-buildmsg"
 GIT_BUILDMSG_H = git-buildmsg.h
 CLEANFILES += $(GIT_BUILDMSG_H)
-git_version.stamp:
-	env GIT_DIR="$(top_srcdir)/.git" $(GIT_VERSION_CMD) -s "$(top_srcdir)" -o "$(GIT_BUILDMSG_H)"
+git-buildmsg.stamp:
+	env GIT_DIR="$(top_srcdir)/.git" $(GIT_BUILDMSG_CMD) -s "$(top_srcdir)" -o "$(GIT_BUILDMSG_H)"
 	@if test -s "$(srcdir)/$(GIT_BUILDMSG_H)"; then \
 		if cmp "$(srcdir)/$(GIT_BUILDMSG_H)" "$(GIT_BUILDMSG_H)"; then :; \
 		else \
@@ -24,7 +24,7 @@ git_version.stamp:
 
 bin_PROGRAMS += foo
 foo_SOURCES = foo.c
-ndist_foo_SOURCES = $(GIT_BUILDMSG_H)
+nodist_foo_SOURCES = $(GIT_BUILDMSG_H)
 ---[ END Makefile.am where information is needed ]---
 
 
