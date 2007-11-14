@@ -142,6 +142,10 @@ would work equally well for many other SCMs.
 Any build system which works in similar stages should work:
 Create BS (autoreconf), configure BS (configure), execute BS (make).
 cmake(1) could be one.
+.TP
+.B "Arch-independent build/install dirs"
+Yupp, they should be arch-dependent (e.g. i386 vs x86_64). But how to
+determine that?
 .SH "NON-BUGS"
 .TP
 .B "No support for autogen.sh scripts"
