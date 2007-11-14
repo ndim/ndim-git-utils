@@ -6,7 +6,7 @@ AC_INIT([ndims git utilities],
 	[hun@n-dimensional.de],
 	[ndim-git-utils])
 AC_CONFIG_AUX_DIR([auto-aux])
-dnl AC_CONFIG_HEADER([include/config.h])
+AC_CONFIG_HEADER([include/config.h])
 AC_CONFIG_SRCDIR([git-amb/git-amb.in])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign 1.10 dist-bzip2

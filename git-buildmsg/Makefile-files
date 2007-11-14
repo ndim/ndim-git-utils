@@ -21,7 +21,7 @@ GIT_BUILDMSG_CMD = $(SHELL) "git-buildmsg/git-buildmsg" --error-if-no-git
 GIT_BUILDMSG_H = git-buildmsg.h
 CLEANFILES += $(GIT_BUILDMSG_H)
 git-buildmsg.stamp: git-buildmsg/git-buildmsg
-	if env GIT_DIR="$(top_srcdir)/.git" $(GIT_BUILDMSG_CMD) -s "$(top_srcdir)" -o "$(GIT_BUILDMSG_H)"; then \
+	@if env GIT_DIR="$(top_srcdir)/.git" $(GIT_BUILDMSG_CMD) -s "$(top_srcdir)" -o "$(GIT_BUILDMSG_H)"; then \
 		if test -s "$(srcdir)/$(GIT_BUILDMSG_H)"; then \
 			if diff "$(srcdir)/$(GIT_BUILDMSG_H)" "$(GIT_BUILDMSG_H)"; then \
 				echo "New $(GIT_BUILDMSG_H) does not differ from $(srcdir)/$(GIT_BUILDMSG_H)"; \
@@ -48,11 +48,10 @@ TESTS += print-buildmsg
 bin_PROGRAMS += print-buildmsg
 check_PROGRAMS += print-buildmsg
 print_buildmsg_SOURCES = git-buildmsg/print-buildmsg.c
-print_buildmsg_SOURCES += $(GIT_BUILDMSG_H)
+nodist_print_buildmsg_SOURCES = $(GIT_BUILDMSG_H)
 
-dist-hook:
+dist-hook: git-buildmsg.stamp
 	if test -e "$(GIT_BUILDMSG_H)"; then \
 		$(SED) -e 's|^#undef GIT_IS_DIST.*|#define GIT_IS_DIST 1|' \
-			"$(GIT_BUILDMSG_H)" > "$(GIT_BUILDMSG_H).new"; \
-		mv -f "$(GIT_BUILDMSG_H).new" "$(GIT_BUILDMSG_H)"; \
+			"$(GIT_BUILDMSG_H)" > "$(distdir)/$(GIT_BUILDMSG_H)"; \
 	fi

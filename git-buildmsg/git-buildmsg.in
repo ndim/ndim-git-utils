@@ -37,6 +37,8 @@
 #
 # Ideas:
 #  * Output for languages other than C (Erlang, Python, Perl, sh, ...)
+#  * Recognize difference between being built from "non-git" sources and
+#    a dist tarball generated from git rev XYZ.
 
 # The caller may have found these programs for us
 SED="${SED-sed}"
@@ -223,8 +225,10 @@ cat<<EOF
 
 #ifdef GIT_IS_DIST
 # define GIT_DIST_MSG "dist of "
+# define GIT_DIST_MSG_2 " (possibly modified)"
 #else
 # define GIT_DIST_MSG ""
+# define GIT_DIST_MSG_2 ""
 #endif
 
 #ifdef GIT_IS_GIT_WORKTREE
@@ -238,10 +242,10 @@ cat<<EOF
 # define GIT_MESSAGE \\
         GIT_DIST_MSG \\
         "git branch " GIT_BRANCH ", " \\
-        "commit " GIT_COMMIT_ID GIT_CHANGE_MSG
+        "commit " GIT_COMMIT_ID GIT_CHANGE_MSG GIT_DIST_MSG_2
 
 #else
-# define GIT_MESSAGE GIT_DIST_MSG "non-git sources"
+# define GIT_MESSAGE GIT_DIST_MSG "non-git sources" GIT_DIST_MSG_2
 #endif /* GIT_IS_GIT_WORKTREE */
 
 #endif /* ${ifndef_symbol} */
@@ -255,6 +259,10 @@ then
 /* example program demonstrating the use of ${self} output */
 #include <stdio.h>
 #include <string.h>
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 int main(int argc, char *argv[])
 {

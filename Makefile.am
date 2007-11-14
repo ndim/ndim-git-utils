@@ -12,6 +12,8 @@ check_SCRIPTS =
 TESTS =
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT =
 
+AM_CPPFLAGS = -I${top_builddir}/include
+
 ACLOCAL_AMFLAGS = -I m4 --install
 
 include Makefile-files
