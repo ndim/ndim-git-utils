@@ -1,5 +1,7 @@
 # -*- makefile -*-
 
+if HAVE_PYTHON
+
 # For now
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT += nbb/nbb
 
@@ -13,5 +15,7 @@ all-local: nbb/nbb
 nbb/nbb: nbb/nbb_lib.py
 
 python_PYTHON += nbb/nbb_lib.py
+
+endif
 
 # End of Makefile-files.

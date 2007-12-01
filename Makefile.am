@@ -29,8 +29,10 @@ include git-rebase-subtree/Makefile-files
 include git-check-commit-msg/Makefile-files
 include nbb/Makefile-files
 
+if HAVE_PYTHON
 PYTHONPATH = $(DESTDIR)$(pythondir)
 export PYTHONPATH
+endif
 
 if HAVE_NDIM_MAN2TXT
 .man.txt:
@@ -60,3 +62,5 @@ upload: $(UPLOAD_FILES) dist tag
 
 clean-local:
 	rm -rf "$(UPLOAD_DIR)"
+
+# End of Makefile.am.
