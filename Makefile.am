@@ -9,6 +9,7 @@ bin_PROGRAMS =
 check_PROGRAMS =
 bin_SCRIPTS =
 check_SCRIPTS =
+python_PYTHON =
 TESTS =
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT =
 
@@ -22,6 +23,10 @@ include git-ndim-sh/Makefile-files
 include git-amb/Makefile-files
 include git-buildmsg/Makefile-files
 include git-rebase-subtree/Makefile-files
+include nbb/Makefile-files
+
+PYTHONPATH = $(DESTDIR)$(pythondir)
+export PYTHONPATH
 
 if HAVE_NDIM_MAN2TXT
 .man.txt:
