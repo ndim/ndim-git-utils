@@ -55,3 +55,5 @@ upload: $(UPLOAD_FILES) dist tag
 
 clean-local:
 	rm -rf "$(UPLOAD_DIR)"
+
+# End of Makefile.am.
