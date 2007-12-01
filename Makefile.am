@@ -13,6 +13,9 @@ python_PYTHON =
 TESTS =
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT =
 
+# For the test cases
+export top_srcdir
+
 AM_CPPFLAGS = -I${top_builddir}/include
 
 ACLOCAL_AMFLAGS = -I m4 --install
@@ -23,6 +26,7 @@ include git-ndim-sh/Makefile-files
 include git-amb/Makefile-files
 include git-buildmsg/Makefile-files
 include git-rebase-subtree/Makefile-files
+include git-check-commit-msg/Makefile-files
 include nbb/Makefile-files
 
 PYTHONPATH = $(DESTDIR)$(pythondir)
