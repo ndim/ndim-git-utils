@@ -1,5 +1,8 @@
 # -*- makefile -*-
 
+# For now
+AM_INSTALLCHECK_STD_OPTIONS_EXEMPT += nbb/nbb
+
 # TESTS       += nbb/nbb
 bin_SCRIPTS += nbb/nbb
 EXTRA_DIST  += nbb/nbb.in
