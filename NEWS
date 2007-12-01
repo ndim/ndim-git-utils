@@ -1,3 +1,11 @@
+ndim-git-utils 1.16.1
+  * New:
+    * Add git-check-commit-msg.
+  git-buildmsg:
+    * Add C test program.
+    * Distinguish between dist tarballs and git workdirs.
+    * Still needs a number of fixes from radeonhd's git_version.sh.
+
 ndim-git-utils 1.16
   git-rebase-subtree:
     * Warn about using it.
