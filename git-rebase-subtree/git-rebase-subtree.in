@@ -37,10 +37,12 @@ require_work_tree
 # Abort on error
 set -e
 
+#dry_run=:
+dry_run=false
 
 cmd() {
     echo "CMD>" "$@"
-    "$@"
+    "$dry_run" || "$@"
 }
 
 
@@ -109,6 +111,7 @@ gf_rebase_tree() {
     git config "$configvar" | while read from to restofline; do
 	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
 	if test "x$reverse" = "xno" && test "x$from" = "x$oldroot"; then
+	    cmd git-rebase "$newroot" "$oldroot"
 	    cmd git-rebase --onto "$newroot" "follow-old/$from" "$to"
 	elif test "x$reverse" = "xyes" && test "x$from" = "x$newroot"; then
 	    cmd git-rebase --onto "$newroot" "$oldroot" "$to"
