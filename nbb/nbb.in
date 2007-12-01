@@ -1,0 +1,17 @@
+#!@PYTHON@
+
+import sys
+
+if __name__ == '__main__':
+   try:
+      sys.stdout.write("sys.path=%s\n" % repr(sys.path))
+      sys.stdout.flush()
+      import nbb_lib
+      nbb_lib.main(sys.argv)
+   except ImportError, e:
+      sys.stderr.write("nbb: Fatal: Could not load nbb_lib.\n")
+      sys.exit(3)
+
+# Local Variables:
+# mode: python
+# End:

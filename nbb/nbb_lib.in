@@ -1,0 +1,59 @@
+import sys
+import os
+from subprocess import Popen
+import subprocess
+
+class AbstractSourceTree(object):
+    def __init__(self, srcdir):
+        raise "Moo"
+
+srctree_classes = []
+
+def prog_stdout(call_list):
+    p = Popen(call_list, stdout=subprocess.PIPE)
+    stdout, stderr = p.communicate()
+    return stdout.strip()
+
+class GitSourceTree(object):
+    def __init__(self, srcdir):
+        if "true" != prog_stdout(["git", "rev-parse", "--is-inside-work-tree"]):
+            raise "Not a git sourcetree"
+        self.top_srcdir = os.path.join(srcdir,
+
+srctree_classes.append(GitSourceTree)
+
+def get_sourcetree(srcdir):
+    for cls in srctree_classes:
+        try:
+            return cls(srcdir)
+        except "Moo":
+            pass
+    raise "Source tree type for '%s' not detected" % (srcdir,)
+
+class NBB(object):
+    def __init__(self):
+        srcdir = os.getcwd()
+        self.sourcetree = get_sourcetree(srcdir)
+
+def main(argv):
+    prog = argv[0]
+    idx = prog.rfind('/')
+    if idx >= 0:
+        prog = prog[idx+1:]
+    for arg in argv[1:]:
+        if arg in ('-h', '--help'):
+            print "Usage: %(prog)s" % locals()
+            return
+        elif arg in ('-V', '--version'):
+            print "%(prog)s (@PACKAGE_NAME@) @PACKAGE_VERSION@"
+            return
+        else:
+            pass
+    nbb = NBB()
+
+if __name__ == '__main__':
+    raise "This is not a library"
+
+# Local Variables:
+# mode: python
+# End:

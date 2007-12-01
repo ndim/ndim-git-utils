@@ -1,0 +1,14 @@
+# -*- makefile -*-
+
+# TESTS       += nbb/nbb
+bin_SCRIPTS += nbb/nbb
+EXTRA_DIST  += nbb/nbb.in
+
+all-local: nbb/nbb
+	chmod +x nbb/nbb
+
+nbb/nbb: nbb/nbb_lib.py
+
+python_PYTHON += nbb/nbb_lib.py
+
+# End of Makefile-files.
