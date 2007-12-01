@@ -8,7 +8,10 @@ errors=0
 while read tc expect restofline
 do
 	tcfile="${tcdir}/git-check-commit-msg/${tc}"
-	test -s "$tcfile" || continue
+	test -f "$tcfile" || {
+		echo "$0: Fatal: Test file $tcfile not found." >&2
+		exit 1
+	}
 
 	"$script" "$tcfile"; s="$?"
 
@@ -26,3 +29,4 @@ commit-3	OK
 EOF
 
 [ "$errors" -ne 0 ] && exit 1
+exit 0
