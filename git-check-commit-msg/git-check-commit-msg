@@ -1,8 +1,9 @@
 #!/bin/sh
 
 msgfile="$1"
+
 test -s "$msgfile" || {
-	echo >&2 "Commit message must not be empty"
+	echo >&2 "Commit message must NOT be empty."
 	exit 1
 }
 
