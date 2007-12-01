@@ -1,0 +1,20 @@
+#!/bin/sh
+
+msgfile="$1"
+test -s "$msgfile" || {
+	echo >&2 "Commit message must not be empty"
+	exit 1
+}
+
+# Check first line is <= 50 chars, and followed by empty line
+test "x$(sed -n '1s/^.\{,50\}//p' "$msgfile")" = "x"  || {
+	echo >&2 "First line is too long. It should be <= 50 characters."
+        echo >&2 "These characters fit:   $(sed -n '1s/^\(.\{,50\}\)\(.*\)$/\1/p' "$1")"
+	echo >&2 "These exceed the limit: $(sed -n '1s/^\(.\{,50\}\)\(.*\)$/\2/p' "$1")"
+	exit 1
+}
+test "x$(sed -n 's/^#.*//; 2p' "$msgfile")" = "x" || {
+	echo >&2 "Second line should be empty."
+	exit 1
+}
+

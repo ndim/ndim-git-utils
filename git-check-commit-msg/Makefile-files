@@ -1,0 +1,7 @@
+# -*- makefile -*-
+
+AM_INSTALLCHECK_STD_OPTIONS_EXEMPT += git-check-commit-msg
+bin_SCRIPTS += git-check-commit-msg/git-check-commit-msg
+EXTRA_DIST  += git-check-commit-msg/git-check-commit-msg
+
+TESTS += git-check-commit-msg/run-tests.sh
