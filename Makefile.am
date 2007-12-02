@@ -35,11 +35,12 @@ if HAVE_NDIM_MAN2TXT
 endif
 
 # Requires git 1.5 to work properly.
+GIT = git
 tag:
 	test -d "$(top_srcdir)/.git"
-	@cd "$(top_srcdir)" && git status;:
-	@cd "$(top_srcdir)" && git-diff-files --quiet
-	@cd "$(top_srcdir)" && git-diff-index --cached --quiet HEAD
+	@cd "$(top_srcdir)" && $(GIT) status;:
+	@cd "$(top_srcdir)" && $(GIT) diff-files --quiet
+	@cd "$(top_srcdir)" && $(GIT) diff-index --cached --quiet HEAD
 	test "x$$($(SED) '/^$(PACKAGE_TARNAME) $(PACKAGE_VERSION)$$/,$$ d' '$(top_srcdir)/NEWS')" = "x"
 	@$(SED) -n '/^$(PACKAGE_TARNAME) $(PACKAGE_VERSION)$$/,/^$(PACKAGE_TARNAME) / p' '$(top_srcdir)/NEWS' \
 		| $(SED) '$$d' | $(SED) '$$ { /^$$/d }' \
@@ -50,7 +51,7 @@ tag:
 	trap "rm $$msg" TERM QUIT ABRT INT; read ignore_this; \
 	args=""; \
 	test "x$$(echo "$(PACKAGE_VERSION)" | $(SED) 's/^[0-9]\{1,\}\.[0-9]\{1,\}//')" = "x" && args="-s -F $$msg"; \
-	cd "$(top_srcdir)" && echo git tag $${args} "v$(PACKAGE_VERSION)"; rm "$$msg"
+	cd "$(top_srcdir)" && $(GIT) tag $${args} "v$(PACKAGE_VERSION)"; rm "$$msg"
 
 UPLOAD_DIR = upload-dir
 ALL_UPLOAD_FILES = $(UPLOAD_FILES) $(distdir).tar.bz2
