@@ -1,4 +1,4 @@
-ndim-git-utils 1.16.3
+ndim-git-utils 1.16.4
   * New:
     * Add git-check-commit-msg.
     * Add skeleton nbb (ndim's branch builder), a generic git-amb replacement.
