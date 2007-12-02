@@ -1,4 +1,4 @@
-ndim-git-utils 1.16.4
+ndim-git-utils 1.17
   New:
     * Add git-check-commit-msg.
   git-buildmsg:

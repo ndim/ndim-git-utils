@@ -2,7 +2,7 @@
 
 AC_PREREQ(2.61)
 AC_INIT([ndims git utilities],
-	[1.16.4],
+	[1.17],
 	[hun@n-dimensional.de],
 	[ndim-git-utils])
 AC_CONFIG_AUX_DIR([auto-aux])
