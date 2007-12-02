@@ -1,5 +1,5 @@
-ndim-git-utils 1.16.1
-  * New:
+ndim-git-utils 1.16.3
+  New:
     * Add git-check-commit-msg.
   git-buildmsg:
     * Add C test program.
