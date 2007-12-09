@@ -14,21 +14,41 @@ def prog_stdout(call_list):
     stdout, stderr = p.communicate()
     return stdout.strip()
 
+class NotASourceTree(Exception):
+    pass
+
 class GitSourceTree(object):
     def __init__(self, srcdir):
         if "true" != prog_stdout(["git", "rev-parse", "--is-inside-work-tree"]):
             raise "Not a git sourcetree"
-        self.top_srcdir = os.path.join(srcdir,
+        self.top_srcdir = os.path.join(srcdir, FIXME)
 
 srctree_classes.append(GitSourceTree)
 
+class BzrSourceTree(object):
+    def __init__(self, srcdir):
+        try:
+            import bzrlib.workingtree
+            wt,b = bzrlib.workingtree.WorkingTree.open_containing(".")
+        except ImportError:
+            raise NotASourceTree()
+        self.wt = wt
+
+srctree_classes.append(BzrSourceTree)
+
 def get_sourcetree(srcdir):
-    for cls in srctree_classes:
+    def moo(cls):
         try:
             return cls(srcdir)
-        except "Moo":
-            pass
-    raise "Source tree type for '%s' not detected" % (srcdir,)
+        except NotASourceTree():
+            return None
+    tmp = map(moo, srctree_classes)
+    srctrees = filter(lambda x: not x == None, tmp)
+    if len(srctrees) > 1:
+        raise "More than one source tree type detected for '%s'" % (srcdir,)
+    elif len(srctrees) < 1:
+        raise "Source tree type for '%s' not detected" % (srcdir,)
+    return srctrees[0]
 
 class NBB(object):
     def __init__(self):
