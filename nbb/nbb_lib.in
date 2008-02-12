@@ -1,7 +1,11 @@
 import sys
 import os
+import getopt
+
 from subprocess import Popen
 import subprocess
+
+import urlparse
 
 
 ########################################################################
@@ -17,6 +21,9 @@ def prog_stdout(call_list):
 
 ########################################################################
 # VCS Source Tree plugin system
+########################################################################
+# Plugin architecture (metaclass tricks) by Marty Alchin from
+# http://gulopine.gamemusic.org/2008/jan/10/simple-plugin-framework/
 ########################################################################
 
 class NotASourceTree(Exception):
@@ -53,21 +60,38 @@ class VCSourceTree(object):
     __metaclass__ = VCSourceTreeMeta
 
     def detect(cls, srcdir):
+        """Find VCS tree type and return it"""
         def check_class(klass):
             try:
-                return klass(srcdir)
+                t = klass(srcdir)
+                #print "t:", t
+                return t
             except NotASourceTree:
                 return None
         if len(VCSourceTree.plugins) < 1:
             raise "No VC source tree classes registered"
-        matches = filter(check_class, VCSourceTree.plugins)
+        t_matches = [check_class(k) for k in VCSourceTree.plugins]
+        matches = [x for x in t_matches if x]
         if len(matches) > 1:
-            raise ("More than one source tree type detected for '%s'"
-                   % (srcdir,))
+            raise ("More than one source tree type detected for '%s': %s"
+                   % (srcdir, ", ".join(map(lambda x:str(x), matches))))
         elif len(matches) < 1:
             raise "Source tree type for '%s' not detected" % (srcdir,)
+        print "returning match:", matches[0]
         return matches[0]
     detect = classmethod(detect)
+
+    def tree_root(self):
+        raise NotImplementedError()
+
+    def branch_name(self):
+        """Return name identifying the branch"""
+        raise NotImplementedError()
+
+    def __str__(self):
+        return "VCS-Source-Tree(%s, %s, %s)" % (self.vcs_name,
+                                                repr(self.tree_root()),
+                                                repr(self.branch_name()))
 
 
 ########################################################################
@@ -79,13 +103,20 @@ class GitSourceTree(VCSourceTree):
     vcs_name = 'git'
 
     def __init__(self, srcdir):
+        os.chdir(srcdir)
         if "true" != prog_stdout(["git", "rev-parse",
                                   "--is-inside-work-tree"]):
             raise NotASourceTree()
-        self.top_srcdir = os.path.join(srcdir, '.') # FIXME)
+        self.__tree_root = srcdir
 
-    def __str__(self):
-        return "%s(%s)" % (self.__class__.__name__, self.top_srcdir)
+    def tree_root(self):
+        return self.__tree_root
+
+    def branch_name(self):
+        bname = prog_stdout(["git", "symbolic-ref", "HEAD"])
+        refs,heads,branch = bname.split('/')
+        assert(refs=='refs' and heads=='heads')
+        return branch
 
 
 class BzrSourceTree(VCSourceTree):
@@ -95,19 +126,29 @@ class BzrSourceTree(VCSourceTree):
     def __init__(self, srcdir):
         try:
             import bzrlib.workingtree
-            wt,b = bzrlib.workingtree.WorkingTree.open_containing(".")
+            wt,b = bzrlib.workingtree.WorkingTree.open_containing(srcdir)
         except bzrlib.errors.NotBranchError:
             raise NotASourceTree()
         except ImportError:
             raise NotASourceTree()
         self.wt = wt
-        print "wt:", wt
-        print "b:", b
-        print "wt:", dir(wt)
-        print "b:", dir(b)
+        #print "wt:", wt
+        #print "wt:", dir(wt)
+        #print "wt.branch:", wt.branch
+        #print "wt.branch:", dir(wt.branch)
+        #print "wt.branch.nick:", wt.branch.nick
+        #print "wt.branch.abspath:", wt.branch.abspath
+        #print "wt.branch.base:", wt.branch.base
+        #print "wt.branch.basis_tree:", wt.branch.basis_tree()
 
-    def __str__(self):
-        return "%s(%s)" % (self.__class__.__name__, self.top_srcdir)
+    def tree_root(self):
+        proto,host,path,some,thing = urlparse.urlsplit(self.wt.branch.base)
+        assert(proto == "file" and host == "")
+        assert(some == "" and thing == "")
+        return path
+
+    def branch_name(self):
+        return self.wt.branch.nick
 
 
 ########################################################################
@@ -115,11 +156,12 @@ class BzrSourceTree(VCSourceTree):
 ########################################################################
 
 class NBB(object):
-    def __init__(self):
-        srcdir = os.getcwd()
-        self.sourcetree = VCSourceTree.detect(srcdir)
-        print "sourcetree: %s" % self.sourcetree
-        print "sourcetree:", dir(self.sourcetree)
+    def __init__(self, srcdir=None):
+        if srcdir is None:
+            srcdir = os.getcwd()
+        self.sourcetree = VCSourceTree.detect(os.path.abspath(srcdir))
+        print "sourcetree: %s" % str(self.sourcetree)
+        #print "sourcetree:", dir(self.sourcetree)
 
 
 def main(argv):
@@ -127,16 +169,23 @@ def main(argv):
     idx = prog.rfind('/')
     if idx >= 0:
         prog = prog[idx+1:]
-    for arg in argv[1:]:
-        if arg in ('-h', '--help'):
+    optlist, args = getopt.getopt(argv[1:], 'hV', [
+            'help', 'version'])
+    for opt, arg in optlist:
+        if opt in ('-h', '--help'):
             print "Usage: %(prog)s" % locals()
             return
-        elif arg in ('-V', '--version'):
+        elif opt in ('-V', '--version'):
             print "%(prog)s (@PACKAGE_NAME@) @PACKAGE_VERSION@"
             return
         else:
-            pass
-    nbb = NBB()
+            raise NotImplementedError()
+    if len(args) == 0:
+        nbb = NBB()
+    elif len(args) == 1:
+        nbb = NBB(args[0])
+    else:
+        raise NotImplementedError()
 
 
 if __name__ == '__main__':
