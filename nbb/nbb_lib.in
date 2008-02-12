@@ -3,11 +3,34 @@ import os
 from subprocess import Popen
 import subprocess
 
-class AbstractSourceTree(object):
-    def __init__(self, srcdir):
-        raise "Moo"
+vc_srctree_classes = []
 
-srctree_classes = []
+class FooMeta(type):
+    def __init__(self, name, bases, attrs):
+        print ("FooMeta.__init__: name=%s, bases=%s, attrs=%s"
+               % (name, bases, attrs))
+        cls = super(FooMeta, self).__init__(name, bases, attrs)
+        if attrs['platform'] is not None:
+            # register_foo_implementation(cls.platform, cls)
+            vc_srctree_classes.append(cls)
+        return cls
+
+class VCSourceTree(object):
+    __metaclass__ = FooMeta
+    platform = None
+    def __init__(self, srcdir):
+        def check_class(cls):
+            try:
+                return cls(srcdir)
+            except NotASourceTree():
+                return None
+        matches = filter(check_class, vc_srctree_classes)
+        if len(matches) > 1:
+            raise ("More than one source tree type detected for '%s'"
+                   % (srcdir,))
+        elif len(matches) < 1:
+            raise "Source tree type for '%s' not detected" % (srcdir,)
+        return matches[0]
 
 def prog_stdout(call_list):
     p = Popen(call_list, stdout=subprocess.PIPE)
@@ -17,15 +40,16 @@ def prog_stdout(call_list):
 class NotASourceTree(Exception):
     pass
 
-class GitSourceTree(object):
+class GitSourceTree(VCSourceTree):
+    platform = 'git'
     def __init__(self, srcdir):
-        if "true" != prog_stdout(["git", "rev-parse", "--is-inside-work-tree"]):
+        if "true" != prog_stdout(["git", "rev-parse",
+                                  "--is-inside-work-tree"]):
             raise "Not a git sourcetree"
         self.top_srcdir = os.path.join(srcdir, FIXME)
 
-srctree_classes.append(GitSourceTree)
-
-class BzrSourceTree(object):
+class BzrSourceTree(VCSourceTree):
+    platform = 'bzr'
     def __init__(self, srcdir):
         try:
             import bzrlib.workingtree
@@ -34,26 +58,10 @@ class BzrSourceTree(object):
             raise NotASourceTree()
         self.wt = wt
 
-srctree_classes.append(BzrSourceTree)
-
-def get_sourcetree(srcdir):
-    def moo(cls):
-        try:
-            return cls(srcdir)
-        except NotASourceTree():
-            return None
-    tmp = map(moo, srctree_classes)
-    srctrees = filter(lambda x: not x == None, tmp)
-    if len(srctrees) > 1:
-        raise "More than one source tree type detected for '%s'" % (srcdir,)
-    elif len(srctrees) < 1:
-        raise "Source tree type for '%s' not detected" % (srcdir,)
-    return srctrees[0]
-
 class NBB(object):
     def __init__(self):
         srcdir = os.getcwd()
-        self.sourcetree = get_sourcetree(srcdir)
+        self.sourcetree = VCSourceTree(srcdir)
 
 def main(argv):
     prog = argv[0]
