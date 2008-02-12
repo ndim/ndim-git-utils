@@ -4,8 +4,8 @@ import sys
 
 if __name__ == '__main__':
    try:
-      sys.stdout.write("sys.path=%s\n" % repr(sys.path))
-      sys.stdout.flush()
+      #sys.stdout.write("sys.path=%s\n" % repr(sys.path))
+      #sys.stdout.flush()
       import nbb_lib
       nbb_lib.main(sys.argv)
    except ImportError, e:
