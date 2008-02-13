@@ -8,8 +8,18 @@ import urlparse
 """nbb_lib - moo
 
 TODO:
- * VCS config support
+ * VCS config support ('git config', etc.)
+
  * Build system support: automake/autoconf, cmake
+
+ * Design nice user interface. Requirements:
+   * print top_srcdir, builddir, installdir
+   * start subshell in top_srcdir, builddir, installdir
+   * run 'autoreconf' type step
+   * run 'configure' type step
+   * run 'make' type step
+   * run 'make install' type step
+   * run custom (make) commands
 """
 
 
