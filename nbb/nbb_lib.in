@@ -80,100 +80,6 @@ class AbstractConfig(object):
 
 
 ########################################################################
-# Buildsystem Source Tree plugin system
-########################################################################
-# Plugin architecture (metaclass tricks) by Marty Alchin from
-# http://gulopine.gamemusic.org/2008/jan/10/simple-plugin-framework/
-########################################################################
-
-class NotABSSourceTree(Exception): pass
-
-class BSSourceTreeMeta(type):
-    def __init__(cls, name, bases, attrs):
-        if not hasattr(cls, 'plugins'):
-            cls.plugins = []
-        else:
-            cls.plugins.append(cls)
-
-
-class BSSourceTree(object):
-    __metaclass__ = BSSourceTreeMeta
-
-    def detect(cls, vcs_tree):
-        """Find BS tree type and return it"""
-        if len(BSSourceTree.plugins) < 1:
-            raise "No BS source tree classes registered"
-        def check_class(klass):
-            try:
-                t = klass(vcs_tree)
-                return t
-            except NotABSSourceTree:
-                return None
-        matches = filter(lambda x:x, map(check_class, BSSourceTree.plugins))
-        if len(matches) > 1:
-            raise ("More than one source tree type detected for '%s': %s"
-                   % (vcs_tree, ", ".join(map(lambda x:str(x), matches))))
-        elif len(matches) < 1:
-            raise "Source tree type for '%s' not detected" % (vcs_tree,)
-        return matches[0]
-    detect = classmethod(detect)
-
-    def __str__(self):
-        return "BS-Source-Tree(%s, %s)" % (self.bs_name,
-                                           repr(self.tree_root()))
-
-    # Abstract methods
-    def tree_root(self): raise NotImplementedError()
-    def init(self): raise NotImplementedError()
-    def configure(self): raise NotImplementedError()
-    def build(self): raise NotImplementedError()
-    def install(self): raise NotImplementedError()
-
-
-class AutomakeSourceTree(BSSourceTree):
-    bs_name = 'automake'
-    def __init__(self, vcs_tree):
-        srcdir = vcs_tree.tree_root()
-        self.config = vcs_tree.get_config()
-        flag = False
-        for f in [ os.path.join(srcdir, 'configure.ac'),
-                   os.path.join(srcdir, 'configure.in'),
-                   ]:
-            if os.path.exists(f):
-                flag = True
-                break
-        if not flag:
-            raise NotABSSourceTree()
-        self.srcdir = srcdir
-
-    def tree_root(self):
-        return self.srcdir
-
-    def init(self):
-        """'autoreconf'"""
-        prog_run(["autoreconf", "-v", "-i", "-s", self.srcdir])
-
-    def configure(self):
-        """'configure --prefix'"""
-        builddir = self.config.builddir()
-        if not os.path.exists(builddir): os.makedirs(builddir)
-        os.chdir(builddir)
-        prog_run(["%s/configure" % self.srcdir,
-                  "--prefix=%s" % self.config.installdir()
-                  ])
-
-    def build(self):
-        """'make'"""
-        os.chdir(self.config.builddir())
-        prog_run(["make", ])
-
-    def install(self):
-        """'make install'"""
-        os.chdir(self.config.builddir())
-        prog_run(["make", "install", "INSTALL=/usr/bin/install -p"])
-
-
-########################################################################
 # VCS Source Tree plugin system
 ########################################################################
 # Plugin architecture (metaclass tricks) by Marty Alchin from
@@ -305,6 +211,100 @@ class BzrSourceTree(VCSourceTree):
 
     def branch_name(self):
         return self.wt.branch.nick
+
+
+########################################################################
+# Buildsystem Source Tree plugin system
+########################################################################
+# Plugin architecture (metaclass tricks) by Marty Alchin from
+# http://gulopine.gamemusic.org/2008/jan/10/simple-plugin-framework/
+########################################################################
+
+class NotABSSourceTree(Exception): pass
+
+class BSSourceTreeMeta(type):
+    def __init__(cls, name, bases, attrs):
+        if not hasattr(cls, 'plugins'):
+            cls.plugins = []
+        else:
+            cls.plugins.append(cls)
+
+
+class BSSourceTree(object):
+    __metaclass__ = BSSourceTreeMeta
+
+    def detect(cls, vcs_tree):
+        """Find BS tree type and return it"""
+        if len(BSSourceTree.plugins) < 1:
+            raise "No BS source tree classes registered"
+        def check_class(klass):
+            try:
+                t = klass(vcs_tree)
+                return t
+            except NotABSSourceTree:
+                return None
+        matches = filter(lambda x:x, map(check_class, BSSourceTree.plugins))
+        if len(matches) > 1:
+            raise ("More than one source tree type detected for '%s': %s"
+                   % (vcs_tree, ", ".join(map(lambda x:str(x), matches))))
+        elif len(matches) < 1:
+            raise "Source tree type for '%s' not detected" % (vcs_tree,)
+        return matches[0]
+    detect = classmethod(detect)
+
+    def __str__(self):
+        return "BS-Source-Tree(%s, %s)" % (self.bs_name,
+                                           repr(self.tree_root()))
+
+    # Abstract methods
+    def tree_root(self): raise NotImplementedError()
+    def init(self): raise NotImplementedError()
+    def configure(self): raise NotImplementedError()
+    def build(self): raise NotImplementedError()
+    def install(self): raise NotImplementedError()
+
+
+class AutomakeSourceTree(BSSourceTree):
+    bs_name = 'automake'
+    def __init__(self, vcs_tree):
+        srcdir = vcs_tree.tree_root()
+        self.config = vcs_tree.get_config()
+        flag = False
+        for f in [ os.path.join(srcdir, 'configure.ac'),
+                   os.path.join(srcdir, 'configure.in'),
+                   ]:
+            if os.path.exists(f):
+                flag = True
+                break
+        if not flag:
+            raise NotABSSourceTree()
+        self.srcdir = srcdir
+
+    def tree_root(self):
+        return self.srcdir
+
+    def init(self):
+        """'autoreconf'"""
+        prog_run(["autoreconf", "-v", "-i", "-s", self.srcdir])
+
+    def configure(self):
+        """'configure --prefix'"""
+        builddir = self.config.builddir()
+        if not os.path.exists(builddir): os.makedirs(builddir)
+        os.chdir(builddir)
+        prog_run(["%s/configure" % self.srcdir,
+                  "--prefix=%s" % self.config.installdir()
+                  ])
+
+    def build(self):
+        """'make'"""
+        os.chdir(self.config.builddir())
+        prog_run(["make", ])
+
+    def install(self):
+        """'make install'"""
+        os.chdir(self.config.builddir())
+        prog_run(["make", "install", "INSTALL=/usr/bin/install -p"])
 
 
 ########################################################################
