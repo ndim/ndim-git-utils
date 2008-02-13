@@ -36,13 +36,30 @@ def prog_stdout(call_list):
     return stdout.strip()
 
 
+class ProgramRunError(Exception):
+    def __init__(self, call_list, retcode, cwd=None):
+        self.call_list = call_list
+        self.retcode = retcode
+        if cwd:
+            self.cwd = cwd
+        else:
+            self.cwd = os.getcwd()
+    def __str__(self):
+        return ("Error running program (%s, retcode=%d, cwd=%s)"
+                % (repr(self.call_list),
+                   self.retcode,
+                   repr(self.cwd)))
+
+
 def prog_run(call_list):
     print "RUN:", call_list
     print "  in", os.getcwd()
     return None
     p = subprocess.Popen(call_list)
     stdout, stderr = p.communicate(input=None)
-    return None # FIXME: Exit code
+    if p.returncode != 0:
+        raise ProgramRunError(call_list, p.returncode, os.getcwd())
+    return p.returncode
 
 
 class AbstractConfig(object):
@@ -123,6 +140,7 @@ class AutomakeSourceTree(BSSourceTree):
     def init(self):
         """'autoreconf'"""
         prog_run(["autoreconf", "-v", "-i", "-s", self.srcdir])
+
     def configure(self):
         """'configure --prefix'"""
         builddir = self.config.builddir()
@@ -131,10 +149,12 @@ class AutomakeSourceTree(BSSourceTree):
         prog_run(["%s/configure" % self.srcdir,
                   "--prefix=%s" % self.config.installdir()
                   ])
+
     def build(self):
         """'make'"""
         os.chdir(self.config.builddir())
         prog_run(["make", ])
+
     def install(self):
         """'make install'"""
         os.chdir(self.config.builddir())
@@ -284,13 +304,17 @@ class NBB(object):
         absdir = os.path.abspath(srcdir)
         self.vcs_sourcetree = VCSourceTree.detect(absdir)
         print str(self.vcs_sourcetree)
+        #print "sourcetree:", dir(self.sourcetree)
         self.bs_sourcetree = BSSourceTree.detect(self.vcs_sourcetree)
         print str(self.bs_sourcetree)
-        self.bs_sourcetree.init()
-        self.bs_sourcetree.configure()
-        self.bs_sourcetree.build()
-        self.bs_sourcetree.install()
-        #print "sourcetree:", dir(self.sourcetree)
+        try:
+            self.bs_sourcetree.init()
+            self.bs_sourcetree.configure()
+            self.bs_sourcetree.build()
+            self.bs_sourcetree.install()
+        except ProgramRunError, e:
+            print "Fatal:", e
+            print "Program aborted."
 
 
 def main(argv):
