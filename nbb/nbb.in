@@ -1,16 +1,28 @@
 #!@PYTHON@
 
 import sys
+import os
+
+def error():
+   sys.stderr.write("nbb: Fatal: Could not load nbb_lib.\n")
+   sys.exit(3)
 
 if __name__ == '__main__':
    try:
-      #sys.stdout.write("sys.path=%s\n" % repr(sys.path))
-      #sys.stdout.flush()
       import nbb_lib
-      nbb_lib.main(sys.argv)
    except ImportError, e:
-      sys.stderr.write("nbb: Fatal: Could not load nbb_lib.\n")
-      sys.exit(3)
+      pythondir = "@pythondir@"
+      if os.path.exists(pythondir):
+         try:
+            sys.path.insert(0, pythondir)
+            import nbb_lib
+         except ImportError, e:
+            error()
+      else:
+         error()
+   #sys.stdout.write("sys.path=%s\n" % repr(sys.path))
+   #sys.stdout.flush()
+   nbb_lib.main(sys.argv)
 
 # Local Variables:
 # mode: python

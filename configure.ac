@@ -36,7 +36,6 @@ AC_CONFIG_FILES([git-buildmsg/git-buildmsg])
 AC_CONFIG_FILES([git-rebase-subtree/git-rebase-subtree])
 AC_CONFIG_FILES([git-rebase-subtree/git-rebase-subtree.man])
 AC_CONFIG_FILES([git-ndim-sh/git-ndim-sh])
-AC_CONFIG_FILES([nbb/nbb])
 AC_CONFIG_FILES([nbb/nbb_lib.py:nbb/nbb_lib.in])
 AC_OUTPUT
 

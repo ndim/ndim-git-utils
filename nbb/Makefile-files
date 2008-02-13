@@ -3,16 +3,16 @@
 if HAVE_PYTHON
 
 # For now
-AM_INSTALLCHECK_STD_OPTIONS_EXEMPT += nbb/nbb
-
 # TESTS       += nbb/nbb
 bin_SCRIPTS += nbb/nbb
 EXTRA_DIST  += nbb/nbb.in
 
-all-local: nbb/nbb
+CLEANFILES += nbb/nbb
+nbb/nbb: $(srcdir)/nbb/nbb.in nbb/nbb_lib.py
+	$(SED)	-e "s|[@]PYTHON@|$(PYTHON)|" \
+		-e "s|[@]pythondir@|$(pythondir)|" \
+		< $(srcdir)/nbb/nbb.in > nbb/nbb
 	chmod +x nbb/nbb
-
-nbb/nbb: nbb/nbb_lib.py
 
 python_PYTHON += nbb/nbb_lib.py
 

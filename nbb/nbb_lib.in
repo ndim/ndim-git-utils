@@ -329,7 +329,7 @@ def main(argv):
             print "Usage: %(prog)s" % locals()
             return
         elif opt in ('-V', '--version'):
-            print "%(prog)s (@PACKAGE_NAME@) @PACKAGE_VERSION@"
+            print "%(prog)s (@PACKAGE_NAME@) @PACKAGE_VERSION@" % locals()
             return
         else:
             raise NotImplementedError()
