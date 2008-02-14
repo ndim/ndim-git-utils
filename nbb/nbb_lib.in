@@ -1,11 +1,20 @@
 """\
-nbb_lib - program innards for ndim's branch builder
+nbb (ndim's branch builder) from @PACKAGE_NAME@ @PACKAGE_VERSION@
+Build, install given branch of source code into a branch specific place
+Copyright (C) 2007,2008 Hans Ulrich Niedermann
+
+Usage: %(prog)s <to-be-determined>
+
+Features:
+ * supports git branches (TBD: git config)
+ * supports bzr branches (requires useful branch nick, TBD: bzr config)
+ * does out-of-source-tree builds (in-source-tree-builds unsupported)
+ * direct support for automake/autoconf based build systems
+ * TBD: supports execution of user commands in source, build, install dirs
 
 TODO:
  * VCS config support ('git config', etc.)
-
  * Build system support: automake/autoconf, cmake
-
  * Design nice user interface. Requirements:
    * print top_srcdir, builddir, installdir
    * start subshell in top_srcdir, builddir, installdir
@@ -14,29 +23,46 @@ TODO:
    * run 'make' type step
    * run 'make install' type step
    * run custom (make) commands
-
  * Bash syntax completion for that user interface.
-
  * Man page or something similar.
 
-Possible interface:
+Command line interface (TBD):
 
-  $ nbb [general options] init [command specific options]
-  $ nbb [general options] configure [command specific options]
-  $ nbb [general options] build [command specific options]
-  $ nbb [general options] install [command specific options]
+  Run default build commands:
+  $ %(prog)s [general options] init [command specific options]
+  $ %(prog)s [general options] configure [command specific options]
+  $ %(prog)s [general options] build [command specific options]
+  $ %(prog)s [general options] install [command specific options]
 
-  $ nbb [general options] config srcdir
-  $ nbb [general options] config builddir [<builddir>]
-  $ nbb [general options] config installdir [<installdir>]
+  Get/set config:
+  $ %(prog)s [general options] config srcdir
+  $ %(prog)s [general options] config builddir [<builddir>]
+  $ %(prog)s [general options] config installdir [<installdir>]
 
-  $ nbb [general options] src-sh [command specific options]
-  $ nbb [general options] build-sh [command specific options]
-  $ nbb [general options] install-sh [command specific options]
+  Start an interactive shell in either of the three directories:
+  $ %(prog)s [general options] src-sh [command specific options]
+  $ %(prog)s [general options] build-sh [command specific options]
+  $ %(prog)s [general options] install-sh [command specific options]
 
-  $ nbb [general options] run <command> [<param>...]
-  $ nbb [general options] run [command specific options... <-->] <command>...
+  Run command in builddir:
+  $ %(prog)s [general options] run <command> [<param>...]
+  $ %(prog)s [general options] run [command specific options... <-->] <cmd>...
 
+  (Not sure about these)
+  Run a non-interactive shell command in either of the three directories:
+  $ %(prog)s [general options] src-sh [command specific options] <command>...
+  $ %(prog)s [general options] build-sh [command specific options] <command>...
+  $ %(prog)s [general options] install-sh [command specific options] <cmd...>
+
+Global options:
+
+  -h --help          Print this help text
+  -V --version       Print program version number
+
+  -n --dry-run       Do not actually execute any commands
+
+  -b --build-system  Force buildsystem detection (%(buildsystems)s)
+  -v --vcs           Force VCS detection (%(vcssystems)s)
 
 """
 
@@ -362,10 +388,14 @@ def main(argv):
     if idx >= 0:
         prog = prog[idx+1:]
 
+    # FIXME: From plugin systems.
+    buildsystems = ', '.join(['automake', ])
+    vcssystems = ', '.join(['bzr', 'git', ])
+
     optlist, args = getopt.getopt(argv[1:], 'hV', ['help', 'version'])
     for opt, arg in optlist:
         if opt in ('-h', '--help'):
-            print "Usage: %(prog)s" % locals()
+            print __doc__ % locals()
             return
         elif opt in ('-V', '--version'):
             print "%(prog)s (@PACKAGE_NAME@) @PACKAGE_VERSION@" % locals()
