@@ -34,6 +34,9 @@ Command line interface (TBD):
   $ %(prog)s [general options] build [command specific options]
   $ %(prog)s [general options] install [command specific options]
 
+  Run cleanup commands:
+  TBD
+
   Get/set config:
   $ %(prog)s [general options] config srcdir
   $ %(prog)s [general options] config builddir [<builddir>]
@@ -393,7 +396,7 @@ WARNING: %(prog)s is very much a work in progress.
          Parts of %(prog)s are not implemented yet.
 """ % locals()
 
-    # FIXME: From plugin systems.
+    # FIXME: Generate from plugin systems.
     buildsystems = ', '.join(['automake', ])
     vcssystems = ', '.join(['bzr', 'git', ])
 
