@@ -14,6 +14,30 @@ TODO:
    * run 'make' type step
    * run 'make install' type step
    * run custom (make) commands
+
+ * Bash syntax completion for that user interface.
+
+ * Man page or something similar.
+
+Possible interface:
+
+  $ nbb [general options] init [command specific options]
+  $ nbb [general options] configure [command specific options]
+  $ nbb [general options] build [command specific options]
+  $ nbb [general options] install [command specific options]
+
+  $ nbb [general options] config srcdir
+  $ nbb [general options] config builddir [<builddir>]
+  $ nbb [general options] config installdir [<installdir>]
+
+  $ nbb [general options] src-sh [command specific options]
+  $ nbb [general options] build-sh [command specific options]
+  $ nbb [general options] install-sh [command specific options]
+
+  $ nbb [general options] run <command> [<param>...]
+  $ nbb [general options] run [command specific options... <-->] <command> [<param>...]
+
+
 """
 
 import sys
