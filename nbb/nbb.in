@@ -1,25 +1,29 @@
 #!@PYTHON@
+"""\
+nbb - ndim's branch builder frontend
+"""
 
 import sys
 import os
 
-def error():
-   sys.stderr.write("nbb: Fatal: Could not load nbb_lib.\n")
-   sys.exit(3)
-
 if __name__ == '__main__':
-   try:
-      import nbb_lib
-   except ImportError, e:
-      pythondir = "@pythondir@"
-      if os.path.exists(pythondir):
+   pythondir = "@pythondir@"
+   lib_found = False
+   for cond, path in [
+      (1, sys.path),
+      (os.path.exists(pythondir), [pythondir] + sys.path),
+      ]:
+      if cond:
+         sys.path = path
          try:
-            sys.path.insert(0, pythondir)
             import nbb_lib
+            lib_found = True
+            break
          except ImportError, e:
-            error()
-      else:
-         error()
+            pass
+   if not lib_found:
+      sys.stderr.write("nbb: Fatal: Could not load nbb_lib.\n")
+      sys.exit(3)
    #sys.stdout.write("sys.path=%s\n" % repr(sys.path))
    #sys.stdout.flush()
    nbb_lib.main(sys.argv)
