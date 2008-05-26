@@ -1,3 +1,5 @@
+# -*- mode:python -*-
+
 """\
 nbb (ndim's branch builder) from @PACKAGE_NAME@ @PACKAGE_VERSION@
 Build, install given branch of source code into a branch specific place
