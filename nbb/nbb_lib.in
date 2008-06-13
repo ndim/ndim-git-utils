@@ -395,7 +395,7 @@ def main(argv):
 
     print """\
 WARNING: %(prog)s is very much a work in progress.
-         Parts of %(prog)s are not implemented yet.
+         Large parts of %(prog)s are not implemented yet.
 """ % locals()
 
     # FIXME: Generate from plugin systems.
