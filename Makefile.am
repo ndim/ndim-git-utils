@@ -20,6 +20,8 @@ AM_CPPFLAGS = -I${top_builddir}/include
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
+SUBDIRS = . test
+
 include Makefile-files
 include doc/Makefile-files
 include git-ndim-sh/Makefile-files

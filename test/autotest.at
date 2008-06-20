@@ -1,0 +1,3 @@
+AT_SETUP([autotest tests])
+AT_KEYWORDS([autotest])
+AT_CLEANUP
