@@ -115,7 +115,7 @@ def prog_run(call_list):
     """Run program showing its output. Raise exception if retcode != 0."""
     print "RUN:", call_list
     print "  in", os.getcwd()
-    return None
+    # return None
     p = subprocess.Popen(call_list)
     stdout, stderr = p.communicate(input=None)
     if p.returncode != 0:
