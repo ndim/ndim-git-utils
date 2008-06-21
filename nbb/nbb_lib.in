@@ -156,6 +156,7 @@ class PluginDict(object):
     def __iter__(self): return self.dict.__iter__()
     def __str__(self): return self.dict.__str__()
     def __repr__(self): return self.dict.__repr__()
+    def has_key(self, key): return self.dict.has_key(key)
 
 
 ########################################################################
@@ -268,24 +269,32 @@ class Command(object):
 
     name  attribute
         The text to be displayed, describing the version control system
-    validate_cmdargs(cmdargs)  function
+    summary attribute
+        Short (less than 50 chars) command summary line
+
+    validate_args(*args, **kwargs)  function
         Must raise FIXME() if it encounters invalid arguments in cmdargs
     run() function
         Actually run the function
+
+    FFF(*args, **kwargs)
+        *args are the arguments from the command line
+        **kwargs are additional parameters from within the program
     """
     __metaclass__ = CommandMeta
 
-    def __init__(self, cmdargs):
-        validate_args(cmdargs)
-        self.cmdargs = cmdargs
+    def __init__(self, *args, **kwargs):
+        self.validate_args(*args, **kwargs)
+        self.args = args
+        self.kwargs = kwargs
 
     def run(self):
         """Run the command"""
         raise NotImplementedError()
 
-    def validate_cmdargs(self, cmdargs):
+    def validate_args(self, *args, **kwargs):
         """Validate command line arguments"""
-        raise NotImplementedError()
+        pass
 
     def __str__(self):
         return "Command(%s, %s)" % (self.cmd_name, self.cmdargs)
@@ -293,6 +302,13 @@ class Command(object):
 
 class HelpCommand(Command):
     name = 'help'
+    summary = 'Print help text'
+    def run(self):
+        print "List of commands:"
+        keys = Command.plugins.keys()
+        keys.sort()
+        for k in keys:
+           print "\t%-15s\t%s" % (k, Command.plugins[k].summary)
 
 class ClassCommand(Command):
     pass
@@ -464,12 +480,13 @@ class NBB_Command(object):
     def __init__(self, cmd, cmdargs):
         print "Command:", cmd
 	print "Cmd arg:", cmdargs
-        if cmd in ('help', ):
-            print "List of commands:"
-            raise NotImplementedError()
+        if Command.plugins.has_key(cmd):
+            c = Command.plugins[cmd](*cmdargs)
+            c.run()
         else:
             print "Fatal: Unknown command '%s'" % cmd
 	    raise NotImplementedError()
+        return
         srcdir = None
         if srcdir is None:
             srcdir = os.getcwd()
