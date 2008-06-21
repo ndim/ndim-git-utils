@@ -1,6 +1,8 @@
-ndim-git-utils 1.17.44
-  * FIXME
-  * git-amb:
+ndim-git-utils 1.18
+  general:
+    * Version number generation directly from git
+    * Check POSIX sh compatibility before using sh.
+  git-amb:
     * The 'purge' and 'purge-all' commands now remove
       read-only files and dirs.
 
