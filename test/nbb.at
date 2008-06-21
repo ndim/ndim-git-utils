@@ -1,0 +1,10 @@
+AT_SETUP([nbb tests])
+AT_KEYWORDS([nbb])
+AT_TESTED([nbb])
+dnl
+AT_CHECK([nbb --version | grep ^nbb],
+[0],
+[nbb (ndims git utilities) AT_PACKAGE_VERSION
+])
+dnl
+AT_CLEANUP()

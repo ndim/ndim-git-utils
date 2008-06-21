@@ -1,3 +1,9 @@
 AT_SETUP([autotest tests])
 AT_KEYWORDS([autotest])
-AT_CLEANUP
+AT_CHECK([:], [0], [], [])
+AT_KEYWORDS([shell])
+AT_TESTED([sh grep cmp])
+AT_CHECK([${SHELL} --version], [ignore], [stdout], [stderr])
+AT_CAPTURE_FILE([stdout])
+AT_CAPTURE_FILE([stderr])
+AT_CLEANUP()
