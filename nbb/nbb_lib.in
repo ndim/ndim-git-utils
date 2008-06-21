@@ -294,7 +294,9 @@ class Command(object):
 
     def validate_args(self, *args, **kwargs):
         """Validate command line arguments"""
-        pass
+        print "Command: ", self.name
+        print "*args:   ", args
+        print "**kwargs:", kwargs
 
     def __str__(self):
         return "Command(%s, %s)" % (self.cmd_name, self.cmdargs)
@@ -302,7 +304,7 @@ class Command(object):
 
 class HelpCommand(Command):
     name = 'help'
-    summary = 'Print help text'
+    summary = 'print help text'
     def run(self):
         print "List of commands:"
         keys = Command.plugins.keys()
@@ -310,14 +312,24 @@ class HelpCommand(Command):
         for k in keys:
            print "\t%-15s\t%s" % (k, Command.plugins[k].summary)
 
+class InternalConfigCommand(Command):
+    name = 'internal-config'
+    summary = 'print internal program configuration'
+    def run(self):
+        print "Source tree types:", ", ".join([ x.vcs_name for x in VCSourceTree.plugins ])
+        print "Build system types:", ", ".join([ x.bs_name for x in BSSourceTree.plugins ])
+        print "Commands:",           ", ".join(Command.plugins.keys())
+
 class ClassCommand(Command):
     pass
 
 class FooCommand(ClassCommand):
     name = 'foo'
+    summary = 'bogus command for testing the command infrastructure'
 
 class BarCommand(ClassCommand):
     name = 'bar'
+    summary = 'bogus command for testing the command infrastructure'
 
 
 ########################################################################
@@ -478,8 +490,6 @@ class AutomakeSourceTree(BSSourceTree):
 
 class NBB_Command(object):
     def __init__(self, cmd, cmdargs):
-        print "Command:", cmd
-	print "Cmd arg:", cmdargs
         if Command.plugins.has_key(cmd):
             c = Command.plugins[cmd](*cmdargs)
             c.run()
@@ -509,6 +519,13 @@ class NBB_Command(object):
 # Main program
 ########################################################################
 
+
+def print_help():
+    vcssystems   = ", ".join([ x.vcs_name for x in VCSourceTree.plugins ])
+    buildsystems = ", ".join([ x.bs_name  for x in BSSourceTree.plugins ])
+    print __doc__ % locals()
+
+
 def main(argv):
 
     prog = argv[0]
@@ -516,18 +533,17 @@ def main(argv):
     if idx >= 0:
         prog = prog[idx+1:]
 
-    print "argv:", `argv`
-    print "Source tree plugins:", ", ".join([ x.vcs_name for x in VCSourceTree.plugins ])
-    print "Build system plugins:", ", ".join([ x.bs_name for x in BSSourceTree.plugins ])
-    print "Command plugins:",     ", ".join(Command.plugins.keys())
-    print "Command plugins:", Command.plugins
+    if len(argv) < 2:
+        print "Fatal: %(prog)s requires some arguments" % locals()
+        return 2
+
     verbosity = 0
     i = 1
     while i<len(argv):
         if argv[i][0] != '-':
             break
         if argv[i] in ('-h', '--help'):
-            print __doc__ % locals()
+            print_help()
             return
         elif argv[i] in ('-V', '--version'):
             print "%(prog)s (@PACKAGE_NAME@) @PACKAGE_VERSION@" % locals()

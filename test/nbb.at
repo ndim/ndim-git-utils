@@ -7,9 +7,9 @@ dnl ===================================================================
 
 dnl ===================================================================
 
-AT_SETUP([nbb --version])
+AT_SETUP([nbb: --version option])
 AT_KEYWORDS([nbb version])
-AT_CHECK([nbb --version | grep ^nbb],
+AT_CHECK([nbb --version],
 [0],
 [nbb (ndims git utilities) AT_PACKAGE_VERSION
 ])
@@ -17,14 +17,28 @@ AT_CLEANUP()
 
 dnl ===================================================================
 
-AT_SETUP([nbb --help])
+AT_SETUP([nbb: --help option])
 AT_KEYWORDS([nbb help])
 AT_CHECK([nbb --help], [0], [ignore], [ignore])
 AT_CLEANUP()
 
 dnl ===================================================================
 
-AT_SETUP([nbb git config default defaults])
+AT_SETUP([nbb: help command])
+AT_KEYWORDS([nbb help])
+AT_CHECK([nbb help], [0], [ignore], [])
+AT_CLEANUP()
+
+dnl ===================================================================
+
+AT_SETUP([nbb: internal-config command])
+AT_KEYWORDS([nbb internal-config])
+AT_CHECK([nbb internal-config], [0], [ignore], [])
+AT_CLEANUP()
+
+dnl ===================================================================
+
+AT_SETUP([nbb: git config default defaults])
 AT_KEYWORDS([nbb git config])
 AT_CHECK([mkdir test.git && cd test.git])
 AT_CHECK([cd test.git && git init], [0],
@@ -41,7 +55,7 @@ AT_CLEANUP()
 
 dnl ===================================================================
 
-AT_SETUP([nbb bzr config defaults])
+AT_SETUP([nbb: bzr config defaults])
 AT_KEYWORDS([nbb bzr config])
 AT_CHECK([mkdir test.bzr && cd test.bzr])
 AT_CHECK([cd test.bzr && bzr init])
