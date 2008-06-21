@@ -395,10 +395,10 @@ def main(argv):
     if idx >= 0:
         prog = prog[idx+1:]
 
-    print """\
-WARNING: %(prog)s is very much a work in progress.
-         Large parts of %(prog)s are not implemented yet.
-""" % locals()
+#    print """\
+#WARNING: %(prog)s is very much a work in progress.
+#         Large parts of %(prog)s are not implemented yet.
+#""" % locals()
 
     # FIXME: Generate from plugin systems.
     buildsystems = ', '.join(['automake', ])
