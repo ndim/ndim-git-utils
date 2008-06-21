@@ -1,4 +1,4 @@
-ndim-git-utils 1.17.39
+ndim-git-utils 1.17.44
   * FIXME
   * git-amb:
     * The 'purge' and 'purge-all' commands now remove

@@ -1,7 +1,7 @@
 BUILD_SCRIPT_DIR = build-helpers
 
 # Check that package version matches git version before creating dist tarballs
-dist-hook: git-version-check git-version-stamp
+dist-hook: git-version-check git-version-check-news git-version-stamp
 distcheck-hook: git-version-check
 
 # Note: We cannot run autogen.sh from here, because we would need some way to
@@ -22,7 +22,10 @@ git-version-check:
 			echo "Update PACKAGE_VERSION by running autoreconf(1)."; \
 		fi; \
 		exit 1; \
-	fi; \
+	fi
+
+git-version-check-news:
+	@git_ver=`$(top_srcdir)/$(BUILD_SCRIPT_DIR)/package-version $(top_srcdir) version-stamp`; \
 	case `sed 15q $(top_srcdir)/NEWS` in \
 	*"$${git_ver%%-*}"*) : ;; \
 	*) \
