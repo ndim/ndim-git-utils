@@ -1,5 +1,3 @@
-# -*- mode:python -*-
-
 """\
 nbb (ndim's branch builder) from @PACKAGE_NAME@ @PACKAGE_VERSION@
 Build, install given branch of source code into a branch specific place
@@ -424,6 +422,7 @@ WARNING: %(prog)s is very much a work in progress.
 if __name__ == '__main__':
     raise "This is not a library"
 
+# vim: syntax=python
 # Local Variables:
 # mode: python
 # End:

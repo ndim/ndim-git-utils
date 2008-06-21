@@ -28,6 +28,7 @@ if __name__ == '__main__':
    #sys.stdout.flush()
    nbb_lib.main(sys.argv)
 
+# vim: syntax=python
 # Local Variables:
 # mode: python
 # End:
