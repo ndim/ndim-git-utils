@@ -365,11 +365,20 @@ class AutomakeSourceTree(BSSourceTree):
 
 
 ########################################################################
-# Main program
+# Commands
 ########################################################################
 
-class NBB(object):
-    def __init__(self, srcdir=None):
+class NBB_Command(object):
+    def __init__(self, cmd, cmdargs):
+        print "Command:", cmd
+	print "Cmd arg:", cmdargs
+        if cmd in ('help', ):
+            print "List of commands:"
+            raise NotImplementedError()
+        else:
+            print "Fatal: Unknown command '%s'" % cmd
+	    raise NotImplementedError()
+        srcdir = None
         if srcdir is None:
             srcdir = os.getcwd()
         absdir = os.path.abspath(srcdir)
@@ -388,6 +397,10 @@ class NBB(object):
             print "Program aborted."
 
 
+########################################################################
+# Main program
+########################################################################
+
 def main(argv):
 
     prog = argv[0]
@@ -395,32 +408,31 @@ def main(argv):
     if idx >= 0:
         prog = prog[idx+1:]
 
-#    print """\
-#WARNING: %(prog)s is very much a work in progress.
-#         Large parts of %(prog)s are not implemented yet.
-#""" % locals()
-
     # FIXME: Generate from plugin systems.
     buildsystems = ', '.join(['automake', ])
     vcssystems = ', '.join(['bzr', 'git', ])
 
-    optlist, args = getopt.getopt(argv[1:], 'hV', ['help', 'version'])
-    for opt, arg in optlist:
-        if opt in ('-h', '--help'):
+    print "argv:", `argv`
+    verbosity = 0
+    i = 1
+    while i<len(argv):
+        if argv[i][0] != '-':
+            break
+        if argv[i] in ('-h', '--help'):
             print __doc__ % locals()
             return
-        elif opt in ('-V', '--version'):
+        elif argv[i] in ('-V', '--version'):
             print "%(prog)s (@PACKAGE_NAME@) @PACKAGE_VERSION@" % locals()
             return
-        else:
-            raise NotImplementedError()
-
-    if len(args) == 0:
-        nbb = NBB()
-    elif len(args) == 1:
-        nbb = NBB(args[0])
-    else:
-        raise NotImplementedError()
+        elif argv[i] in ('-v', '--verbose'):
+            verbosity = verbosity + 1
+        elif argv[i] in ('-q', '--quiet'):
+            verbosity = verbosity - 1
+        print "", i, argv[i]
+        i = i + 1
+    cmd = argv[i]
+    cmdargs = argv[i+1:]
+    nbb = NBB_Command(cmd, cmdargs)
 
 
 if __name__ == '__main__':
