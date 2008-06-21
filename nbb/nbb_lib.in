@@ -520,10 +520,13 @@ class NBB_Command(object):
 ########################################################################
 
 
+outdict = {}
+outdict['vcssystems']   = ", ".join([ x.vcs_name for x in VCSourceTree.plugins ])
+outdict['buildsystems'] = ", ".join([ x.bs_name  for x in BSSourceTree.plugins ])
+
+
 def print_help():
-    vcssystems   = ", ".join([ x.vcs_name for x in VCSourceTree.plugins ])
-    buildsystems = ", ".join([ x.bs_name  for x in BSSourceTree.plugins ])
-    print __doc__ % locals()
+    print __doc__ % outdict
 
 
 def main(argv):
@@ -532,9 +535,10 @@ def main(argv):
     idx = prog.rfind('/')
     if idx >= 0:
         prog = prog[idx+1:]
+    outdict['prog'] = prog
 
     if len(argv) < 2:
-        print "Fatal: %(prog)s requires some arguments" % locals()
+        print "Fatal: %(prog)s requires some arguments" % outdict
         return 2
 
     verbosity = 0
@@ -546,7 +550,7 @@ def main(argv):
             print_help()
             return
         elif argv[i] in ('-V', '--version'):
-            print "%(prog)s (@PACKAGE_NAME@) @PACKAGE_VERSION@" % locals()
+            print "%(prog)s (@PACKAGE_NAME@) @PACKAGE_VERSION@" % outdict
             return
         elif argv[i] in ('-v', '--verbose'):
             verbosity = verbosity + 1
