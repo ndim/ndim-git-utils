@@ -136,6 +136,28 @@ class AbstractConfig(object):
         return os.path.join(self.srcdir, "_install", self.nick)
 
 
+class DuplicatePluginName(Exception):
+    pass
+
+
+class PluginDict(object):
+    def __init__(self):
+        self.dict = {}
+    def __getitem__(self, *args):
+        return self.dict.__getitem__(*args)
+    def __setitem__(self, key, value):
+        if self.dict.has_key(key):
+            raise DuplicatePluginName()
+        else:
+            self.dict[key] = value
+    def items(self): return self.dict.items()
+    def keys(self): return self.dict.keys()
+    def values(self): return self.dict.values()
+    def __iter__(self): return self.dict.__iter__()
+    def __str__(self): return self.dict.__str__()
+    def __repr__(self): return self.dict.__repr__()
+
+
 ########################################################################
 # VCS Source Tree plugin system
 ########################################################################
@@ -210,6 +232,76 @@ class VCSourceTree(object):
         return "VCS-Source-Tree(%s, %s, %s)" % (self.vcs_name,
                                                 repr(self.tree_root()),
                                                 repr(self.branch_name()))
+
+
+########################################################################
+# Command plugin system
+########################################################################
+# Plugin architecture (metaclass tricks) by Marty Alchin from
+# http://gulopine.gamemusic.org/2008/jan/10/simple-plugin-framework/
+########################################################################
+
+class CommandMeta(type):
+    def __init__(cls, name, bases, attrs):
+        if not hasattr(cls, 'plugins'):
+            # This branch only executes when processing the mount point itself.
+            # So, since this is a new plugin type, not an implementation, this
+            # class shouldn't be registered as a plugin. Instead, it sets up a
+            # list where plugins can be registered later.
+            cls.plugins = PluginDict()
+        elif hasattr(cls, 'name'):
+            # This must be a plugin implementation, which should be registered.
+            # Simply appending it to the list is all that's needed to keep
+            # track of it later.
+            cls.plugins[cls.name] = cls
+        else:
+            # This must be an abstract subclass of plugins.
+            pass
+
+
+class Command(object):
+    """
+    Mount point for plugins which refer to commands that can be performed.
+
+    Plugins implementing this reference should provide the following
+    interface:
+
+    name  attribute
+        The text to be displayed, describing the version control system
+    validate_cmdargs(cmdargs)  function
+        Must raise FIXME() if it encounters invalid arguments in cmdargs
+    run() function
+        Actually run the function
+    """
+    __metaclass__ = CommandMeta
+
+    def __init__(self, cmdargs):
+        validate_args(cmdargs)
+        self.cmdargs = cmdargs
+
+    def run(self):
+        """Run the command"""
+        raise NotImplementedError()
+
+    def validate_cmdargs(self, cmdargs):
+        """Validate command line arguments"""
+        raise NotImplementedError()
+
+    def __str__(self):
+        return "Command(%s, %s)" % (self.cmd_name, self.cmdargs)
+
+
+class HelpCommand(Command):
+    name = 'help'
+
+class ClassCommand(Command):
+    pass
+
+class FooCommand(ClassCommand):
+    name = 'foo'
+
+class BarCommand(ClassCommand):
+    name = 'bar'
 
 
 ########################################################################
@@ -384,7 +476,6 @@ class NBB_Command(object):
         absdir = os.path.abspath(srcdir)
         self.vcs_sourcetree = VCSourceTree.detect(absdir)
         print str(self.vcs_sourcetree)
-        #print "sourcetree:", dir(self.sourcetree)
         self.bs_sourcetree = BSSourceTree.detect(self.vcs_sourcetree)
         print str(self.bs_sourcetree)
         try:
@@ -408,11 +499,11 @@ def main(argv):
     if idx >= 0:
         prog = prog[idx+1:]
 
-    # FIXME: Generate from plugin systems.
-    buildsystems = ', '.join(['automake', ])
-    vcssystems = ', '.join(['bzr', 'git', ])
-
     print "argv:", `argv`
+    print "Source tree plugins:", ", ".join([ x.vcs_name for x in VCSourceTree.plugins ])
+    print "Build system plugins:", ", ".join([ x.bs_name for x in BSSourceTree.plugins ])
+    print "Command plugins:",     ", ".join(Command.plugins.keys())
+    print "Command plugins:", Command.plugins
     verbosity = 0
     i = 1
     while i<len(argv):
