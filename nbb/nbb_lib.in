@@ -29,33 +29,33 @@ TODO:
 Command line interface (TBD):
 
   Run default build commands:
-  $ %(prog)s [general options] init [command specific options]
-  $ %(prog)s [general options] configure [command specific options]
-  $ %(prog)s [general options] build [command specific options]
-  $ %(prog)s [general options] install [command specific options]
+    $ %(prog)s [general options] init [command specific options]
+    $ %(prog)s [general options] configure [command specific options]
+    $ %(prog)s [general options] build [command specific options]
+    $ %(prog)s [general options] install [command specific options]
 
   Run cleanup commands:
-  TBD
+    TBD
 
   Get/set config:
-  $ %(prog)s [general options] config srcdir
-  $ %(prog)s [general options] config builddir [<builddir>]
-  $ %(prog)s [general options] config installdir [<installdir>]
+    $ %(prog)s [general options] config srcdir
+    $ %(prog)s [general options] config builddir [<builddir>]
+    $ %(prog)s [general options] config installdir [<installdir>]
 
   Start an interactive shell in either of the three directories:
-  $ %(prog)s [general options] src-sh [command specific options]
-  $ %(prog)s [general options] build-sh [command specific options]
-  $ %(prog)s [general options] install-sh [command specific options]
+    $ %(prog)s [general options] src-sh [command specific options]
+    $ %(prog)s [general options] build-sh [command specific options]
+    $ %(prog)s [general options] install-sh [command specific options]
 
   Run command in builddir:
-  $ %(prog)s [general options] run <command> [<param>...]
-  $ %(prog)s [general options] run [command specific options... <-->] <cmd>...
+    $ %(prog)s [general options] run <command> [<param>...]
+    $ %(prog)s [general options] run [command specific options... <-->] <cmd>...
 
   (Not sure about these)
   Run a non-interactive shell command in either of the three directories:
-  $ %(prog)s [general options] src-sh [command specific options] <command>...
-  $ %(prog)s [general options] build-sh [command specific options] <command>...
-  $ %(prog)s [general options] install-sh [command specific options] <cmd...>
+    $ %(prog)s [general options] src-sh [command specific options] <command>...
+    $ %(prog)s [general options] build-sh [command specific options] <command>...
+    $ %(prog)s [general options] install-sh [command specific options] <cmd...>
 
 Global options:
 
@@ -66,7 +66,6 @@ Global options:
 
   -b --build-system  Force buildsystem detection (%(buildsystems)s)
   -v --vcs           Force VCS detection (%(vcssystems)s)
-
 """
 
 import sys
@@ -180,6 +179,7 @@ class PluginDict(object):
 ########################################################################
 # Plugin architecture (metaclass tricks) by Marty Alchin from
 # http://gulopine.gamemusic.org/2008/jan/10/simple-plugin-framework/
+# Slightly modified go store plugins as dict.
 ########################################################################
 
 class GenericPluginMeta(type):
@@ -274,9 +274,6 @@ class VCSourceTree(object):
 
 ########################################################################
 # Command plugin system
-########################################################################
-# Plugin architecture (metaclass tricks) by Marty Alchin from
-# http://gulopine.gamemusic.org/2008/jan/10/simple-plugin-framework/
 ########################################################################
 
 class Command(object):
