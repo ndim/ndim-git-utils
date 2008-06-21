@@ -376,7 +376,9 @@ class GitSourceTree(VCSourceTree):
         if "true" != prog_stdout(["git", "rev-parse",
                                   "--is-inside-work-tree"]):
             raise NotAVCSourceTree()
-        os.chdir(prog_stdout(["git", "rev-parse", "--show-cdup"]))
+        reldir = prog_stdout(["git", "rev-parse", "--show-cdup"])
+        if reldir:
+            os.chdir(reldir)
         self.__tree_root = os.getcwd()
 
     def tree_root(self):
