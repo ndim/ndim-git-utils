@@ -541,7 +541,7 @@ outdict['buildsystems'] = ", ".join(BSSourceTree.plugins.keys())
 
 
 def print_help():
-    print __doc__ % outdict
+    print __doc__ % outdict,
 
 
 def main(argv):
