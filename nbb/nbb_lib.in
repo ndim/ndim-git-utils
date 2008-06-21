@@ -136,6 +136,16 @@ class AbstractConfig(object):
         return os.path.join(self.srcdir, "_install", self.nick)
 
 
+class CommandLineError(Exception):
+    def __init__(self, message, *args):
+        if args:
+            self.msg = message % args
+        else:
+            self.msg = message
+    def __str__(self):
+        return "Command line error: %s" % self.msg
+
+
 class DuplicatePluginName(Exception):
     pass
 
@@ -268,7 +278,7 @@ class Command(object):
         Short (less than 50 chars) command summary line
 
     validate_args(*args, **kwargs)  function
-        Must raise FIXME() if it encounters invalid arguments in cmdargs
+        Must raise CommandLineError() if it encounters invalid arguments in cmdargs
     run() function
         Actually run the function
 
@@ -292,6 +302,8 @@ class Command(object):
         print "Command: ", self.name
         print "*args:   ", args
         print "**kwargs:", kwargs
+	if len(args) > 0:
+            raise CommandLineError("'%s' command takes no parameters", self.name)
 
     def __str__(self):
         return "Command(%s, %s)" % (self.cmd_name, self.cmdargs)
@@ -486,8 +498,12 @@ class AutomakeSourceTree(BSSourceTree):
 class NBB_Command(object):
     def __init__(self, cmd, cmdargs):
         if Command.plugins.has_key(cmd):
-            c = Command.plugins[cmd](*cmdargs)
-            c.run()
+            try:
+                c = Command.plugins[cmd](*cmdargs)
+                c.run()
+            except CommandLineError, e:
+                print "%(prog)s: Fatal:" % (outdict), e
+                sys.exit(2)
         else:
             print "Fatal: Unknown command '%s'" % cmd
 	    raise NotImplementedError()
