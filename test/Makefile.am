@@ -25,14 +25,16 @@ DISTCLEANFILES += \
 	testsuite.dir/at-check-line \
 	testsuite.dir/at-status
 
-#all-local:
-#	git_ver=`$(top_srcdir)/build-helpers/package-version $(top_srcdir) version-stamp`; \
-#	if test "x$${git_ver}" = "x$(PACKAGE_VERSION)"; then :; else \
-#		rm -f $(srcdir)/$(TESTSUITE); \
-#		rm -f $(srcdir)/package.m4; \
-#	fi
+git-check-version:
+	git_ver=`$(top_srcdir)/build-helpers/package-version $(top_srcdir) version-stamp`; \
+	if test "x$${git_ver}" = "x$(PACKAGE_VERSION)"; then :; else \
+		rm -f $(srcdir)/$(TESTSUITE); \
+		rm -f $(srcdir)/package.m4; \
+		rm -rf $(top_srcdir)/autom4te.cache; \
+		echo "VERSION MISMATCH: run autoreconf/autogen.sh"; \
+	fi
 
-check-local: atconfig atlocal $(srcdir)/$(TESTSUITE)
+check-local: git-check-version atconfig atlocal $(srcdir)/$(TESTSUITE)
 	$(SHELL) "$(srcdir)/$(TESTSUITE)" AUTOTEST_PATH=`cd $(top_builddir) > /dev/null && pwd`:`cd $(top_builddir)/nbb > /dev/null && pwd` \
 		$(TESTSUITEFLAGS)
 
