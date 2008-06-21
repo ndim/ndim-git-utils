@@ -135,6 +135,7 @@ amb_printvars() {
 amb_purge() {
     echo "$self: Purging branch ${git_branch} build and install"
     echo "$self: Purging $top_builddir..."
+    if test -d "$top_builddir"; then chmod -R u+w "$top_builddir"; fi
     rm -rf "$top_builddir"
     echo "$self: Purging $top_installdir..."
     rm -rf "$top_installdir"
@@ -144,6 +145,7 @@ amb_purge() {
 amb_purge_all() {
     echo "$self: Purging ALL branches"
     echo "$self: Purging $amb_builddir..."
+    if test -d "$amb_builddir"; then chmod -R u+w "$amb_builddir"; fi
     rm -rf "$amb_builddir"
     echo "$self: Purging $amb_installdir..."
     rm -rf "$amb_installdir"
