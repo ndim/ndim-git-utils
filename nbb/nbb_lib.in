@@ -141,6 +141,11 @@ class DuplicatePluginName(Exception):
 
 
 class PluginDict(object):
+    """Helper for GenericPluginMeta class
+
+    Behaves basically like a standard dict, but fails when asked
+    to update an existing value.
+    """
     def __init__(self):
         self.dict = {}
     def __getitem__(self, *args):
@@ -160,28 +165,36 @@ class PluginDict(object):
 
 
 ########################################################################
-# VCS Source Tree plugin system
+# Generic plugin system
 ########################################################################
 # Plugin architecture (metaclass tricks) by Marty Alchin from
 # http://gulopine.gamemusic.org/2008/jan/10/simple-plugin-framework/
 ########################################################################
 
-class NotAVCSourceTree(Exception):
-    pass
-
-class VCSourceTreeMeta(type):
+class GenericPluginMeta(type):
     def __init__(cls, name, bases, attrs):
         if not hasattr(cls, 'plugins'):
             # This branch only executes when processing the mount point itself.
             # So, since this is a new plugin type, not an implementation, this
             # class shouldn't be registered as a plugin. Instead, it sets up a
             # list where plugins can be registered later.
-            cls.plugins = []
-        else:
+            cls.plugins = PluginDict()
+        elif hasattr(cls, 'name'):
             # This must be a plugin implementation, which should be registered.
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
-            cls.plugins.append(cls)
+            cls.plugins[cls.name] = cls
+        else:
+            # This must be an abstract subclass of plugins.
+            pass
+
+
+########################################################################
+# VCS Source Tree plugin system
+########################################################################
+
+class NotAVCSourceTree(Exception):
+    pass
 
 
 class VCSourceTree(object):
@@ -191,12 +204,12 @@ class VCSourceTree(object):
     Plugins implementing this reference should provide the following
     interface:
 
-    vcs_name  attribute
+    name  attribute
         The text to be displayed, describing the version control system
     __init__  function
         Must raise NotAVCSourceTree() if it is not a VCS source tree
     """
-    __metaclass__ = VCSourceTreeMeta
+    __metaclass__ = GenericPluginMeta
 
     def detect(cls, srcdir):
         """Detect VCS tree type and return object representing it"""
@@ -230,7 +243,7 @@ class VCSourceTree(object):
         raise NotImplementedError()
 
     def __str__(self):
-        return "VCS-Source-Tree(%s, %s, %s)" % (self.vcs_name,
+        return "VCS-Source-Tree(%s, %s, %s)" % (self.name,
                                                 repr(self.tree_root()),
                                                 repr(self.branch_name()))
 
@@ -241,24 +254,6 @@ class VCSourceTree(object):
 # Plugin architecture (metaclass tricks) by Marty Alchin from
 # http://gulopine.gamemusic.org/2008/jan/10/simple-plugin-framework/
 ########################################################################
-
-class CommandMeta(type):
-    def __init__(cls, name, bases, attrs):
-        if not hasattr(cls, 'plugins'):
-            # This branch only executes when processing the mount point itself.
-            # So, since this is a new plugin type, not an implementation, this
-            # class shouldn't be registered as a plugin. Instead, it sets up a
-            # list where plugins can be registered later.
-            cls.plugins = PluginDict()
-        elif hasattr(cls, 'name'):
-            # This must be a plugin implementation, which should be registered.
-            # Simply appending it to the list is all that's needed to keep
-            # track of it later.
-            cls.plugins[cls.name] = cls
-        else:
-            # This must be an abstract subclass of plugins.
-            pass
-
 
 class Command(object):
     """
@@ -281,7 +276,7 @@ class Command(object):
         *args are the arguments from the command line
         **kwargs are additional parameters from within the program
     """
-    __metaclass__ = CommandMeta
+    __metaclass__ = GenericPluginMeta
 
     def __init__(self, *args, **kwargs):
         self.validate_args(*args, **kwargs)
@@ -316,8 +311,8 @@ class InternalConfigCommand(Command):
     name = 'internal-config'
     summary = 'print internal program configuration'
     def run(self):
-        print "Source tree types:", ", ".join([ x.vcs_name for x in VCSourceTree.plugins ])
-        print "Build system types:", ", ".join([ x.bs_name for x in BSSourceTree.plugins ])
+        print "Source tree types:",  ", ".join(VCSourceTree.plugins.keys())
+        print "Build system types:", ", ".join(BSSourceTree.plugins.keys())
         print "Commands:",           ", ".join(Command.plugins.keys())
 
 class ClassCommand(Command):
@@ -338,7 +333,7 @@ class BarCommand(ClassCommand):
 
 class GitSourceTree(VCSourceTree):
 
-    vcs_name = 'git'
+    name = 'git'
 
     def __init__(self, srcdir):
         os.chdir(srcdir)
@@ -360,7 +355,7 @@ class GitSourceTree(VCSourceTree):
 
 class BzrSourceTree(VCSourceTree):
 
-    vcs_name = 'bzr'
+    name = 'bzr'
 
     def __init__(self, srcdir):
         try:
@@ -408,7 +403,7 @@ class BSSourceTreeMeta(type):
 
 
 class BSSourceTree(object):
-    __metaclass__ = BSSourceTreeMeta
+    __metaclass__ = GenericPluginMeta
 
     def detect(cls, vcs_tree):
         """Find BS tree type and return it"""
@@ -430,7 +425,7 @@ class BSSourceTree(object):
     detect = classmethod(detect)
 
     def __str__(self):
-        return "BS-Source-Tree(%s, %s)" % (self.bs_name,
+        return "BS-Source-Tree(%s, %s)" % (self.name,
                                            repr(self.tree_root()))
 
     # Abstract methods
@@ -442,7 +437,7 @@ class BSSourceTree(object):
 
 
 class AutomakeSourceTree(BSSourceTree):
-    bs_name = 'automake'
+    name = 'automake'
     def __init__(self, vcs_tree):
         srcdir = vcs_tree.tree_root()
         self.config = vcs_tree.get_config()
@@ -521,8 +516,8 @@ class NBB_Command(object):
 
 
 outdict = {}
-outdict['vcssystems']   = ", ".join([ x.vcs_name for x in VCSourceTree.plugins ])
-outdict['buildsystems'] = ", ".join([ x.bs_name  for x in BSSourceTree.plugins ])
+outdict['vcssystems']   = ", ".join(VCSourceTree.plugins.keys())
+outdict['buildsystems'] = ", ".join(BSSourceTree.plugins.keys())
 
 
 def print_help():
