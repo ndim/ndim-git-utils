@@ -24,7 +24,7 @@ AT_CLEANUP()
 
 dnl ===================================================================
 
-AT_SETUP([nbb git config])
+AT_SETUP([nbb git config default defaults])
 AT_KEYWORDS([nbb git config])
 AT_CHECK([mkdir test.git && cd test.git])
 AT_CHECK([cd test.git && git init], [0],
@@ -40,6 +40,19 @@ AT_CHECK([rm -rf test.git])
 AT_CLEANUP()
 
 dnl ===================================================================
+
+AT_SETUP([nbb bzr config defaults])
+AT_KEYWORDS([nbb bzr config])
+AT_CHECK([mkdir test.bzr && cd test.bzr])
+AT_CHECK([cd test.bzr && bzr init])
+echo "$PWD/test.bzr" > expout
+AT_CHECK([cd test.bzr && nbb config srcdir], [0], [expout])
+echo "$PWD/test.bzr/_build" > expout
+AT_CHECK([cd test.bzr && nbb config builddir], [0], [expout])
+echo "$PWD/test.bzr/_install" > expout
+AT_CHECK([cd test.bzr && nbb config installdir], [0], [expout])
+AT_CHECK([rm -rf test.git])
+AT_CLEANUP()
 
 dnl ===================================================================
 
