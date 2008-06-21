@@ -8,9 +8,10 @@ bin_SCRIPTS += nbb/nbb
 EXTRA_DIST  += nbb/nbb.in
 
 CLEANFILES += nbb/nbb
-nbb/nbb: $(srcdir)/nbb/nbb.in nbb/nbb_lib.py
+nbb/nbb: $(srcdir)/nbb/nbb.in nbb/nbb_lib.py Makefile
 	$(SED)	-e "s|[@]PYTHON@|$(PYTHON)|" \
 		-e "s|[@]pythondir@|$(pythondir)|" \
+		-e "s|[@]PACKAGE_VERSION@|$(PACKAGE_VERSION)|" \
 		< $(srcdir)/nbb/nbb.in > nbb/nbb
 	chmod +x nbb/nbb
 

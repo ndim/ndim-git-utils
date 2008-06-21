@@ -77,6 +77,10 @@ import subprocess
 import urlparse
 
 
+# Used to make sure nbb_lib and nbb fit together
+version = "@PACKAGE_VERSION@"
+
+
 ########################################################################
 # Utility functions
 ########################################################################

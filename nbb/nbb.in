@@ -26,6 +26,7 @@ if __name__ == '__main__':
       sys.exit(3)
    #sys.stdout.write("sys.path=%s\n" % repr(sys.path))
    #sys.stdout.flush()
+   assert(nbb_lib.version == "@PACKAGE_VERSION@")
    nbb_lib.main(sys.argv)
 
 # vim: syntax=python
