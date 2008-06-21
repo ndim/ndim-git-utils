@@ -1,5 +1,8 @@
 ndim-git-utils 1.17.39
   * FIXME
+  * git-amb:
+    * The 'purge' and 'purge-all' commands now remove
+      read-only files and dirs.
 
 ndim-git-utils 1.17
   New:
