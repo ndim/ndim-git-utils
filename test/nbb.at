@@ -1,10 +1,43 @@
-AT_SETUP([nbb tests])
-AT_KEYWORDS([nbb])
+dnl ===================================================================
+
+AT_COPYRIGHT([Copyright (C) 2008 Hans Ulrich Niedermann])
 AT_TESTED([nbb])
-dnl
+
+dnl ===================================================================
+
+dnl ===================================================================
+
+AT_SETUP([nbb --version])
+AT_KEYWORDS([nbb version])
 AT_CHECK([nbb --version | grep ^nbb],
 [0],
 [nbb (ndims git utilities) AT_PACKAGE_VERSION
 ])
-dnl
 AT_CLEANUP()
+
+dnl ===================================================================
+
+AT_SETUP([nbb --help])
+AT_KEYWORDS([nbb help])
+AT_CHECK([nbb --help], [0], [ignore], [ignore])
+AT_CLEANUP()
+
+dnl ===================================================================
+
+AT_SETUP([nbb git config])
+AT_KEYWORDS([nbb git config])
+AT_CHECK([mkdir test.git && cd test.git])
+AT_CHECK([cd test.git && git init], [0],
+[Initialized empty Git repository in .git/
+])
+AT_CHECK([cd test.git && nbb config srcdir])
+AT_CHECK([cd test.git && nbb config builddir])
+AT_CHECK([cd test.git && nbb config installdir])
+AT_CHECK([rm -rf test.git])
+AT_CLEANUP()
+
+dnl ===================================================================
+
+dnl ===================================================================
+
+dnl ===================================================================
