@@ -30,9 +30,12 @@ AT_CHECK([mkdir test.git && cd test.git])
 AT_CHECK([cd test.git && git init], [0],
 [Initialized empty Git repository in .git/
 ])
-AT_CHECK([cd test.git && nbb config srcdir])
-AT_CHECK([cd test.git && nbb config builddir])
-AT_CHECK([cd test.git && nbb config installdir])
+echo "$PWD/test.git" > expout
+AT_CHECK([cd test.git && nbb config srcdir], [0], [expout])
+echo "$PWD/test.git/_build/_master" > expout
+AT_CHECK([cd test.git && nbb config builddir], [0], [expout])
+echo "$PWD/test.git/_install/master" > expout
+AT_CHECK([cd test.git && nbb config installdir], [0], [expout])
 AT_CHECK([rm -rf test.git])
 AT_CLEANUP()
 
