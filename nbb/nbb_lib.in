@@ -171,6 +171,7 @@ class PluginDict(object):
     def __iter__(self): return self.dict.__iter__()
     def __str__(self): return self.dict.__str__()
     def __repr__(self): return self.dict.__repr__()
+    def __len__(self): return self.dict.__len__()
     def has_key(self, key): return self.dict.has_key(key)
 
 
@@ -206,6 +207,15 @@ class GenericPluginMeta(type):
 class NotAVCSourceTree(Exception):
     pass
 
+class AmbigousAVCSource(Exception):
+    def __init__(self, srcdir, matches):
+        super(AmbigousAVCSource, self).__init__()
+        self.srcdir = srcdir
+        self.matches = matches
+    def __str__(self):
+        return ("More than one source tree VCS type detected for '%s': %s"
+                % (self.srcdir, self.matches))
+
 
 class VCSourceTree(object):
     """
@@ -225,19 +235,23 @@ class VCSourceTree(object):
         """Detect VCS tree type and return object representing it"""
         if len(VCSourceTree.plugins) < 1:
             raise "No VC source tree classes registered"
-        def check_class(klass):
+        matches = PluginDict()
+        print "VCSourceTree.detect", VCSourceTree.plugins
+        print "srcdir", srcdir
+        for key, klass in VCSourceTree.plugins.items():
+            print "key", key
+            print "klass", klass
             try:
-                t = klass(srcdir)
-                return t
-            except NotAVCSourceTree:
-                return None
-        matches = filter(lambda x:x, map(check_class, VCSourceTree.plugins))
+                matches[key] = klass(srcdir)
+                print "MATCH:", srcdir
+            except NotAVCSourceTree, e:
+                pass
         if len(matches) > 1:
-            raise ("More than one source tree type detected for '%s': %s"
-                   % (srcdir, ", ".join(map(lambda x:str(x), matches))))
+            raise AmbigousAVCSource(srcdir, str(matches.values()))
         elif len(matches) < 1:
-            raise "Source tree type for '%s' not detected" % (srcdir,)
-        return matches[0]
+            raise NotAVCSourceTree(srcdir)
+        print "Matches:", matches
+        return matches[matches.keys()[0]]
     detect = classmethod(detect)
 
     def get_config(self):
@@ -327,16 +341,26 @@ class InternalConfigCommand(Command):
         print "Build system types:", ", ".join(BSSourceTree.plugins.keys())
         print "Commands:",           ", ".join(Command.plugins.keys())
 
-class ClassCommand(Command):
-    pass
+class SourceClassCommand(Command):
+    """Base class for commands acting on source trees"""
+    def __init__(self, *args, **kwargs):
+        super(SourceClassCommand, self).__init__(*args, **kwargs)
+        srcdir = os.getcwd()
+        absdir = os.path.abspath(srcdir)
+        self.vcs_sourcetree = VCSourceTree.detect(absdir)
+        print "vcs_sourcetree", str(self.vcs_sourcetree)
+        assert(self.vcs_sourcetree)
+        self.bs_sourcetree = BSSourceTree.detect(self.vcs_sourcetree)
+        print "bs_sourcetree", str(self.bs_sourcetree)
 
-class FooCommand(ClassCommand):
-    name = 'foo'
-    summary = 'bogus command for testing the command infrastructure'
-
-class BarCommand(ClassCommand):
-    name = 'bar'
-    summary = 'bogus command for testing the command infrastructure'
+class BuildTestCommand(SourceClassCommand):
+    name = 'build-test'
+    summary = 'simple build test'
+    def run(self):
+        self.bs_sourcetree.init()
+        self.bs_sourcetree.configure()
+        self.bs_sourcetree.build()
+        self.bs_sourcetree.install()
 
 
 ########################################################################
@@ -398,20 +422,10 @@ class BzrSourceTree(VCSourceTree):
 
 
 ########################################################################
-# Buildsystem Source Tree plugin system
-########################################################################
-# Plugin architecture (metaclass tricks) by Marty Alchin from
-# http://gulopine.gamemusic.org/2008/jan/10/simple-plugin-framework/
+# Buildsystem Source Tree plugins
 ########################################################################
 
 class NotABSSourceTree(Exception): pass
-
-class BSSourceTreeMeta(type):
-    def __init__(cls, name, bases, attrs):
-        if not hasattr(cls, 'plugins'):
-            cls.plugins = []
-        else:
-            cls.plugins.append(cls)
 
 
 class BSSourceTree(object):
@@ -421,19 +435,20 @@ class BSSourceTree(object):
         """Find BS tree type and return it"""
         if len(BSSourceTree.plugins) < 1:
             raise "No BS source tree classes registered"
-        def check_class(klass):
+        matches = PluginDict()
+        for key, klass in BSSourceTree.plugins.items():
             try:
                 t = klass(vcs_tree)
-                return t
+                matches[key] = t
             except NotABSSourceTree:
-                return None
-        matches = filter(lambda x:x, map(check_class, BSSourceTree.plugins))
+                pass
         if len(matches) > 1:
-            raise ("More than one source tree type detected for '%s': %s"
+            raise ("More than one source tree BS type detected for '%s': %s"
                    % (vcs_tree, ", ".join(map(lambda x:str(x), matches))))
         elif len(matches) < 1:
             raise "Source tree type for '%s' not detected" % (vcs_tree,)
-        return matches[0]
+        print "Matches:", matches
+        return matches[matches.keys()[0]]
     detect = classmethod(detect)
 
     def __str__(self):
@@ -504,26 +519,13 @@ class NBB_Command(object):
             except CommandLineError, e:
                 print "%(prog)s: Fatal:" % (outdict), e
                 sys.exit(2)
+            except ProgramRunError, e:
+                print "%(prog)s: Fatal:" % (outdict), e
+                print "Program aborted."
         else:
             print "Fatal: Unknown command '%s'" % cmd
 	    raise NotImplementedError()
         return
-        srcdir = None
-        if srcdir is None:
-            srcdir = os.getcwd()
-        absdir = os.path.abspath(srcdir)
-        self.vcs_sourcetree = VCSourceTree.detect(absdir)
-        print str(self.vcs_sourcetree)
-        self.bs_sourcetree = BSSourceTree.detect(self.vcs_sourcetree)
-        print str(self.bs_sourcetree)
-        try:
-            self.bs_sourcetree.init()
-            self.bs_sourcetree.configure()
-            self.bs_sourcetree.build()
-            self.bs_sourcetree.install()
-        except ProgramRunError, e:
-            print "Fatal:", e
-            print "Program aborted."
 
 
 ########################################################################
