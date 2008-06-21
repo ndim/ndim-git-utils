@@ -1,2 +1,3 @@
-x.y   versions are official releases
-x.y.z versions are intermediate (alpha) versions
+x.y           versions are official releases
+x.y.z-ccccccc versions are intermediate (alpha) versions,
+              where ccccccc is the ID of the git commit.

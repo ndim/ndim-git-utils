@@ -1,4 +1,5 @@
-If this is a git repository checkout:
+If this is a git repository checkout (as opposed to sources extracted
+from a source tarball):
 
   $ autoreconf -vis .
 
@@ -7,4 +8,5 @@ source tarball:
 
   $ ./configure --prefix=/what/ever
   $ make
+  $ make check # optional
   $ make install
