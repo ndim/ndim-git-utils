@@ -19,4 +19,6 @@ python_PYTHON += nbb/nbb_lib.py
 
 endif
 
+CLEANFILES += nbb/nbb_lib.pyc
+
 # End of Makefile-files.

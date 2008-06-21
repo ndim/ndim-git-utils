@@ -22,6 +22,8 @@ ACLOCAL_AMFLAGS = -I m4 --install
 
 SUBDIRS = . test
 
+include build-helpers/package-version.mk
+
 include Makefile-files
 include doc/Makefile-files
 include git-ndim-sh/Makefile-files

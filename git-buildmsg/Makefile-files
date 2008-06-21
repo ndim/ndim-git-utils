@@ -50,7 +50,8 @@ check_PROGRAMS += print-buildmsg
 print_buildmsg_SOURCES = git-buildmsg/print-buildmsg.c
 nodist_print_buildmsg_SOURCES = $(GIT_BUILDMSG_H)
 
-dist-hook: git-buildmsg.stamp
+dist-hook: dist-hook-git-buildmsg
+dist-hook-git-buildmsg: git-buildmsg.stamp
 	if test -e "$(GIT_BUILDMSG_H)"; then \
 		$(SED) -e 's|^#undef GIT_IS_DIST.*|#define GIT_IS_DIST 1|' \
 			"$(GIT_BUILDMSG_H)" > "$(distdir)/$(GIT_BUILDMSG_H)"; \
