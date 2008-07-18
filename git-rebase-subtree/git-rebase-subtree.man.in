@@ -91,6 +91,10 @@ After hypothetical "git\-rebase\-subtree \-\-reverse master Y":
 .fi
 .SH "BUGS"
 .TP
+.B "Obsoleted by git 1.5.6"
+git 1.5.6 can trigger branch rebases on pulls automatically without
+external tools.
+.TP
 .B "Lacks generality (fixation about 'master')"
 Yes.
 .TP
