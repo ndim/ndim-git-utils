@@ -24,6 +24,7 @@ NDIM_DETECT_MAN2TXT()dnl
 
 ########################################################################
 
+AC_CONFIG_FILES([GNUmakefile])
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([git-amb/git-amb.man])
 AC_CONFIG_FILES([git-amb/git-amb])
