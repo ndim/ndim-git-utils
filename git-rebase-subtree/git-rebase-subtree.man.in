@@ -1,3 +1,5 @@
+.\" shorthand for double quote that works everywhere.
+.ds q \N'34'
 .TH GIT-REBASE-SUBTREE 1 "@PACKAGE_TARNAME@ @PACKAGE_VERSION@" "2007\-11\-02" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
 .SH NAME
 git\-rebase\-subtree \- rebase set of interdependant git branches
@@ -34,15 +36,15 @@ Old tree:
 .fi
 .PP
 Generate the following configuration using
-.I "git config rebase-subtree.subtree"
+.IR "git config" :
 .nf
-  master A
-  A B
-  B F
-  B G
-  A D
-  D H
-  D K
+  git config --add rebase-subtree.rebase \*qmaster A\*q
+  git config --add rebase-subtree.rebase \*qA B\*q
+  git config --add rebase-subtree.rebase \*qB F\*q
+  git config --add rebase-subtree.rebase \*qB G\*q
+  git config --add rebase-subtree.rebase \*qA D\*q
+  git config --add rebase-subtree.rebase \*qD H\*q
+  git config --add rebase-subtree.rebase \*qD K\*q
 .fi
 .PP
 After "git\-fetch \-v":
@@ -89,11 +91,36 @@ After hypothetical "git\-rebase\-subtree \-\-reverse master Y":
                           \\
                            *'\-\-*'\-\-K'
 .fi
-.SH "BUGS"
+.SH "GIT CONFIGURATION"
+Configuration for
+.B "git-rebase-subtree"
+only makes sense on a per-repository basis, not on a
+.I "--global"
+basis.
+.TP
+.B "rebase-subtree.rebase"
+Add a new line to the config option for each
+.IR "orig" - "branch"
+pair. Each
+.B "rebase-subtree.rebase"
+option line defines an edge in the branch subtree to rebase.
+.TP
+.B "rebase-subtree.subtree"
+.br
+.I "(Deprecated because it is unreadable)"
+.br
+String of \*qorig branch\norig2 branch2\*q form. Becomes very unreadable
+when the branch subtree to rebase contains more than a couple of branches.
+Use
+.B "rebase-subtree.rebase"
+instead.
+.SH "NOT BUGS"
 .TP
 .B "Obsoleted by git 1.5.6"
-git 1.5.6 can trigger branch rebases on pulls automatically without
-external tools.
+git 1.5.6 can trigger branch rebases on pulls instead of standard merges.
+It cannot rebase entire subtrees, through, neither by manual command nor
+automatically.
+.SH "BUGS"
 .TP
 .B "Lacks generality (fixation about 'master')"
 Yes.
@@ -107,7 +134,7 @@ error happens during the rebase.
 .TP
 .B "Needs proper error handling"
 Definitely. Possibly just renaming the
-.I rebasetree-old/foo
+.I rebase-subtree/old/foo
 branches to
 .I foo
 could do the job. Needs more investigation, though.

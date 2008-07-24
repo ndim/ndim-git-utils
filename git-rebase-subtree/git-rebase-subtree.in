@@ -47,26 +47,38 @@ cmd() {
 
 
 gf_init() {
-    configvar="rebase-subtree.subtree"
     echo "$self: Examining configuration"
-    test -n "$(git config "$configvar")" || die "Unset or empty git config var \"$configvar\""
-    git config "$configvar" | while read from to restofline; do
-	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
-	echo ""
-	echo "  From: $from"
-	echo "    To: $to"
+    config_found=no
+    for configvar in "rebase-subtree.rebase" "rebase-subtree.subtree"
+    do
+        if test -n "$(git config --get-all "$configvar")"
+        then
+            if test "x$configvar" = "xrebase-subtree.subtree"; then
+                echo "$self: WARNING: Using deprecated config variable rebase-subtree.subtree."
+                echo "       Better use rebase-subtree.rebase lines instead."
+            fi
+            git config --get-all "$configvar" | while read from to restofline; do
+                if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
+                echo ""
+                echo "  From: $from"
+                echo "    To: $to"
+            done
+            config_found=yes
+            break
+        fi
     done
+    test "x$config_found" = "xyes" || die "Unset or empty git config var \"rebase-subtree.rebase\""
 }
 
 gf_branch() {
     branch="$1"
     newbranch="follow-old/$branch"
-    if git-rev-parse --verify "$branch" > /dev/null 2>&1; then
+    if git rev-parse --verify "$branch" > /dev/null 2>&1; then
 	# valid branch
-	if git-rev-parse --verify "$newbranch" > /dev/null 2>&1; then
+	if git rev-parse --verify "$newbranch" > /dev/null 2>&1; then
 	    : # branch already exists, do nothing
 	else
-	    cmd git-branch "${newbranch}" "${branch}"
+	    cmd git branch "${newbranch}" "${branch}"
 	fi
     else
 	echo "$self: gf_branch called with invalid branch \"$branch\"" >&2
@@ -78,8 +90,8 @@ gf_branch() {
 gf_rmbranch() {
     branch="$1"
     newbranch="follow-old/$branch"
-    if git-rev-parse --verify "$branch" > /dev/null 2>&1; then
-	if git-rev-parse --verify "$newbranch" > /dev/null 2>&1; then
+    if git rev-parse --verify "$branch" > /dev/null 2>&1; then
+	if git rev-parse --verify "$newbranch" > /dev/null 2>&1; then
 	    cmd git-branch -D "${newbranch}"
 	fi
     fi
@@ -101,14 +113,14 @@ gf_rebase_tree() {
     read
     echo
     echo "$self: Preparing subtree rebase"
-    git config "$configvar" | while read from to restofline; do
+    git config --get-all "$configvar" | while read from to restofline; do
 	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
 	gf_branch "$from"
 	gf_branch "$to"
     done
     echo
     echo "$self: Executing subtree rebase"
-    git config "$configvar" | while read from to restofline; do
+    git config --get-all "$configvar" | while read from to restofline; do
 	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
 	if test "x$reverse" = "xno" && test "x$from" = "x$oldroot"; then
 	    cmd git-rebase "$newroot" "$oldroot"
@@ -121,7 +133,7 @@ gf_rebase_tree() {
     done
     echo
     echo "$self: Cleaning up after subtree rebase"
-    git config "$configvar" | while read from to restofline; do
+    git config --get-all "$configvar" | while read from to restofline; do
 	if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
 	gf_rmbranch "$from"
 	gf_rmbranch "$to"

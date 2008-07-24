@@ -12,19 +12,20 @@ The utilities in detail
     some source tree built with automake easy, clean and flexible.
     The name stands for "git *a*uto*m*ake *b*uild". For details, see
     git-amb(1) man page.
-    git-amb(1) is about to be obsoleted by the generalized nbb(1) tool.
+    git-amb(1) is about to be obsoleted by the generalized nbb(1)
+    tool which is being developed as a separate project.
 
   git-buildmsg (status: testing)
     Generate .h file containing information about the current git
     working tree. Useful for programs' version messages in logs etc.
     Generating the version message from git describe output appears
-    to be much cleaner, though.
+    to be much cleaner, though, especially when done at autoconf time.
 
   git-rebase-subtree (status: stale)
     Rebase not only a single branch, but a whole "subtree of branches".
     Useful for maintaining your own subtree of branches close to some
     upstream's branch, but is in dire need of proper error handling.
-    Probably obsoleted by automatic branch..rebase setup in git 1.5.6.
+    NOT obsoleted by automatic branch..rebase setup in git 1.5.6.
 
 
 Resources
