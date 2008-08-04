@@ -122,10 +122,6 @@ It cannot rebase entire subtrees, through, neither by manual command nor
 automatically.
 .SH "BUGS"
 .TP
-.B "A different branch ends up checked out"
-Yes, we should save the checked out branch at startup, and check it out again
-after the branch subtree has been rebased.
-.TP
 .B "Specifying the branches from which to which to rebase is complicated"
 Yes. Should have default settings, or do a reasonable guess, or something.
 .TP

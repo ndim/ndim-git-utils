@@ -107,6 +107,10 @@ gf_rebase_tree() {
     test "x$newroot" = "x" && die "Need <newroot> parameter"
     oldroot="$2"
     test "x$oldroot" = "x" && die "Need <oldroot> parameter"
+    # save old checked out branch
+    if old_branch=`git-symbolic-ref HEAD 2> /dev/null`
+    then old_branch=`echo "$old_branch" | $SED 's|^refs/heads/||'`
+    fi
     echo
     echo "CAUTION: ${self} does not handle merge errors yet - that will mess up your repo!"
     echo "Press Ctrl-C to abort. Or, if you feel adventurous, press ENTER."
@@ -138,6 +142,9 @@ gf_rebase_tree() {
 	gf_rmbranch "$from"
 	gf_rmbranch "$to"
     done
+    if test "x$old_branch" = "x"
+    then echo "$self: Warning: There now is a different branch checked out than before."
+    else cmd git checkout "$old_branch"; fi
 }
 
 gf_init
