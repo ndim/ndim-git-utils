@@ -124,6 +124,7 @@ automatically.
 .TP
 .B "Specifying the branches from which to which to rebase is complicated"
 Yes. Should have default settings, or do a reasonable guess, or something.
+The current behaviour is definitely stupidly complicated.
 .TP
 .B "Lacks generality (fixation about 'master')"
 Yes.
