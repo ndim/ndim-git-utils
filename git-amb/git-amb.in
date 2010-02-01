@@ -38,7 +38,7 @@ USAGE="<command> [params...]"
 LONG_USAGE="\
 Build automake based git checkout in branch specific build and install trees.
 For more details, see the ${self}(1) man page."
-. git sh-setup
+. "$(unset GIT_EXEC_PATH; export GIT_EXEC_PATH; git --exec-path)/git-sh-setup"
 
 require_work_tree
 
