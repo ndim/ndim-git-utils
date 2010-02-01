@@ -38,7 +38,7 @@ USAGE="<command> [params...]"
 LONG_USAGE="\
 Build automake based git checkout in branch specific build and install trees.
 For more details, see the ${self}(1) man page."
-. git-sh-setup
+. git sh-setup
 
 require_work_tree
 
@@ -74,21 +74,21 @@ amb_init() {
     #   bzr log -r -1.. | sed -n 's/^branch nick: //p'
     if test "x$1" = "x"; then
 	# determine currently checked out branch
-	git_branch="$(git-symbolic-ref HEAD | $SED -n 's|^refs/heads/||p')"
-    elif git-rev-parse --verify "$1" > /dev/null 2>&1; then
+	git_branch="$(git symbolic-ref HEAD | $SED -n 's|^refs/heads/||p')"
+    elif git rev-parse --verify "$1" > /dev/null 2>&1; then
 	# $1 is valid branch: use it
 	git_branch="${1}"
     else
 	die "Invalid branch \"$1\" given."
     fi
-    test "x$(git-rev-parse --is-inside-work-tree 2> /dev/null)" = "xtrue"
+    test "x$(git rev-parse --is-inside-work-tree 2> /dev/null)" = "xtrue"
     top_srcdir="$(cd_to_toplevel && pwd)"
 
-    tmp="$(git-config amb.builddir)" || tmp="$GIT_DIR/amb/build"
+    tmp="$(git config amb.builddir)" || tmp="$GIT_DIR/amb/build"
     amb_builddir="$(cond_cat_path "${top_srcdir}" "$tmp")"
     top_builddir="$(cond_cat_path "${top_srcdir}" "$tmp" "${git_branch}")"
 
-    tmp="$(git-config amb.installdir)" || tmp="$GIT_DIR/amb/install"
+    tmp="$(git config amb.installdir)" || tmp="$GIT_DIR/amb/install"
     amb_installdir="$(cond_cat_path "${top_srcdir}" "$tmp")"
     top_installdir="$(cond_cat_path "${top_srcdir}" "$tmp" "$git_branch")"
 
