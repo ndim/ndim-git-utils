@@ -108,6 +108,18 @@ Define local build dirs, relative to top source tree dir.
   $ git config amb.installdir _installs
 .fi
 .PP
+Define some default parameters for builds of this project.
+.nf
+  $ git config --add amb.params.configure --disable-nls
+  $ git config --add amb.params.configure --disable-docs
+  $ git config --add amb.params.configure 'LIBFOO_CFLAGS="-I/buildroot/foo/include -DFOO_USE_BAR"'
+  $ git config --add amb.params.configure 'LIBFOO_LIBS="-L/buildroot/foo/lib -lfoo"'
+  $ git config --add amb.params.configure LIBMEH_CFLAGS=-I/srcroot/meh
+  $ git config --add amb.params.configure LIBMEH_LIBS=-L/srcroot/meh/libmeh.la
+  $ git config --add amb.params.make -j2
+  $ git config --add amb.params.make 'CFLAGS="-std=c99 -pedantic -Wall -Wextra -Werror"'
+.fi
+.PP
 In the following example, we build two branches and compare their
 resulting installation trees. Please note that
 .I "git amb make"
