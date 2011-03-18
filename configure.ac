@@ -4,12 +4,13 @@ AC_PREREQ(2.61)
 AC_INIT([ndims git utilities],
 	[m4_esyscmd([./build-helpers/package-version . version-stamp])],
 	[hun@n-dimensional.de],
-	[ndim-git-utils])
+	[ndim-git-utils],
+	[https://github.com/ndim/ndim-git-utils/])
 AC_CONFIG_AUX_DIR([auto-aux])
 AC_CONFIG_HEADER([include/config.h])
 AC_CONFIG_SRCDIR([git-amb/git-amb.in])
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE([-Wall -Werror foreign 1.10 dist-bzip2
+AM_INIT_AUTOMAKE([-Wall -Werror foreign 1.11.1 dist-bzip2
                   readme-alpha std-options])
 
 ########################################################################
