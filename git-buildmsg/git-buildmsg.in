@@ -136,10 +136,7 @@ cd "$srcdir"
 
 # Detect git tools (should work with old and new git versions)
 git_found=yes
-for git_tool in git-symbolic-ref git-rev-parse git-diff-files git-diff-index
-do
-    [ x`which $git_tool 2>/dev/null` = "x" ] && { git_found=no; break; }
-done
+[ x`which git 2>/dev/null` = "x" ] && { git_found=no; break; }
 
 # Determine data about git tree
 is_git_worktree=no
@@ -148,17 +145,17 @@ if [ "x$git_found" = "xyes" ]; then
 	is_git_worktree="yes"
 
         # Commit ID
-        git_commitid=`git-rev-parse HEAD | $SED -n 's/^\(.\{8\}\).*/\1/p'` || \
-	    { echo "Error running git-rev-parse HEAD" >&2; exit 1; }
+        git_commitid=`git rev-parse HEAD | $SED -n 's/^\(.\{8\}\).*/\1/p'` || \
+	    { echo "Error running git rev-parse HEAD" >&2; exit 1; }
 
         # Branch
-        git_branch=`git-symbolic-ref HEAD | $SED -n 's|^refs/heads/||p'` || \
-	    { echo "Error running git-symbolic-ref HEAD" >&2; exit 1; }
+        git_branch=`git symbolic-ref HEAD | $SED -n 's|^refs/heads/||p'` || \
+	    { echo "Error running git symbolic-ref HEAD" >&2; exit 1; }
 
         # Any uncommitted changes we should know about?
         # Or technically: Are the working tree or index dirty?
 	git_dirty_tree=yes
-        if git-diff-files --quiet && git-diff-index --cached --quiet HEAD; then
+        if git diff-files --quiet && git diff-index --cached --quiet HEAD; then
 	    git_dirty_tree=no
         fi
     fi
