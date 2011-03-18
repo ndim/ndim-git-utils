@@ -19,7 +19,7 @@ dnl
 m4_pattern_forbid([NDIM_DETECT_MAN2TXT])dnl
 AC_DEFUN([NDIM_DETECT_MAN2TXT], [dnl
 NDIM_CHECK_SH_FUNCTIONS([], [dnl
-AC_MSG_ERROR([Sorry, POSIX sh with functions required.])dnl
+AC_MSG_ERROR([Sorry, POSIX sh with functions required.])
 ])dnl
 AC_ARG_VAR([MAN])
 AC_PATH_PROG([MAN], [man], [false])

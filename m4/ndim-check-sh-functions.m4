@@ -5,7 +5,7 @@ dnl
 m4_pattern_forbid([NDIM_CHECK_SH_FUNCTIONS])dnl
 AC_DEFUN([NDIM_CHECK_SH_FUNCTIONS],[dnl
 NDIM_CHECK_SH_COMMAND_SUBSTITUTION([], [dnl
-AC_MSG_ERROR([Sorry, POSIX sh with \$() required.])dnl
+AC_MSG_ERROR([Sorry, POSIX sh with \$() required.])
 ])dnl
 AS_IF([test "x$ndim_sh_functions" = "x"], [dnl
 AC_MSG_CHECKING([whether sh supports POSIX sh functions])
