@@ -1,3 +1,4 @@
+# serial 15
 dnl NDIM_CHECK_SH_COMMAND_SUBSTITUTION([ACTION-IF-SUPPORTED],
 dnl                                    [ACTION-IF-NOT-SUPPORTED])dnl
 dnl

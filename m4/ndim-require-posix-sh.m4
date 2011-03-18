@@ -1,3 +1,4 @@
+# serial 15
 dnl NDIM_REQUIRE_POSIX_SH()dnl
 dnl dnl
 m4_pattern_forbid([NDIM_REQUIRE_POSIX_SH])dnl
