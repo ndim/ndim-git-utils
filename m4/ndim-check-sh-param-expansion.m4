@@ -14,16 +14,10 @@ test "x${ndim_testvalue%%-*}" = "x12.34.56" \
      && test "x${ndim_testvalue#*-}" = "x1.23.4-615asdg" \
      && ndim_sh_param_substitution=yes
 AC_MSG_RESULT([$ndim_sh_param_substitution])])
-m4_ifval([$1], [
-if test "x$ndim_sh_param_substitution" = "xyes"; then
-$1
-fi
+m4_ifval([$1], [AS_IF([test "x$ndim_sh_param_substitution" = "xyes"], [$1])
 ])dnl
-m4_ifval([$2], [
-if test "x$ndim_sh_param_substitution" = "xno"; then
-$2
-fi
-])
+m4_ifval([$2], [AS_IF([test "x$ndim_sh_param_substitution" = "xno"],  [$2])
+])dnl
 ])dnl
 dnl
 dnl Local Variables:

@@ -30,13 +30,13 @@ AM_CONDITIONAL([HAVE_NDIM_MAN2TXT],
                 test "x$COL" != "xfalse" &&
                 test "x$(echo "ABXY" | $COL -b)" = "xBY"])
 AC_MSG_CHECKING([man and col -b work correctly])
-if test "x$HAVE_NDIM_MAN2TXT_FALSE" = "x#"; then
+AS_IF([test "x$HAVE_NDIM_MAN2TXT_FALSE" = "x#"], [dnl
 	AC_MSG_RESULT([yes])
 	NDIM_MAN2TXT='m2t(){ $(MAN) "$$(dirname "[$$]1")/$$(basename "[$$]1")"|$(COL) -b; }; m2t'
-else
+      ],[dnl
 	AC_MSG_RESULT([no $(echo "ABXY" | $COL -b)])
 	NDIM_MAN2TXT='false'
-fi
+])
 AC_SUBST([NDIM_MAN2TXT])
 ])dnl
 dnl

@@ -12,16 +12,10 @@ AC_MSG_CHECKING([whether sh supports POSIX sh functions])
 ndim_sh_functions=no
 test "x$(moo() { echo "meh"; }; moo)" = "xmeh" && ndim_sh_functions=yes
 AC_MSG_RESULT([$ndim_sh_functions])])
-m4_ifval([$1], [
-if test "x$ndim_sh_functions" = "xyes"; then
-$1
-fi
+m4_ifval([$1], [AS_IF([test "x$ndim_sh_functions" = "xyes"], [$1])
 ])dnl
-m4_ifval([$2], [
-if test "x$ndim_sh_functions" = "xno"; then
-$2
-fi
-])
+m4_ifval([$2], [AS_IF([test "x$ndim_sh_functions" = "xno"],  [$2])
+])dnl
 ])dnl
 dnl
 dnl Local Variables:
