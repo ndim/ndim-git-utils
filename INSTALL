@@ -10,3 +10,15 @@ source tarball:
   $ make
   $ make check # optional
   $ make install
+
+If the given prefix does not match your default git installation's
+prefix, git will not find the new commands. To make git find them,
+set the environment variable GIT_EXEC_PATH accordingly:
+
+  $ git --exec-path
+  /usr/libexec/git-core
+  $ export GIT_EXEC_PATH=/what/ever/libexec/git-core:/usr/libexec/git-core
+  $ git --exec-path
+  /what/ever/libexec/git-core:/usr/libexec/git-core
+  $ git amb --help # should come up with the git-amb(1) man page
+

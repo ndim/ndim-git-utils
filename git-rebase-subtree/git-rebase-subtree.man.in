@@ -35,7 +35,7 @@ Old tree:
                           *\-\-*\-\-K
 .fi
 .PP
-Generate the following configuration using
+Generate the corresponding configuration by running
 .IR "git config" :
 .nf
   git config --add rebase-subtree.rebase \*qmaster A\*q
@@ -46,6 +46,20 @@ Generate the following configuration using
   git config --add rebase-subtree.rebase \*qD H\*q
   git config --add rebase-subtree.rebase \*qD K\*q
 .fi
+or just edit
+.IR ".git/config"
+adding the following section:
+.nf
+  [rebase-subtree]
+  rebase = master A
+  rebase A B
+  rebase B F
+  rebase B G
+  rebase A D
+  rebase D H
+  rebase D K
+.fi
+which effectively does the same thing.
 .PP
 After "git\-fetch \-v":
 .nf
@@ -128,6 +142,7 @@ after the branch subtree has been rebased.
 .TP
 .B "Specifying the branches from which to which to rebase is complicated"
 Yes. Should have default settings, or do a reasonable guess, or something.
+The current behaviour is definitely stupidly complicated.
 .TP
 .B "Lacks generality (fixation about 'master')"
 Yes.

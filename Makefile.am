@@ -1,6 +1,10 @@
 CLEANFILES =
 BUILT_SOURCES =
 EXTRA_DIST =
+
+gitbindir = $(exec_prefix)/libexec/git-core
+
+gitbin_SCRIPTS =
 man1_MANS =
 UPLOAD_FILES =
 doc_DATA =

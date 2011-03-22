@@ -2,7 +2,7 @@
 .SH NAME
 git\-amb \- git automake build utitilty
 .SH SYNOPSIS
-.B "git\-amb"
+.B "git amb"
 .RB "command"
 .RI [ params ]
 .SH DESCRIPTION
@@ -14,11 +14,11 @@ separate build directory.
 .SH "COMMANDS"
 .SS "Build Commands"
 .TP
-.B "git\-amb autoreconf [params...]"
+.B "git amb autoreconf [params...]"
 Run autoreconf on ${top_srcdir}.
 Optional params will be passed on to autoreconf.
 .TP
-.B "git\-amb configure [params...]"
+.B "git amb configure [params...]"
 Run configure in ${top_builddir} with
 .I "\-\-enable\-maintainer\-mode"
 and
@@ -26,58 +26,58 @@ and
 set appropriately.
 Optional params will be passed on to configure.
 If necessary, runs
-.I "git\-amb autoreconf"
+.I "git amb autoreconf"
 first.
 .TP
-.B "git\-amb make [params...]"
+.B "git amb make [params...]"
 Run make in ${top_builddir}.
 Optional params will be passed on to make.
 If necessary, runs
-.I "git\-amb configure"
+.I "git amb configure"
 first.
 .SS "Cleanup Commands"
 .TP
-.B "git\-amb clean [branch]"
+.B "git amb clean [branch]"
 Run 'make clean' in ${top_builddir}.
 The optional branch is the branch to clean up.
 .TP
-.B "git\-amb distclean [branch]"
+.B "git amb distclean [branch]"
 Run 'make distclean' in ${top_builddir}.
 The optional branch is the branch to clean up.
 .TP
-.B "git\-amb purge [branch]"
+.B "git amb purge [branch]"
 Remove both build and install tree.
 The optional branch is the branch to purge.
 .TP
-.B "git\-amb uninstall [branch]"
+.B "git amb uninstall [branch]"
 Remove ${installdir}.
 The optional branch is the branch to uninstall.
 .TP
-.B "git\-amb purge\-all"
+.B "git amb purge\-all"
 Remove build and install trees for
 .I all
 branches.
 .SS "Interactive and Scripting Commands"
 .TP
-.B "git\-amb sh [params...]"
+.B "git amb sh [params...]"
 Start shell in ${top_builddir}.
 Optional params will be passed on to the shell.
 .TP
-.B "git\-amb builddir [branch]"
+.B "git amb builddir [branch]"
 Print ${builddir}.
 The optional branch is the branch to print the builddir for.
 .TP
-.B "git\-amb installdir [branch]"
+.B "git amb installdir [branch]"
 Print ${installdir}.
 The optional branch is the branch to print the installdir for.
 .SH CONFIGURATION
 Use
-.B git\-config
+.B git config
 to get and set the config values.
 If a config value is not set,
-.B git\-amb
+.B git amb
 uses a built\-in default, which is not documented. Always run the
-.B git\-amb
+.B git amb
 commands
 .I builddir
 and
@@ -89,6 +89,18 @@ The branch name will be appended to it.
 .SS amb.installdir
 Location of installation, relative to top checkout (source) dir, or absolute.
 The branch name will be appended to it.
+.SS amb.params.autoreconf
+A few parameters to append to the
+.I autoreconf
+command line by default. Multiple values are possible. The default is empty.
+.SS amb.params.configure
+A few parameters to append to the
+.I configure
+command line by default. Multiple values are possible. The default is empty.
+.SS amb.params.make
+A few parameters to append to the
+.I make
+command line by default. Multiple values are possible. The default is empty.
 .SH EXAMPLES
 Define local build dirs, relative to top source tree dir.
 .nf
@@ -96,23 +108,35 @@ Define local build dirs, relative to top source tree dir.
   $ git config amb.installdir _installs
 .fi
 .PP
+Define some default parameters for builds of this project.
+.nf
+  $ git config --add amb.params.configure --disable-nls
+  $ git config --add amb.params.configure --disable-docs
+  $ git config --add amb.params.configure 'LIBFOO_CFLAGS="-I/buildroot/foo/include -DFOO_USE_BAR"'
+  $ git config --add amb.params.configure 'LIBFOO_LIBS="-L/buildroot/foo/lib -lfoo"'
+  $ git config --add amb.params.configure LIBMEH_CFLAGS=-I/srcroot/meh
+  $ git config --add amb.params.configure LIBMEH_LIBS=-L/srcroot/meh/libmeh.la
+  $ git config --add amb.params.make -j2
+  $ git config --add amb.params.make 'CFLAGS="-std=c99 -pedantic -Wall -Wextra -Werror"'
+.fi
+.PP
 In the following example, we build two branches and compare their
 resulting installation trees. Please note that
-.I "git\-amb make"
+.I "git amb make"
 automatically runs the necessary precursor steps.
 .nf
   $ git checkout master
-  $ git\-amb make install
+  $ git amb make install
   $ git checkout foo/bar
-  $ git\-amb make dist install
+  $ git amb make dist install
   $ diff \-ru $(git\-amb installdir) $(git\-amb installdir master)
 .fi
 .PP
 The following example builds a dist tarball with all the checks and we
 then examine the files in the dist tarball.
 .nf
-  $ git\-amb make distcheck
-  $ git\-amb sh
+  $ git amb make distcheck
+  $ git amb sh
   <\-\-\-\-> [...] $ ls *.tar.gz
   <\-\-\-\-> [...] $ tar tvfz moo-1.2.3.tar.gz
   <\-\-\-\-> [...] $ exit
@@ -128,14 +152,14 @@ Should be more consistent, smaller.
 .TP
 .B "Concurrent Usage"
 Exhibits problems, e.g. starting
-.B "git\-amb sh"
+.B "git amb sh"
 and then running
 .B "git checkout other\-branch"
 from another terminal.
 .TP
 .B "Why just git?"
 The idea behind
-.B "git\-amb"
+.B "git amb"
 would work equally well for many other SCMs.
 .TP
 .B "Why just automake?"
@@ -152,7 +176,7 @@ determine that?
 Not supporting
 .I "autogen.sh"
 scripts is a
-.B "git\-amb"
+.B "git amb"
 feature, not a bug.
 .I "autogen.sh"
 scripts are almost always broken in at least one way: They
