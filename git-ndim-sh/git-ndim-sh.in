@@ -5,8 +5,8 @@
 # Designed to be sourced.
 case "$(basename "$0")" in
     git-ndim-sh|git-ndim-sh.in)
-	echo "This script is not supposed to be executed." >&2
-	echo "Source it instead." >&2
+	echo "$(basename "$0"): This script is not supposed to be executed." >&2
+	echo "$(basename "$0"): Source it from a git extension script instead." >&2
 	exit 1
 	;;
 esac

@@ -57,7 +57,7 @@ amb_detect_configure() {
 	fi
 	configure_ac=""
     done
-    test -z "${configure_ac}" && die "configure.{ac,in} not found"
+    test -z "${configure_ac}" && die "$self: configure.{ac,in} not found"
     configure="$top_srcdir/configure"
 }
 
@@ -84,7 +84,7 @@ amb_init() {
 	# $1 is valid branch: use it
 	git_branch="${1}"
     else
-	die "Invalid branch \"$1\" given."
+	die "$self: Invalid branch \"$1\" given."
     fi
     test "x$(git rev-parse --is-inside-work-tree 2> /dev/null)" = "xtrue"
     top_srcdir="$(cd_to_toplevel && pwd)"
@@ -166,7 +166,7 @@ amb_uninstall() {
 
 amb_shell() {
     if test -d "$top_builddir"; then :; else
-	die "Build directory does not exist yet: ${top_builddir}"
+	die "$self: Build directory does not exist yet: ${top_builddir}"
     fi
     echo "$self: Starting shell for branch ${git_branch}"
     export git_amb_srcdir="top_srcdir"
@@ -239,7 +239,7 @@ if shift; then
 	    amb_printvars
 	    ;;
 	*)
-	    die "Invalid command line parameter: \"$command\""
+	    die "$self: Invalid command line parameter: \"$command\""
 	    ;;
     esac
 else

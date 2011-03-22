@@ -67,7 +67,7 @@ gf_init() {
             break
         fi
     done
-    test "x$config_found" = "xyes" || die "Unset or empty git config var \"rebase-subtree.rebase\""
+    test "x$config_found" = "xyes" || die "$self: Unset or empty git config var \"rebase-subtree.rebase\""
 }
 
 gf_branch() {
@@ -104,9 +104,9 @@ gf_rebase_tree() {
 	--reverse) reverse=yes; shift ;;
     esac
     newroot="$1"
-    test "x$newroot" = "x" && die "Need <newroot> parameter"
+    test "x$newroot" = "x" && die "$self: Need <newroot> parameter"
     oldroot="$2"
-    test "x$oldroot" = "x" && die "Need <oldroot> parameter"
+    test "x$oldroot" = "x" && die "$self: Need <oldroot> parameter"
     # save old checked out branch
     if old_branch=`git-symbolic-ref HEAD 2> /dev/null`
     then old_branch=`echo "$old_branch" | $SED 's|^refs/heads/||'`
