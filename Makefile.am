@@ -2,7 +2,7 @@ CLEANFILES =
 BUILT_SOURCES =
 EXTRA_DIST =
 
-gitbindir = $(exec_prefix)/libexec/git-core
+gitbindir = $(pkglibexecdir)
 
 gitbin_SCRIPTS =
 man1_MANS =

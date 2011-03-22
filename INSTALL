@@ -17,8 +17,8 @@ set the environment variable GIT_EXEC_PATH accordingly:
 
   $ git --exec-path
   /usr/libexec/git-core
-  $ export GIT_EXEC_PATH=/what/ever/libexec/git-core:/usr/libexec/git-core
+  $ export GIT_EXEC_PATH=/what/ever/libexec/ndim-git-utils:/usr/libexec/git-core
   $ git --exec-path
-  /what/ever/libexec/git-core:/usr/libexec/git-core
+  /what/ever/libexec/ndim-git-utils:/usr/libexec/git-core
   $ git amb --help # should come up with the git-amb(1) man page
 
