@@ -30,7 +30,7 @@ USAGE="<command> [params...]"
 LONG_USAGE="\
 Let a local subtree of branches follow a remote origin without too much merging.
 For more details, see the ${self}(1) man page."
-. "$(unset GIT_EXEC_PATH && git --exec-path)/git-sh-setup"
+. "$(unset GIT_EXEC_PATH; export GIT_EXEC_PATH; git --exec-path)/git-sh-setup"
 
 require_work_tree
 
