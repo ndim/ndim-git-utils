@@ -6,3 +6,4 @@ auto-aux
 autom4te.cache
 configure
 _local-build
+/include/config.h.in
