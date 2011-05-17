@@ -1,4 +1,4 @@
-# serial 15
+# serial 16
 dnl
 dnl NDIM_DETECT_MAN2TXT
 dnl
@@ -19,7 +19,7 @@ dnl
 m4_pattern_forbid([NDIM_DETECT_MAN2TXT])dnl
 AC_DEFUN([NDIM_DETECT_MAN2TXT], [dnl
 NDIM_CHECK_SH_FUNCTIONS([], [dnl
-AC_MSG_ERROR([Sorry, POSIX sh with functions required.])
+AC_MSG_ERROR([Sorry, POSIX sh with functions required.])[]dnl
 ])dnl
 dnl
 AC_ARG_VAR([MAN], [man(1) executable to run])

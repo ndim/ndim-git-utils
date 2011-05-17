@@ -1,6 +1,7 @@
 #!/bin/sh
 # git-amb - git automake build utility
 # Copyright (C) 2007 Hans Ulrich Niedermann <hun@n-dimensional.de>
+# Copyright (C) 2011 Hans Ulrich Niedermann <hun@n-dimensional.de>
 #
 # Build automake based git checkout in branch specific build and install trees.
 # That makes it easy to compare build results from different branches.
@@ -41,6 +42,11 @@ For more details, see the ${self}(1) man page."
 . "$(unset GIT_EXEC_PATH; export GIT_EXEC_PATH; git --exec-path)/git-sh-setup"
 
 require_work_tree
+
+# backup of IFS
+ifs="$IFS"
+LF="
+"
 
 run_cmd() {
 	echo "CMD: $@"
@@ -102,7 +108,9 @@ amb_init() {
 
 amb_autoreconf() {
     echo "$self: Running autoreconf for branch ${git_branch}"
+    IFS="$LF"
     run_cmd autoreconf -vis "$@" $(git config --get-all amb.params.autoreconf) "$top_srcdir"
+    IFS="$ifs"
 }
 
 amb_cond_autoreconf() {
@@ -116,7 +124,9 @@ amb_configure() {
     echo "$self: Running configure for branch ${git_branch}"
     mkdir -p "$top_builddir"
     run_cmd cd "$top_builddir"
+    IFS="$LF"
     run_cmd "$top_srcdir/configure" --prefix="$top_installdir" --enable-maintainer-mode $(git config --get-all amb.params.configure) "$@"
+    IFS="$ifs"
 }
 
 amb_cond_configure() {
@@ -127,7 +137,9 @@ amb_make() {
     amb_cond_configure
     echo "$self: Running make for branch ${git_branch}"
     run_cmd cd "$top_builddir"
+    IFS="$LF"
     run_cmd make $(git config --get-all amb.params.make) "$@"
+    IFS="$ifs"
 }
 
 amb_printvars() {
