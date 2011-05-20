@@ -173,6 +173,12 @@ determine that?
 .TP
 .B "bash completion"
 To be done.
+.TP
+.B "autogen.sh/boot.sh/etc. scripts"
+Could be added via a repo specific git-config option like
+amb.autoreconfcmd. Would need to be called with "--help" for those
+conceptually broken autogen.sh scripts which insist on calling
+configure at their end. See also below in the "NON-BUGS" section.
 .SH "NON-BUGS"
 .TP
 .B "No support for autogen.sh scripts"
@@ -186,7 +192,8 @@ scripts are almost always broken in at least one way: They
 unnecessarily duplicate the functionality of autoreconf(1), they join
 two independent steps into one (running both automake &
 Co. and ./configure), they do not allow srcdir != builddir builds, and
-there is no real standard about what exactly they do, and how.
+there is no real standard about what exactly they do, and how. See
+also above in the "BUGS" section.
 .SH AUTHORS
 .B "git\-amb"
 was written by Hans Ulrich Niedermann.
