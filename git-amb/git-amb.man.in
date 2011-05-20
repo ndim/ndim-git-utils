@@ -170,6 +170,9 @@ cmake(1) could be one.
 .B "Arch-independent build/install dirs"
 Yupp, they should be arch-dependent (e.g. i386 vs x86_64). But how to
 determine that?
+.TP
+.B "bash completion"
+To be done.
 .SH "NON-BUGS"
 .TP
 .B "No support for autogen.sh scripts"
