@@ -176,6 +176,21 @@ amb_uninstall() {
     echo "$self: Finished."
 }
 
+amb_ls_installdir() {
+    if test -d "$top_installdir"; then
+	if test "x$*" = "x"; then
+	    cd "$top_installdir" && find * -not -type d
+	else
+	    cd "$top_installdir" && ls "$@" $(find * -not -type d)
+	fi
+    else
+	echo "$self: Install directory not found:"
+	echo "$self:     \`${top_installdir}'"
+	echo "$self: Maybe try running \`git amb make install'?"
+	exit 1
+    fi
+}
+
 amb_shell() {
     if test -d "$top_builddir"; then :; else
 	die "$self: Build directory does not exist yet: ${top_builddir}"
@@ -207,6 +222,10 @@ if shift; then
 	installdir)
 	    amb_init "$@"
 	    echo "$top_installdir"
+	    ;;
+	ls-installdir)
+	    amb_init
+	    amb_ls_installdir "$@"
 	    ;;
 	autoreconf)
 	    amb_init

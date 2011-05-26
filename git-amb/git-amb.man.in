@@ -70,6 +70,12 @@ The optional branch is the branch to print the builddir for.
 .B "git amb installdir [branch]"
 Print ${installdir}.
 The optional branch is the branch to print the installdir for.
+.TP
+.B "git amb ls\-installdir [options-to-ls]"
+List all non\-directory files in the "${installdir}" while passing
+given options to the
+.B "ls(1)"
+command.
 .SH CONFIGURATION
 Use
 .B git config
