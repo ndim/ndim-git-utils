@@ -59,6 +59,9 @@ Remove build and install trees for
 branches.
 .SS "Interactive and Scripting Commands"
 .TP
+.B "git amb irun <command...>"
+Run the given command in ${top_installdir}.
+.TP
 .B "git amb sh [params...]"
 Start shell in ${top_builddir}.
 Optional params will be passed on to the shell.

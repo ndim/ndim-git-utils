@@ -191,6 +191,17 @@ amb_ls_installdir() {
     fi
 }
 
+amb_irun() {
+    if test -d "$top_installdir"; then
+	cd "$top_installdir" && "$@"
+    else
+	echo "$self: Install directory not found:"
+	echo "$self:     \`${top_installdir}'"
+	echo "$self: Maybe try running \`git amb make install' first?"
+	exit 1
+    fi
+}
+
 amb_shell() {
     if test -d "$top_builddir"; then :; else
 	die "$self: Build directory does not exist yet: ${top_builddir}"
@@ -226,6 +237,10 @@ if shift; then
 	ls-installdir)
 	    amb_init
 	    amb_ls_installdir "$@"
+	    ;;
+	irun)
+	    amb_init
+	    amb_irun "$@"
 	    ;;
 	autoreconf)
 	    amb_init
