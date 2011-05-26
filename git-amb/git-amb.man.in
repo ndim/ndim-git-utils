@@ -68,7 +68,7 @@ Optional params will be passed on to the shell.
 .TP
 .B "git amb builddir [branch]"
 Print ${builddir}.
-The optional branch is the branch to print the builddir for.
+The optional branch is the branch to print the ${builddir} for.
 .TP
 .B "git amb installdir [branch]"
 Print ${installdir}.
