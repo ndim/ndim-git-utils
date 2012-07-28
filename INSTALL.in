@@ -6,7 +6,7 @@ from a source tarball):
 Regardless of whether this is a git repo checkout or an extracted
 source tarball:
 
-  $ ./configure --prefix=/what/ever
+  $ ./configure --prefix=@prefix@
   $ make
   $ make check # optional
   $ make install
@@ -17,8 +17,8 @@ set the environment variable GIT_EXEC_PATH accordingly:
 
   $ git --exec-path
   /usr/libexec/git-core
-  $ export GIT_EXEC_PATH=/what/ever/libexec/ndim-git-utils:/usr/libexec/git-core
+  $ export "GIT_EXEC_PATH=@pkglibexecdir@:$(git --exec-path)"
   $ git --exec-path
-  /what/ever/libexec/ndim-git-utils:/usr/libexec/git-core
+  @pkglibexecdir@:/usr/libexec/git-core
   $ git amb --help # should come up with the git-amb(1) man page
 

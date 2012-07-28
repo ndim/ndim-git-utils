@@ -41,6 +41,21 @@ if HAVE_NDIM_MAN2TXT
 endif
 
 
+all-local: INSTALL
+
+CLEANFILES += INSTALL
+EXTRA_DIST += INSTALL.in
+INSTALL: $(top_srcdir)/INSTALL.in Makefile
+	$(SED) \
+		-e 's,[@]prefix@,$(prefix),g' \
+		-e 's,[@]pkglibexecdir@,$(pkglibexecdir),g' \
+		$(top_srcdir)/INSTALL.in > INSTALL
+
+dist-hook: dist-hook-rm-INSTALL-file
+dist-hook-rm-INSTALL-file:
+	rm -f "$(distdir)/INSTALL"
+
+
 UPLOAD_DIR = upload-dir
 ALL_UPLOAD_FILES = $(UPLOAD_FILES) $(distdir).tar.bz2
 upload: $(UPLOAD_FILES) dist tag

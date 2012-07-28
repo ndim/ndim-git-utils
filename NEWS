@@ -1,3 +1,6 @@
+ndim-git-utils 1.22.x
+  - Improved INSTALL file with local configured data
+
 ndim-git-utils 1.22
   - non user visible changes and small fixes
 
