@@ -47,8 +47,9 @@ CLEANFILES += INSTALL
 EXTRA_DIST += INSTALL.in
 INSTALL: $(top_srcdir)/INSTALL.in Makefile
 	$(SED) \
-		-e 's,[@]prefix@,$(prefix),g' \
+		-e 's,[@]mandir@,$(mandir),g' \
 		-e 's,[@]pkglibexecdir@,$(pkglibexecdir),g' \
+		-e 's,[@]prefix@,$(prefix),g' \
 		$(top_srcdir)/INSTALL.in > INSTALL
 
 dist-hook: dist-hook-rm-INSTALL-file

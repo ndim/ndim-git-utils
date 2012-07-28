@@ -20,5 +20,17 @@ set the environment variable GIT_EXEC_PATH accordingly:
   $ export "GIT_EXEC_PATH=@pkglibexecdir@:$(git --exec-path)"
   $ git --exec-path
   @pkglibexecdir@:/usr/libexec/git-core
-  $ git amb --help # should come up with the git-amb(1) man page
+  $ git amb --version
+  git-amb (ndims git utilities) 1.22.1-64ea8c7
 
+A similar operation is required to set up the man pages so that both
+"man git-amb" and "git amb --help" can display the git-amb(1) man
+page:
+
+  $ manpath
+  /usr/local/share/man:/usr/share/man
+  $ export MANPATH="@mandir@:$(manpath)"
+  $ manpath
+  manpath: warning: $MANPATH set, ignoring /etc/man_db.conf
+  @mandir@:/usr/local/share/man:/usr/share/man
+  $ git amb --help # should come up with the git-amb(1) man page
