@@ -25,6 +25,12 @@ NDIM_DETECT_MAN2TXT()dnl
 
 ########################################################################
 
+AC_ARG_VAR([GIT], [git revision control system])
+AC_PATH_PROG([GIT], [git], [no])
+AM_CONDITIONAL([HAVE_GIT], [test "x$GIT" != "xno"])
+
+########################################################################
+
 AC_CONFIG_FILES([GNUmakefile])
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([git-amb/git-amb.man])
