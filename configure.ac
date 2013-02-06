@@ -11,7 +11,7 @@ AC_CONFIG_HEADER([include/config.h])
 AC_CONFIG_SRCDIR([git-amb/git-amb.in])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign 1.11.1 no-dist-gzip dist-xz
-                  readme-alpha std-options])
+                  readme-alpha std-options tar-pax])
 
 ########################################################################
 
