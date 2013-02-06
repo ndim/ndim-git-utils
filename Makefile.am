@@ -2,9 +2,7 @@ CLEANFILES =
 BUILT_SOURCES =
 EXTRA_DIST =
 
-gitbindir = $(pkglibexecdir)
-
-gitbin_SCRIPTS =
+gitexec_SCRIPTS =
 man1_MANS =
 UPLOAD_FILES =
 doc_DATA =
@@ -48,7 +46,7 @@ EXTRA_DIST += INSTALL.in
 INSTALL: $(top_srcdir)/INSTALL.in Makefile
 	$(SED) \
 		-e 's,[@]mandir@,$(mandir),g' \
-		-e 's,[@]pkglibexecdir@,$(pkglibexecdir),g' \
+		-e 's,[@]gitexecdir@,$(gitexecdir),g' \
 		-e 's,[@]prefix@,$(prefix),g' \
 		$(top_srcdir)/INSTALL.in > INSTALL
 

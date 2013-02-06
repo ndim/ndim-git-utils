@@ -17,9 +17,9 @@ set the environment variable GIT_EXEC_PATH accordingly:
 
   $ git --exec-path
   /usr/libexec/git-core
-  $ export "GIT_EXEC_PATH=@pkglibexecdir@:$(git --exec-path)"
+  $ export "GIT_EXEC_PATH=@gitexecdir@:$(git --exec-path)"
   $ git --exec-path
-  @pkglibexecdir@:/usr/libexec/git-core
+  @gitexecdir@:/usr/libexec/git-core
   $ git amb --version
   git-amb (ndims git utilities) 1.22.1-64ea8c7
 

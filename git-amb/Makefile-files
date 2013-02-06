@@ -1,7 +1,7 @@
 # -*- makefile -*-
-gitbin_SCRIPTS += git-amb/git-amb
-EXTRA_DIST     += git-amb/git-amb.in
-UPLOAD_FILES   += git-amb/git-amb
+gitexec_SCRIPTS += git-amb/git-amb
+EXTRA_DIST      += git-amb/git-amb.in
+UPLOAD_FILES    += git-amb/git-amb
 
 man1_MANS  += git-amb/git-amb.man
 EXTRA_DIST += git-amb/git-amb.man.in
