@@ -5,7 +5,7 @@ Summary:	ndim's git utilities
 
 License:	FIXME
 URL:		@PACKAGE_URL@
-Source0:	@distdir@.tar.gz
+Source0:	@distdir@.tar.xz
 
 Requires:	git
 
