@@ -67,6 +67,11 @@ $(PACKAGE_TARNAME).spec: $(top_srcdir)/package.spec.in Makefile
 		$(top_srcdir)/package.spec.in > $(PACKAGE_TARNAME).spec
 
 
+# Unsupported convenience target test packages on RPM based systems
+rpm: dist-xz
+	rpmbuild -ta $(distdir).tar.xz
+
+
 dist-hook: dist-hook-rm-INSTALL-file
 dist-hook-rm-INSTALL-file:
 	rm -f "$(distdir)/INSTALL"
