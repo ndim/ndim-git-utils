@@ -1,0 +1,46 @@
+Name:		@PACKAGE_TARNAME@
+Version:	@RPM_VERSION@
+Release:	1@RPM_RELEASE@%{?dist}
+Summary:	ndim's git utilities
+
+License:	FIXME
+URL:		@PACKAGE_URL@
+Source0:	@distdir@.tar.gz
+
+Requires:	git
+
+%description
+ndim's git utilities contains
+
+   git amb  - easy automake based builds
+
+
+%prep
+%setup -q -n @distdir@
+
+
+%build
+%configure --libexecdir=%{_libexecdir}/git-core
+make # %{?_smp_mflags}
+
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make DESTDIR="${RPM_BUILD_ROOT}" install
+mv "${RPM_BUILD_ROOT}/usr/share/doc/ndim-git-utils/" rpm-docdir
+
+
+%files
+%docdir rpm-docdir
+%{_bindir}/git-buildmsg
+%{_bindir}/git-check-commit-msg
+%{_bindir}/print-buildmsg
+%{_libexecdir}/git-core/ndim-git-utils/git-amb
+%{_libexecdir}/git-core/ndim-git-utils/git-ndim-sh
+%{_libexecdir}/git-core/ndim-git-utils/git-rebase-subtree
+%{_mandir}/man1/git-amb.1.gz
+%{_mandir}/man1/git-rebase-subtree.1.gz
+
+
+
+%changelog

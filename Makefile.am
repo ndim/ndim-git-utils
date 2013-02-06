@@ -52,6 +52,21 @@ INSTALL: $(top_srcdir)/INSTALL.in Makefile
 		-e 's,[@]prefix@,$(prefix),g' \
 		$(top_srcdir)/INSTALL.in > INSTALL
 
+
+CLEANFILES += $(PACKAGE_TARNAME).spec
+EXTRA_DIST += $(PACKAGE_TARNAME).spec
+EXTRA_DIST += package.spec.in
+$(PACKAGE_TARNAME).spec: $(top_srcdir)/package.spec.in Makefile
+	$(SED) \
+		-e 's,[@]distdir@,$(distdir),g' \
+		-e 's,[@]PACKAGE_NAME@,$(PACKAGE_NAME),g' \
+		-e 's,[@]PACKAGE_TARNAME@,$(PACKAGE_TARNAME),g' \
+		-e 's,[@]PACKAGE_URL@,$(PACKAGE_URL),g' \
+		-e "s,[@]RPM_VERSION@,$$(echo "$(PACKAGE_VERSION)" | $(SED) s/-.*//),g" \
+		-e "s,[@]RPM_RELEASE@,$$(echo "$(PACKAGE_VERSION)" | $(SED) s/.*-/git/),g" \
+		$(top_srcdir)/package.spec.in > $(PACKAGE_TARNAME).spec
+
+
 dist-hook: dist-hook-rm-INSTALL-file
 dist-hook-rm-INSTALL-file:
 	rm -f "$(distdir)/INSTALL"
