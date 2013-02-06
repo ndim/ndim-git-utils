@@ -21,7 +21,8 @@ GIT_BUILDMSG_CMD = $(SHELL) "git-buildmsg/git-buildmsg" --error-if-no-git
 GIT_BUILDMSG_H = git-buildmsg.h
 CLEANFILES += $(GIT_BUILDMSG_H)
 git-buildmsg.stamp: git-buildmsg/git-buildmsg
-	@if env GIT_DIR="$(top_srcdir)/.git" $(GIT_BUILDMSG_CMD) -s "$(top_srcdir)" -o "$(GIT_BUILDMSG_H)"; then \
+	@set -x; \
+	if env GIT_DIR="$(top_srcdir)/.git" $(GIT_BUILDMSG_CMD) -s "$(top_srcdir)" -o "$(GIT_BUILDMSG_H)"; then \
 		if test -s "$(srcdir)/$(GIT_BUILDMSG_H)"; then \
 			if diff "$(srcdir)/$(GIT_BUILDMSG_H)" "$(GIT_BUILDMSG_H)"; then \
 				echo "New $(GIT_BUILDMSG_H) does not differ from $(srcdir)/$(GIT_BUILDMSG_H)"; \
