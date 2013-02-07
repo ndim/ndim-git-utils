@@ -2,6 +2,7 @@
 # git-amb - git automake build utility
 # Copyright (C) 2007 Hans Ulrich Niedermann <hun@n-dimensional.de>
 # Copyright (C) 2011 Hans Ulrich Niedermann <hun@n-dimensional.de>
+# Copyright (C) 2013 Hans Ulrich Niedermann <hun@n-dimensional.de>
 #
 # Build automake based git checkout in branch specific build and install trees.
 # That makes it easy to compare build results from different branches.
@@ -285,7 +286,7 @@ if shift; then
 	    amb_printvars
 	    ;;
 	*)
-	    die "$self: Invalid command line parameter: \"$command\""
+	    die "$self: Invalid command \"$command\""
 	    ;;
     esac
 else
