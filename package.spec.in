@@ -44,3 +44,5 @@ mv "${RPM_BUILD_ROOT}/usr/share/doc/ndim-git-utils/" rpm-docdir
 
 
 %changelog
+* Thu Feb  6 2013 Hans Ulrich Niedermann <hun@n-dimensional.de> - 1.22.3-1
+- Initial RPM.
