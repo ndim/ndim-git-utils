@@ -56,7 +56,15 @@ gf_init() {
         then
             if test "x$configvar" = "xrebase-subtree.subtree"; then
                 echo "$self: WARNING: Using deprecated config variable rebase-subtree.subtree."
-                echo "       Better use rebase-subtree.rebase lines instead."
+                echo "       Migrating to rebase-subtree.rebase lines."
+		git config --get-all rebase-subtree.subtree | while read from to restofline; do
+                    if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi
+		    git config --add rebase-subtree.rebase "$from $to"
+		done
+		git config unset-all rebase-subtree.subtree
+                echo "$self: NOTICE: Migrated from deprecated rebase-subtree.subtree to rebase-subtree.rebase."
+		echo "               Run the \`git rebase-subtree' command again.
+		exit 2
             fi
             git config --get-all "$configvar" | while read from to restofline; do
                 if test "x#" = "x$(echo "$from" | sed -n '1s/^\(.\).*/\1/p')"; then continue; fi

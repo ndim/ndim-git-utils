@@ -121,13 +121,17 @@ option line defines an edge in the branch subtree to rebase.
 .TP
 .B "rebase-subtree.subtree"
 .br
-.I "(Deprecated because it is unreadable)"
+.I "(DEPRECATED because it is unreadable)"
 .br
-String of \*qorig branch\norig2 branch2\*q form. Becomes very unreadable
-when the branch subtree to rebase contains more than a couple of branches.
-Use
+String of \*qorig branch\\norig2 branch2\\norig3 branch3\\n...\*q
+form. Becomes very unreadable when the branch subtree to rebase
+contains more than a couple of branches.  Use the required number of
 .B "rebase-subtree.rebase"
-instead.
+values instead for new setups. Old configs containing
+.B "rebase-subtree.subtree"
+will be automatically migrated to a
+.B "rebase-subtree.rebase"
+based config.
 .SH "NOT BUGS"
 .TP
 .B "Partially obsoleted by git 1.5.6"
