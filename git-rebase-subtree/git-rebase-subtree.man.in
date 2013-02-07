@@ -1,14 +1,14 @@
-.\" shorthand for double quote that works everywhere.
+.\" shorthand for double quote that works everywhere. Use as \*q in text.
 .ds q \N'34'
-.TH GIT-REBASE-SUBTREE 1 "@PACKAGE_TARNAME@ @PACKAGE_VERSION@" "2007\-11\-02" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
+.TH GIT-REBASE-SUBTREE 1 "@PACKAGE_TARNAME@ @PACKAGE_VERSION@" "2013\-02\-07" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
 .SH NAME
 git\-rebase\-subtree \- rebase set of interdependant git branches
 .SH SYNOPSIS
-.B "git\-rebase\-subtree"
+.B "git rebase\-subtree"
 .I "<origin-branch>"
 .I "<master-branch>"
 .PP
-.B "git\-rebase\-subtree"
+.B "git rebase\-subtree"
 .I "\-\-reverse"
 .I "<master-branch>"
 .I "<master-branch-plus-x>"
@@ -18,7 +18,7 @@ of interdependent feature branches ("branch subtree").
 .PP
 And you want to keep that "branch subtree" up-to-date in relation to
 upstream so it stays sweet, small, and clean, increasing the chances
-that upstream will finally pick something up from it.
+that upstream will finally pick some patches up from it.
 .PP
 Initial situation: Local branch master tracks remote origin.
 .PP
@@ -46,7 +46,7 @@ Generate the corresponding configuration by running
   git config --add rebase-subtree.rebase \*qD H\*q
   git config --add rebase-subtree.rebase \*qD K\*q
 .fi
-or just edit
+or edit
 .IR ".git/config"
 adding the following section:
 .nf
@@ -61,7 +61,7 @@ adding the following section:
 .fi
 which effectively does the same thing.
 .PP
-After "git\-fetch \-v":
+After "git fetch \-v", we have an updated origin origin':
 .nf
                          *\-\-F
                         /
@@ -72,7 +72,7 @@ After "git\-fetch \-v":
                origin'     *\-\-*\-\-K
 .fi
 .PP
-After hypothetical "git\-rebase\-subtree origin master":
+After "git rebase\-subtree origin master":
 .nf
                           *'\-\-F'
                          /
@@ -95,7 +95,7 @@ Old tree:
                           *\-\-*\-\-K
 .fi
 .PP
-After hypothetical "git\-rebase\-subtree \-\-reverse master Y":
+After "git rebase\-subtree \-\-reverse master Y":
 .nf
                   Y      *'\-\-F'
                  /      /
@@ -107,7 +107,7 @@ After hypothetical "git\-rebase\-subtree \-\-reverse master Y":
 .fi
 .SH "GIT CONFIGURATION"
 Configuration for
-.B "git-rebase-subtree"
+.B "git rebase-subtree"
 only makes sense on a per-repository basis, not on a
 .I "--global"
 basis.
@@ -130,7 +130,7 @@ Use
 instead.
 .SH "NOT BUGS"
 .TP
-.B "Obsoleted by git 1.5.6"
+.B "Partially obsoleted by git 1.5.6"
 git 1.5.6 can trigger branch rebases on pulls instead of standard merges.
 It cannot rebase entire subtrees, through, neither by manual command nor
 automatically.
