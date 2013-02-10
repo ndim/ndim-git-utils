@@ -64,7 +64,7 @@ gf_init() {
 		done
 		git config unset-all rebase-subtree.subtree
                 echo "$self: NOTICE: Migrated from deprecated rebase-subtree.subtree to rebase-subtree.rebase."
-		echo "               Run the \`git rebase-subtree' command again.
+		echo "               Run the \`git rebase-subtree' command again."
 		exit 2
             fi
             git config --get-all "$configvar" | while read from to restofline; do
