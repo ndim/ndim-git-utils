@@ -9,6 +9,7 @@ doc_DATA =
 dist_doc_DATA =
 bin_PROGRAMS =
 check_PROGRAMS =
+noinst_PROGRAMS =
 bin_SCRIPTS =
 check_SCRIPTS =
 TESTS =

@@ -48,7 +48,7 @@ git-buildmsg.stamp: git-buildmsg/git-buildmsg
 	fi
 
 TESTS += print-buildmsg
-bin_PROGRAMS += print-buildmsg
+noinst_PROGRAMS += print-buildmsg
 check_PROGRAMS += print-buildmsg
 print_buildmsg_SOURCES = git-buildmsg/print-buildmsg.c
 nodist_print_buildmsg_SOURCES = $(GIT_BUILDMSG_H)

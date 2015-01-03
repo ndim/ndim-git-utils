@@ -34,7 +34,6 @@ mv "${RPM_BUILD_ROOT}/usr/share/doc/ndim-git-utils/" rpm-docdir
 %doc rpm-docdir/*
 %{_bindir}/git-buildmsg
 %{_bindir}/git-check-commit-msg
-%{_bindir}/print-buildmsg
 %{_libexecdir}/git-core/git-amb
 %{_libexecdir}/git-core/git-ndim-sh
 %{_libexecdir}/git-core/git-rebase-subtree
