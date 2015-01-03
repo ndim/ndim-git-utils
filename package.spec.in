@@ -31,7 +31,7 @@ mv "${RPM_BUILD_ROOT}/usr/share/doc/ndim-git-utils/" rpm-docdir
 
 
 %files
-%docdir rpm-docdir
+%doc rpm-docdir/*
 %{_bindir}/git-buildmsg
 %{_bindir}/git-check-commit-msg
 %{_bindir}/print-buildmsg
@@ -44,5 +44,5 @@ mv "${RPM_BUILD_ROOT}/usr/share/doc/ndim-git-utils/" rpm-docdir
 
 
 %changelog
-* Thu Feb  6 2013 Hans Ulrich Niedermann <hun@n-dimensional.de> - 1.22.3-1
+* Wed Feb  6 2013 Hans Ulrich Niedermann <hun@n-dimensional.de> - 1.22.3-1
 - Initial RPM.
