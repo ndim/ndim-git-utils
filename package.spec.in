@@ -1,13 +1,18 @@
-Name:		@PACKAGE_TARNAME@
-Version:	@RPM_VERSION@
-Release:	1@RPM_RELEASE@%{?dist}
-Summary:	ndim's git utilities
+# -*- mode: rpm-spec -*-
+Name:      @PACKAGE_TARNAME@
+Version:   @RPM_VERSION@
+Release:   1@RPM_RELEASE@%{?dist}
+Summary:   ndim's git utilities
 
-License:	FIXME
-URL:		@PACKAGE_URL@
-Source0:	@distdir@.tar.xz
+Group:     Development/Tools
+License:   FIXME
+URL:       @PACKAGE_URL@
+Source0:   @distdir@.tar.xz
 
-Requires:	git
+BuildArch: noarch
+
+Requires:  git
+
 
 %description
 ndim's git utilities contains
@@ -21,7 +26,7 @@ ndim's git utilities contains
 
 %build
 %configure --with-gitexecdir=%{_libexecdir}/git-core
-make # %{?_smp_mflags}
+make %{?_smp_mflags}
 
 
 %install
@@ -31,6 +36,7 @@ mv "${RPM_BUILD_ROOT}/usr/share/doc/ndim-git-utils/" rpm-docdir
 
 
 %files
+%defattr(-,root,root,-)
 %doc rpm-docdir/*
 %{_bindir}/git-buildmsg
 %{_bindir}/git-check-commit-msg
