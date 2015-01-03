@@ -64,16 +64,22 @@ $(PACKAGE_TARNAME).spec: $(top_srcdir)/package.spec.in Makefile
 		-e "s,[@]RPM_RELEASE@,$$(echo "$(PACKAGE_VERSION)" | $(SED) s/.*-/git/),g" \
 		$(top_srcdir)/package.spec.in > $(PACKAGE_TARNAME).spec
 
+RPMBUILD = rpmbuild
+RPMBUILD_OPTS =
+RPMBUILD_OPTS += --define "_sourcedir $${PWD}"
+RPMBUILD_OPTS += --define "_builddir $${PWD}/rpm-build"
+RPMBUILD_OPTS += --define "_srcrpmdir $${PWD}/rpm-dist"
+RPMBUILD_OPTS += --define "_rpmdir $${PWD}/rpm-dist"
 
-# Unsupported convenience target test packages on RPM based systems
+.PHONY: rpm
 rpm: dist-xz
-	rpmbuild -ta $(distdir).tar.xz
-
+	rm -rf rpm-dist rpm-build
+	mkdir  rpm-dist rpm-build
+	$(RPMBUILD) $(RPMBUILD_OPTS) -ta $(distdir).tar.xz
 
 dist-hook: dist-hook-rm-INSTALL-file
 dist-hook-rm-INSTALL-file:
 	rm -f "$(distdir)/INSTALL"
-
 
 UPLOAD_DIR = upload-dir
 ALL_UPLOAD_FILES = $(UPLOAD_FILES) $(distdir).tar.bz2
