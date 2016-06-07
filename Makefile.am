@@ -15,6 +15,8 @@ check_SCRIPTS =
 TESTS =
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT =
 
+CLEAN_LOCAL_TARGETS =
+
 # For the test cases
 export top_srcdir
 
@@ -51,54 +53,11 @@ INSTALL: $(top_srcdir)/INSTALL.in Makefile
 		-e 's,[@]prefix@,$(prefix),g' \
 		$(top_srcdir)/INSTALL.in > INSTALL
 
-
-CLEANFILES += $(PACKAGE_TARNAME).spec
-EXTRA_DIST += $(PACKAGE_TARNAME).spec
-EXTRA_DIST += package.spec.in
-$(PACKAGE_TARNAME).spec: $(top_srcdir)/package.spec.in Makefile
-	$(SED) \
-		-e 's,[@]distdir@,$(distdir),g' \
-		-e 's,[@]PACKAGE_NAME@,$(PACKAGE_NAME),g' \
-		-e 's,[@]PACKAGE_TARNAME@,$(PACKAGE_TARNAME),g' \
-		-e 's,[@]PACKAGE_URL@,$(PACKAGE_URL),g' \
-		-e "s,[@]RPM_VERSION@,$$(echo "$(PACKAGE_VERSION)" | $(SED) s/-.*//),g" \
-		-e "s,[@]RPM_RELEASE@,$$(echo "$(PACKAGE_VERSION)" | $(SED) s/.*-/git/),g" \
-		$(top_srcdir)/package.spec.in > $(PACKAGE_TARNAME).spec
-
-if HAVE_RPMBUILD
-
-RPMBUILD_OPTS =
-RPMBUILD_OPTS += --define "_sourcedir $${PWD}"
-RPMBUILD_OPTS += --define "_builddir $${PWD}/rpm-build"
-RPMBUILD_OPTS += --define "_srcrpmdir $${PWD}/rpm-dist"
-RPMBUILD_OPTS += --define "_rpmdir $${PWD}/rpm-dist"
-
-.PHONY: rpm
-rpm: dist-xz
-	rm -rf rpm-dist rpm-build
-	mkdir  rpm-dist rpm-build
-	$(RPMBUILD) $(RPMBUILD_OPTS) -ta $(distdir).tar.xz
-
-endif
-
-if HAVE_FEDPKG
-
-FEDPKG_OPTS =
-FEDPKG_OPTS += --module-name=$(PACKAGE_TARNAME)
-FEDPKG_OPTS += --dist=f$(NDIM_FEDORA_VERSION)
-
-.PHONY: mockbuild
-mockbuild: dist-xz
-	$(FEDPKG) $(FEDPKG_OPTS) mockbuild
-if RUN_EXTRA_i386_BUILD
-	$(FEDPKG) $(FEDPKG_OPTS) mockbuild --root $(NDIM_i386_MOCK_ROOT)
-endif
-
-endif
-
 dist-hook: dist-hook-rm-INSTALL-file
 dist-hook-rm-INSTALL-file:
 	rm -f "$(distdir)/INSTALL"
+
+include m4/ndim-build-rpms.mk
 
 UPLOAD_DIR = upload-dir
 ALL_UPLOAD_FILES = $(UPLOAD_FILES) $(distdir).tar.bz2
@@ -112,7 +71,7 @@ upload: $(UPLOAD_FILES) dist tag
 	rm -rf "$(UPLOAD_DIR)"
 	if test -d "$(top_srcdir)/.git"; then cd "$(top_srcdir)" && git push public master; fi
 
-clean-local:
+clean-local: $(CLEAN_LOCAL_TARGETS)
 	rm -rf "$(UPLOAD_DIR)"
 
 # End of Makefile.am.
