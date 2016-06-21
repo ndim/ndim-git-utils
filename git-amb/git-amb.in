@@ -49,6 +49,49 @@ ifs="$IFS"
 LF="
 "
 
+clean_path() {
+    local path=""
+    if git config amb.path.include > /dev/null; then
+	IFS="$LF"
+	for incp in $(git config --get-all amb.path.include)
+	do
+	    # echo "Add to PATH: $incp"
+	    path="${path}${path:+:}${incp}"
+	done
+	IFS="$ifs"
+    fi
+    if git config amb.path.exclude > /dev/null; then
+	IFS=":"
+	for pc in ${PATH}
+	do
+	    local include=true
+	    IFS="$LF"
+	    for exp in $(git config --get-all amb.path.exclude)
+	    do
+		if test "x$exp" = "x$pc"
+		then
+		    # echo "Remove from PATH: $pc"
+		    include=false
+		    break
+		fi
+	    done
+	    if "$include"
+	    then
+		# echo "Keep in PATH: $pc"
+		path="${path}${path:+:}${pc}"
+	    fi
+	    IFS=":"
+	done
+	IFS="$ifs"
+    else
+	path="${path}${path:+:}${PATH}"
+    fi
+    PATH="$path"
+    export PATH
+}
+
+clean_path
+
 run_cmd() {
 	echo "CMD: $@"
 	"$@"

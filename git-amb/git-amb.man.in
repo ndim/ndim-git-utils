@@ -111,11 +111,26 @@ command line by default. Multiple values are possible. The default is empty.
 A few parameters to append to the
 .I make
 command line by default. Multiple values are possible. The default is empty.
+.SS amb.path.exclude
+A few path components to exclude from
+.B $PATH
+.SS amb.path.include
+A few path components to add to
+.B PATH
+environment variable.
 .SH EXAMPLES
 Define local build dirs, relative to top source tree dir.
 .nf
-  $ git config amb.builddir _builds
-  $ git config amb.installdir _installs
+  $ git config amb.builddir _build
+  $ git config amb.installdir _install
+.fi
+.PP
+Exclude unwanted components from
+.B PATH
+environment variable.
+.nf
+  $ git config --add amb.path.exclude /usr/lib/ccache
+  $ git config --add amb.path.exclude /usr/lib64/ccache
 .fi
 .PP
 Define some default parameters for builds of this project.
