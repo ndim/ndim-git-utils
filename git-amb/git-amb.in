@@ -88,6 +88,7 @@ clean_path() {
     fi
     PATH="$path"
     export PATH
+    echo "$self: Using PATH ${PATH}"
 }
 
 clean_path
