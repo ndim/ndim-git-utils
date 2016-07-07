@@ -1,4 +1,4 @@
-.TH GIT-AMB 1 "@PACKAGE_TARNAME@ @PACKAGE_VERSION@" "2013\-02\-07" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
+.TH GIT-AMB 1 "@PACKAGE_TARNAME@ @PACKAGE_VERSION@" "2016\-07\-07" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
 .SH NAME
 git\-amb \- git automake build utitilty
 .SH SYNOPSIS
@@ -111,6 +111,10 @@ command line by default. Multiple values are possible. The default is empty.
 A few parameters to append to the
 .I make
 command line by default. Multiple values are possible. The default is empty.
+.SS amb.env.set
+A few environment variables to set.
+.SS amb.env.unset
+A few environment variables to unset.
 .SS amb.path.exclude
 A few path components to exclude from
 .B $PATH
@@ -131,6 +135,20 @@ environment variable.
 .nf
   $ git config --add amb.path.exclude /usr/lib/ccache
   $ git config --add amb.path.exclude /usr/lib64/ccache
+.fi
+.PP
+Exclude unwanted variables from environment.
+.nf
+  $ git config --add amb.env.unset MOO
+.fi
+.PP
+Add environment variable to disable
+.B ccache
+when
+.B ccache
+is installed.
+.nf
+  $ git config --global --add amb.env.set CCACHE_DISABLE=true
 .fi
 .PP
 Define some default parameters for builds of this project.

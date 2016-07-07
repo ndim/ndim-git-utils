@@ -91,7 +91,25 @@ clean_path() {
     echo "$self: Using PATH ${PATH}"
 }
 
+setup_env() {
+    local ifs
+    ifs="$IFS"
+    IFS="$LF"
+    local env
+    for env in $(git config --get-all amb.env.unset)
+    do
+	unset "$env"
+	export "$env"
+    done
+    for env in $(git config --get-all amb.env.set)
+    do
+	export "$env"
+    done
+    IFS="$ifs"
+}
+
 clean_path
+setup_env
 
 run_cmd() {
 	echo "CMD: $@"
