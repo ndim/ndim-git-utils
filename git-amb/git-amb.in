@@ -98,11 +98,13 @@ setup_env() {
     local env
     for env in $(git config --get-all amb.env.unset)
     do
+	echo "$self: Unsetting env var $env"
 	unset "$env"
 	export "$env"
     done
     for env in $(git config --get-all amb.env.set)
     do
+	echo "$self: Setting env var $env"
 	export "$env"
     done
     IFS="$ifs"
