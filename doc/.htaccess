@@ -1,6 +1,6 @@
 AddDescription "MIT LICENSE" LICENSE.MIT
 AddDescription "GNU GENERAL PUBLIC LICENSE" LICENSE.GPL
-AddDescription "General description of ndim-git-utils" README
+AddDescription "General description of ndim-git-utils" README.md
 AddDescription "Common code to several scripts" git-ndim-sh
 AddDescription "The git-amb(1) man page" git-amb.txt
 AddDescription "The git-amb script" git-amb
