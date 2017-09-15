@@ -20,7 +20,7 @@ fi
 if test -f "$top_srcdir/$version_stamp"; then # dist source tree
 	cat "$top_srcdir/$version_stamp" | ${TR-tr} -d '\012'
 elif test -d "$GIT_DIR"; then # git source tree
-	git_describe=`${GIT-git} describe 2>/dev/null || echo devel`
+	git_describe="$(${GIT-git} describe 2>/dev/null || echo devel)"
 	# change tags like "foo-conf-1.2" to "1.2"
 	echo "$git_describe" | ${SED-sed} 's/^\([A-Za-z0-9_-]\{1,\}\)-\([0-9]\)/\2/;s/-/./;s/-g/-/' | ${TR-tr} -d '\012'
 else # ???

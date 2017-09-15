@@ -80,7 +80,7 @@ do
             if shift; then
                 outfile="$1"
                 [ "x$outfile" = "x-" ] || \
-                    ifndef_symbol=`basename "$outfile" | $SED 's|\.|_|g; s|[^A-Za-z0-9_]||g' | tr a-z A-Z`
+                    ifndef_symbol="$(basename "$outfile" | $SED 's|\.|_|g; s|[^A-Za-z0-9_]||g' | tr a-z A-Z)"
             else
                 echo "$self: Fatal: \"$1\" option requires parameter." >&2
                 exit 1
@@ -136,7 +136,7 @@ cd "$srcdir"
 
 # Detect git tools (should work with old and new git versions)
 git_found=yes
-[ x`which git 2>/dev/null` = "x" ] && { git_found=no; break; }
+[ "x$(which git 2>/dev/null)" = "x" ] && { git_found=no; break; }
 
 # Determine data about git tree
 is_git_worktree=no
@@ -145,11 +145,11 @@ if [ "x$git_found" = "xyes" ]; then
 	is_git_worktree="yes"
 
         # Commit ID
-        git_commitid=`git rev-parse HEAD | $SED -n 's/^\(.\{8\}\).*/\1/p'` || \
+        git_commitid="$(git rev-parse HEAD | $SED -n 's/^\(.\{8\}\).*/\1/p')" || \
 	    { echo "Error running git rev-parse HEAD" >&2; exit 1; }
 
         # Branch
-        git_branch=`git symbolic-ref HEAD | $SED -n 's|^refs/heads/||p'` || \
+        git_branch="$(git symbolic-ref HEAD | $SED -n 's|^refs/heads/||p')" || \
 	    { echo "Error running git symbolic-ref HEAD" >&2; exit 1; }
 
         # Any uncommitted changes we should know about?

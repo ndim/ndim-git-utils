@@ -8,7 +8,7 @@ distcheck-hook: git-version-check
 #       restart the whole dist process from the start and there is none.
 EXTRA_DIST += $(top_srcdir)/$(BUILD_SCRIPT_DIR)/package-version
 git-version-check:
-	@git_ver=`$(top_srcdir)/$(BUILD_SCRIPT_DIR)/package-version $(top_srcdir) version-stamp`; \
+	@git_ver="$$($(top_srcdir)/$(BUILD_SCRIPT_DIR)/package-version $(top_srcdir) version-stamp)"; \
 	if test "x$${git_ver}" = "x$(PACKAGE_VERSION)"; then :; else \
 		echo "ERROR: PACKAGE_VERSION and 'git describe' version do not match:"; \
 		echo "         current 'git describe' version: $${git_ver}"; \
@@ -25,10 +25,10 @@ git-version-check:
 # FIXME: NEWS check uses ${foo%%-*} POSIX shell, tested
 #        with bash, dash, busybox.
 git-version-check-news:
-	@git_ver=`$(top_srcdir)/$(BUILD_SCRIPT_DIR)/package-version $(top_srcdir) version-stamp`; \
+	@git_ver="$$($(top_srcdir)/$(BUILD_SCRIPT_DIR)/package-version $(top_srcdir) version-stamp)"; \
 	gv_xyz="$${git_ver%%-*}"; \
 	gv_xy="$${gv_xyz%.*}"; \
-	case `sed 1q $(top_srcdir)/NEWS` in \
+	case "$$(sed 1q $(top_srcdir)/NEWS)" in \
 	"$(PACKAGE_TARNAME) $${gv_xyz}") : ;; \
 	"$(PACKAGE_TARNAME) $${gv_xy}.x") : ;; \
 	*) \

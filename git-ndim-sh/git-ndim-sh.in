@@ -2,7 +2,16 @@
 # Dual-licensed. Choose LICENSE.MIT or LICENSE.GPL.
 # Contributions to this file will only be accepted under the same license.
 
-# Designed to be sourced.
+# Even if the script sourcing already has used $() before us, we make
+# sure using $() works.
+if test "x$(pwd)" = "x`pwd`" && test "y$(echo "foobar")" = "y`echo foobar`"
+then :;
+else
+    echo "$self: FATAL: This shell does not support POSIX sh \$() command substitution" >&2
+    exit 1
+fi
+
+# This file is designed to be sourced.
 case "$(basename "$0")" in
     git-ndim-sh|git-ndim-sh.in)
 	echo "$(basename "$0"): This script is not supposed to be executed." >&2
@@ -11,13 +20,7 @@ case "$(basename "$0")" in
 	;;
 esac
 
-if test "x$(pwd)" = "x`pwd`" && test "y$(echo "foobar")" = "y`echo foobar`"
-then :;
-else
-    echo "$self: FATAL: This shell does not support POSIX sh \$() command substitution" >&2
-    exit 1
-fi
-
+# Test for POSIX function support
 if test "x$(moo() { echo "meh"; }; moo)" = "xmeh"; then :;
 else
     echo "$self: FATAL: This shell does not support POSIX sh functions" >&2

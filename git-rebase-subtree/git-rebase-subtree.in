@@ -3,6 +3,7 @@
 # Copyright (C) 2007 Hans Ulrich Niedermann
 # Copyright (C) 2011 Hans Ulrich Niedermann
 # Copyright (C) 2013 Hans Ulrich Niedermann
+# Copyright (C) 2017 Hans Ulrich Niedermann
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,9 +22,10 @@
 unset CDPATH
 SED="${SED-sed}"
 
-self=`basename "$0"`
-selfdir=`dirname "$0"`
-selfdir=`cd "$selfdir" && pwd`
+self="$(basename "$0")"
+selfdir="$(dirname "$0")"
+selfdir="$(cd "$selfdir" && pwd)"
+
 . "$selfdir/git-ndim-sh"
 
 SUBDIRECTORY_OK="yes"
@@ -32,6 +34,7 @@ USAGE="<command> [params...]"
 LONG_USAGE="\
 Let a local subtree of branches follow a remote origin without too much merging.
 For more details, see the ${self}(1) man page."
+
 . "$(unset GIT_EXEC_PATH; export GIT_EXEC_PATH; git --exec-path)/git-sh-setup"
 
 require_work_tree
@@ -118,8 +121,8 @@ gf_rebase_tree() {
     oldroot="$2"
     test "x$oldroot" = "x" && die "$self: Need <oldroot> parameter"
     # save old checked out branch
-    if old_branch=`git-symbolic-ref HEAD 2> /dev/null`
-    then old_branch=`echo "$old_branch" | $SED 's|^refs/heads/||'`
+    if old_branch="$(git-symbolic-ref HEAD 2> /dev/null)"
+    then old_branch="$(echo "$old_branch" | $SED 's|^refs/heads/||')"
     fi
     echo
     echo "CAUTION: ${self} does not handle merge errors yet - that will mess up your repo!"

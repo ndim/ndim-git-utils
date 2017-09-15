@@ -29,9 +29,10 @@
 unset CDPATH
 SED="${SED-sed}"
 
-self=`basename "$0"`
-selfdir=`dirname "$0"`
-selfdir=`cd "$selfdir" && pwd`
+self="$(basename "$0")"
+selfdir="$(dirname "$0")"
+selfdir="$(cd "$selfdir" && pwd)"
+
 . "$selfdir/git-ndim-sh"
 
 SUBDIRECTORY_OK="yes"
@@ -40,6 +41,7 @@ USAGE="<command> [params...]"
 LONG_USAGE="\
 Build automake based git checkout in branch specific build and install trees.
 For more details, see the ${self}(1) man page."
+
 . "$(unset GIT_EXEC_PATH; export GIT_EXEC_PATH; git --exec-path)/git-sh-setup"
 
 require_work_tree
@@ -49,6 +51,7 @@ ifs="$IFS"
 LF="
 "
 
+# Clean up the PATH: Include and exclude dirs according to config.
 clean_path() {
     local path=""
     if git config amb.path.include > /dev/null; then
@@ -91,6 +94,7 @@ clean_path() {
     echo "$self: Using PATH ${PATH}"
 }
 
+# Environment setup: (Un)set variables according to config.
 setup_env() {
     local ifs
     ifs="$IFS"
@@ -113,11 +117,13 @@ setup_env() {
 clean_path
 setup_env
 
+# Run command with echo of command line.
 run_cmd() {
 	echo "CMD: $@"
 	"$@"
 }
 
+# Detect configure.{ac,in} file.
 amb_detect_configure() {
     for configure_ac in \
 	"${top_srcdir}/configure.ac" \
