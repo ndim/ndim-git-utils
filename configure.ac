@@ -43,6 +43,8 @@ AC_CONFIG_FILES([GNUmakefile])
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([git-amb/git-amb.man])
 AC_CONFIG_FILES([git-amb/git-amb])
+AC_CONFIG_FILES([git-amb/test-git-amb-dirs.sh],
+                [chmod +x git-amb/test-git-amb-dirs.sh])
 AC_CONFIG_FILES([git-buildmsg/git-buildmsg])
 AC_CONFIG_FILES([git-rebase-subtree/git-rebase-subtree])
 AC_CONFIG_FILES([git-rebase-subtree/git-rebase-subtree.man])

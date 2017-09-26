@@ -4,6 +4,9 @@ EXTRA_DIST      += git-amb/git-amb.in
 UPLOAD_FILES    += git-amb/git-amb
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT += git-amb/git-amb
 
+TESTS      += git-amb/test-git-amb-dirs.sh
+EXTRA_DIST += git-amb/test-git-amb-dirs.sh.in
+
 man1_MANS  += git-amb/git-amb.man
 EXTRA_DIST += git-amb/git-amb.man.in
 
