@@ -91,7 +91,7 @@ clean_path() {
     fi
     PATH="$path"
     export PATH
-    echo "$self: Using PATH ${PATH}"
+    echo "$self: Using PATH ${PATH}" >&2
 }
 
 # Environment setup: (Un)set variables according to config.
@@ -102,13 +102,13 @@ setup_env() {
     local env
     for env in $(git config --get-all amb.env.unset)
     do
-	echo "$self: Unsetting env var $env"
+	echo "$self: Unsetting env var $env" >&2
 	unset "$env"
 	export "$env"
     done
     for env in $(git config --get-all amb.env.set)
     do
-	echo "$self: Setting env var $env"
+	echo "$self: Setting env var $env" >&2
 	export "$env"
     done
     IFS="$ifs"
