@@ -1,7 +1,7 @@
 # -*- mode: rpm-spec -*-
 Name:      @PACKAGE_TARNAME@
 Version:   @RPM_VERSION@
-Release:   1@RPM_RELEASE@%{?dist}
+Release:   2@RPM_RELEASE@%{?dist}
 Summary:   ndim's git utilities
 
 Group:     Development/Tools
@@ -12,6 +12,8 @@ Source0:   @distdir@.tar.xz
 BuildArch: noarch
 
 Requires:  git
+BuildRequires: make
+BuildRequires: gcc
 
 
 %description
@@ -49,5 +51,8 @@ mv "${RPM_BUILD_ROOT}/usr/share/doc/ndim-git-utils/" rpm-docdir
 
 
 %changelog
+* Mon Mar  8 2021 Hans Ulrich Niedermann <hun@n-dimensional.de> - 1.22.36-2
+- Add BuildRequires: gcc, make for F34
+
 * Wed Feb  6 2013 Hans Ulrich Niedermann <hun@n-dimensional.de> - 1.22.3-1
 - Initial RPM.
