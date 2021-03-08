@@ -152,8 +152,7 @@ cond_cat_path() {
 }
 
 amb_init() {
-    # Equivalent bzr code:
-    #   bzr log -r -1.. | sed -n 's/^branch nick: //p'
+    # FIXME: Avoid "" branch name when rebase is in progress.
     if test "x$1" = "x"; then
 	# determine currently checked out branch
 	git_branch="$(git symbolic-ref HEAD | $SED -n 's|^refs/heads/||p')"
