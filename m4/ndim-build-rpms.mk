@@ -37,13 +37,17 @@ if DO_FEDPKG
 FEDPKG_OPTS =
 FEDPKG_OPTS += --dist=f$(NDIM_FEDORA_VERSION)
 
-mockbuild: dist-xz
+sources: dist-xz
+	$(SHA512SUM) --tag $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.xz > sources.new
+	mv -f sources.new sources
+
+mockbuild: dist-xz sources
 	$(FEDPKG) $(FEDPKG_OPTS) mockbuild
 if DO_EXTRA_i386_BUILD
 	$(FEDPKG) $(FEDPKG_OPTS) mockbuild --root $(NDIM_i386_MOCK_ROOT)
 endif
 
-mockbuild-all: dist-xz
+mockbuild-all: dist-xz sources
 	@echo SHELL="$$SHELL"; fail=""; succ=""; \
 	if test "x$(NDIM_RPM_ARCH)" = "xx86_64" && test "x$(NDIM_MAINPKG_NOARCH)" = "xno"; then \
 	for mockroot in /etc/mock/fedora-*-x86_64.cfg /etc/mock/epel-*-x86_64.cfg /etc/mock/fedora-*-i386.cfg /etc/mock/epel-*-i386.cfg; do \

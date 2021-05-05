@@ -13,6 +13,9 @@ AS_IF([test "x$DO_RPMBUILD_FALSE" = 'x#'],
       [AC_MSG_RESULT([yes])],
       [AC_MSG_RESULT([no])])
 
+AC_ARG_VAR([SHA512SUM], [sha512sum utility])
+AC_PATH_PROG([SHA512SUM], [sha512sum], [no])
+
 AC_ARG_VAR([FEDPKG], [fedora package build utility])
 AC_PATH_PROG([FEDPKG], [fedpkg], [no])
 
