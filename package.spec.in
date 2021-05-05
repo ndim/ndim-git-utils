@@ -11,7 +11,8 @@ Source0:   @distdir@.tar.xz
 
 BuildArch: noarch
 
-Requires:  git
+Requires: git-core
+BuildRequires: git-core
 BuildRequires: make
 BuildRequires: gcc
 
