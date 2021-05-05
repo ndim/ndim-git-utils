@@ -3,6 +3,8 @@
 # Copyright (C) 2007 Hans Ulrich Niedermann <hun@n-dimensional.de>
 # Copyright (C) 2011 Hans Ulrich Niedermann <hun@n-dimensional.de>
 # Copyright (C) 2013 Hans Ulrich Niedermann <hun@n-dimensional.de>
+# Copyright (C) 2017 Hans Ulrich Niedermann <hun@n-dimensional.de>
+# Copyright (C) 2021 Hans Ulrich Niedermann <hun@n-dimensional.de>
 #
 # Build automake based git checkout in branch specific build and install trees.
 # That makes it easy to compare build results from different branches.
@@ -152,10 +154,15 @@ cond_cat_path() {
 }
 
 amb_init() {
-    # FIXME: Avoid "" branch name when rebase is in progress.
+    # FIXME: Avoid "" branch name when rebase or bisect is in progress.
     if test "x$1" = "x"; then
 	# determine currently checked out branch
-	git_branch="$(git symbolic-ref HEAD | $SED -n 's|^refs/heads/||p')"
+	# use hash if we are on a detached HEAD
+	if git symbolic-ref HEAD > /dev/null 2>&1; then
+	    git_branch="$(git symbolic-ref HEAD | $SED -n 's|^refs/heads/||p')"
+	else
+	    git_branch="$(git rev-parse HEAD)"
+	fi
     elif git rev-parse --verify "$1" > /dev/null 2>&1; then
 	# $1 is valid branch: use it
 	git_branch="${1}"

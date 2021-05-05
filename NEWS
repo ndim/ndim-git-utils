@@ -1,5 +1,7 @@
 ndim-git-utils 1.22.x
   - Improved INSTALL file with local configured data
+  - On detached HEAD, git-amb now uses SHA branch name instead of
+    the non-existing branch name
 
 ndim-git-utils 1.22
   - non user visible changes and small fixes

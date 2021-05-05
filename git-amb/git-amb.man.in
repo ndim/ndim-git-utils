@@ -95,10 +95,10 @@ and
 instead of reading the config values.
 .SS amb.builddir
 Location of build tree, relative to top checkout (source) dir, or absolute.
-The branch name will be appended to it.
+The branch name (or SHA in case of detached HEAD) will be appended to it.
 .SS amb.installdir
 Location of installation, relative to top checkout (source) dir, or absolute.
-The branch name will be appended to it.
+The branch name (or SHA in case of detached HEAD) will be appended to it.
 .SS amb.params.autoreconf
 A few parameters to append to the
 .I autoreconf
