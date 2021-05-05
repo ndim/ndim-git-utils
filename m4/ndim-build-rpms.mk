@@ -35,7 +35,6 @@ endif
 if DO_FEDPKG
 
 FEDPKG_OPTS =
-FEDPKG_OPTS += --module-name=$(PACKAGE_TARNAME)
 FEDPKG_OPTS += --dist=f$(NDIM_FEDORA_VERSION)
 
 mockbuild: dist-xz
