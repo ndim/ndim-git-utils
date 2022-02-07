@@ -5,6 +5,7 @@
 # Copyright (C) 2013 Hans Ulrich Niedermann <hun@n-dimensional.de>
 # Copyright (C) 2017 Hans Ulrich Niedermann <hun@n-dimensional.de>
 # Copyright (C) 2021 Hans Ulrich Niedermann <hun@n-dimensional.de>
+# Copyright (C) 2022 Hans Ulrich Niedermann <hun@n-dimensional.de>
 #
 # Build automake based git checkout in branch specific build and install trees.
 # That makes it easy to compare build results from different branches.
@@ -207,7 +208,13 @@ amb_configure() {
 }
 
 amb_cond_configure() {
-    test -s "$top_builddir/Makefile" || amb_configure
+    if   test -s "$top_srcdir/Makefile.in"    && test -s "$top_builddir/Makefile"    && test "$top_builddir/Makefile"    -nt "$top_srcdir/Makefile.in";    then
+	:
+    elif test -s "$top_srcdir/GNUmakefile.in" && test -s "$top_builddir/GNUmakefile" && test "$top_builddir/GNUmakefile" -nt "$top_srcdir/GNUmakefile.in"; then
+	:
+    else
+	amb_configure
+    fi
 }
 
 amb_make() {
