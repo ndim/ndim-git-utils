@@ -22,7 +22,7 @@ export top_srcdir
 
 AM_CPPFLAGS = -I${top_builddir}/include
 
-ACLOCAL_AMFLAGS = -I m4 --install
+ACLOCAL_AMFLAGS = --install
 
 include build-helpers/package-version.mk
 
