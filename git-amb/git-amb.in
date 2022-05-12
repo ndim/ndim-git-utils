@@ -222,7 +222,7 @@ amb_make() {
     echo "$self: Running make for branch ${git_branch}"
     run_cmd cd "$top_builddir"
     IFS="$LF"
-    run_cmd make $(git --git-dir="$GIT_DIR" config --get-all amb.params.make) "$@"
+    run_cmd make $(git --git-dir="$GIT_DIR" config --get-all amb.params.make | sed "s,\(\`nproc\`\|\$(nproc)\),$(nproc),g") "$@"
     IFS="$ifs"
 }
 
