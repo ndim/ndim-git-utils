@@ -57,22 +57,22 @@ LF="
 # Clean up the PATH: Include and exclude dirs according to config.
 clean_path() {
     local path=""
-    if git config amb.path.include > /dev/null; then
+    if git --git-dir="$GIT_DIR" config amb.path.include > /dev/null; then
 	IFS="$LF"
-	for incp in $(git config --get-all amb.path.include)
+	for incp in $(git --git-dir="$GIT_DIR" config --get-all amb.path.include)
 	do
 	    # echo "Add to PATH: $incp"
 	    path="${path}${path:+:}${incp}"
 	done
 	IFS="$ifs"
     fi
-    if git config amb.path.exclude > /dev/null; then
+    if git --git-dir="$GIT_DIR" config amb.path.exclude > /dev/null; then
 	IFS=":"
 	for pc in ${PATH}
 	do
 	    local include=true
 	    IFS="$LF"
-	    for exp in $(git config --get-all amb.path.exclude)
+	    for exp in $(git --git-dir="$GIT_DIR" config --get-all amb.path.exclude)
 	    do
 		if test "x$exp" = "x$pc"
 		then
@@ -103,13 +103,13 @@ setup_env() {
     ifs="$IFS"
     IFS="$LF"
     local env
-    for env in $(git config --get-all amb.env.unset)
+    for env in $(git --git-dir="$GIT_DIR" config --get-all amb.env.unset)
     do
 	echo "$self: Unsetting env var $env" >&2
 	unset "$env"
 	export "$env"
     done
-    for env in $(git config --get-all amb.env.set)
+    for env in $(git --git-dir="$GIT_DIR" config --get-all amb.env.set)
     do
 	echo "$self: Setting env var $env" >&2
 	export "$env"
@@ -159,25 +159,25 @@ amb_init() {
     if test "x$1" = "x"; then
 	# determine currently checked out branch
 	# use hash if we are on a detached HEAD
-	if git symbolic-ref HEAD > /dev/null 2>&1; then
-	    git_branch="$(git symbolic-ref HEAD | $SED -n 's|^refs/heads/||p')"
+	if git --git-dir="$GIT_DIR" symbolic-ref HEAD > /dev/null 2>&1; then
+	    git_branch="$(git --git-dir="$GIT_DIR" symbolic-ref HEAD | $SED -n 's|^refs/heads/||p')"
 	else
-	    git_branch="$(git rev-parse HEAD)"
+	    git_branch="$(git --git-dir="$GIT_DIR" rev-parse HEAD)"
 	fi
-    elif git rev-parse --verify "$1" > /dev/null 2>&1; then
+    elif git --git-dir="$GIT_DIR" rev-parse --verify "$1" > /dev/null 2>&1; then
 	# $1 is valid branch: use it
 	git_branch="${1}"
     else
 	die "$self: Invalid branch \"$1\" given."
     fi
-    test "x$(git rev-parse --is-inside-work-tree 2> /dev/null)" = "xtrue"
+    test "x$(git --git-dir="$GIT_DIR" rev-parse --is-inside-work-tree 2> /dev/null)" = "xtrue"
     top_srcdir="$(cd_to_toplevel && pwd)"
 
-    tmp="$(git config amb.builddir)" || tmp="$GIT_DIR/amb/build"
+    tmp="$(git --git-dir="$GIT_DIR" config amb.builddir)" || tmp="$GIT_DIR/amb/build"
     amb_builddir="$(cond_cat_path "${top_srcdir}" "$tmp")"
     top_builddir="$(cond_cat_path "${top_srcdir}" "$tmp" "${git_branch}")"
 
-    tmp="$(git config amb.installdir)" || tmp="$GIT_DIR/amb/install"
+    tmp="$(git --git-dir="$GIT_DIR" config amb.installdir)" || tmp="$GIT_DIR/amb/install"
     amb_installdir="$(cond_cat_path "${top_srcdir}" "$tmp")"
     top_installdir="$(cond_cat_path "${top_srcdir}" "$tmp" "$git_branch")"
 
@@ -187,7 +187,7 @@ amb_init() {
 amb_autoreconf() {
     echo "$self: Running autoreconf for branch ${git_branch}"
     IFS="$LF"
-    run_cmd autoreconf -vis "$@" $(git config --get-all amb.params.autoreconf) "$top_srcdir"
+    run_cmd autoreconf -vis "$@" $(git --git-dir="$GIT_DIR" config --get-all amb.params.autoreconf) "$top_srcdir"
     IFS="$ifs"
 }
 
@@ -203,7 +203,7 @@ amb_configure() {
     mkdir -p "$top_builddir"
     run_cmd cd "$top_builddir"
     IFS="$LF"
-    run_cmd "$top_srcdir/configure" --prefix="$top_installdir" --enable-maintainer-mode $(git config --get-all amb.params.configure) "$@"
+    run_cmd "$top_srcdir/configure" --prefix="$top_installdir" --enable-maintainer-mode $(git --git-dir="$GIT_DIR" config --get-all amb.params.configure) "$@"
     IFS="$ifs"
 }
 
@@ -222,7 +222,7 @@ amb_make() {
     echo "$self: Running make for branch ${git_branch}"
     run_cmd cd "$top_builddir"
     IFS="$LF"
-    run_cmd make $(git config --get-all amb.params.make) "$@"
+    run_cmd make $(git --git-dir="$GIT_DIR" config --get-all amb.params.make) "$@"
     IFS="$ifs"
 }
 
