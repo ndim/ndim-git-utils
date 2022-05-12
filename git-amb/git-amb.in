@@ -193,7 +193,7 @@ amb_autoreconf() {
 
 amb_cond_autoreconf() {
     if test ! -s "$configure" || test "$configure_ac" -nt "$configure"; then
-	    amb_autoreconf
+        amb_autoreconf
     fi
 }
 
