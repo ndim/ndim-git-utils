@@ -110,7 +110,7 @@ command line by default. Multiple values are possible. The default is empty.
 .SS amb.params.make
 A few parameters to append to the
 .I make
-command line by default. Multiple values are possible. The default is empty. Will substitute the strings \fB`nproc`\fR and \fB$(nproc)\fR with the number of CPUs as printed by \fBnproc(1)\fR, which can be useful for the \fI-j\fR and \fI-l\fR make arguments.
+command line by default. Multiple values are possible. The default is empty. Will substitute the string \fB`%NPROC%`\fR with the number of CPUs as printed by \fBnproc(1)\fR, which can be useful for the \fI-j\fR and \fI-l\fR make arguments.
 .SS amb.env.set
 A few environment variables to set.
 .SS amb.env.unset
