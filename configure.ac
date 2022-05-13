@@ -36,8 +36,10 @@ NDIM_DETECT_MAN2TXT()dnl
 ########################################################################
 
 AC_ARG_VAR([GIT], [git revision control system])
+AS_VAR_IF([GIT], [], [dnl
 AC_PATH_PROG([GIT], [git], [no])
-AM_CONDITIONAL([HAVE_GIT], [test "x$GIT" != "xno"])
+])
+AM_CONDITIONAL([HAVE_GIT], [test "x$GIT" != xno])
 m4_pattern_forbid([NDIM_GITEXECDIR])dnl
 NDIM_GITEXECDIR()dnl
 
