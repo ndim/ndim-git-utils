@@ -203,7 +203,12 @@ amb_configure() {
     mkdir -p "$top_builddir"
     run_cmd cd "$top_builddir"
     IFS="$LF"
-    run_cmd "$top_srcdir/configure" --prefix="$top_installdir" --enable-maintainer-mode $(git --git-dir="$GIT_DIR" config --get-all amb.params.configure) "$@"
+    if grep AM_MAINTAINER_MODE "$configure_ac" > /dev/null; then
+	maintainer_mode_arg=--enable-maintainer-mode
+    else
+	maintainer_mode_arg=
+    fi
+    run_cmd "$top_srcdir/configure" --prefix="$top_installdir" ${maintainer_mode_arg} $(git --git-dir="$GIT_DIR" config --get-all amb.params.configure) "$@"
     IFS="$ifs"
 }
 
