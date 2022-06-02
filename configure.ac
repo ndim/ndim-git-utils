@@ -3,7 +3,7 @@
 AC_PREREQ(2.69)
 AC_INIT([ndims git utilities],
 	[m4_esyscmd([./build-helpers/package-version . version-stamp])],
-	[hun@n-dimensional.de],
+	[https://github.com/ndim/ndim-git-utils/issues],
 	[ndim-git-utils],
 	[https://github.com/ndim/ndim-git-utils/])
 AC_CONFIG_AUX_DIR([auto-aux])
