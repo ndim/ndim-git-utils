@@ -155,7 +155,6 @@ cond_cat_path() {
 }
 
 amb_init() {
-    # FIXME: Avoid "" branch name when rebase or bisect is in progress.
     if test "x$1" = "x"; then
 	# determine currently checked out branch
 	# use hash if we are on a detached HEAD
