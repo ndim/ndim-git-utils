@@ -157,6 +157,43 @@ cond_cat_path() {
     echo "$path"
 }
 
+# FIXME: We *COULD* detect `findmnt` and `sort -h` from
+#        `configure.ac`, but this appears to work as well.
+gnu_find_rootdir() {
+    if findmnt --version > /dev/null; then :; else
+	return 1
+    fi
+    if tmp1="$(printf "1.7G\n3.6K\n2.1M\n" | sort -h)"; then
+	tmp2="$(printf "3.6K\n2.1M\n1.7G\n")"
+	if test "x$tmp1" != "x$tmp2"; then
+	    return 1
+	fi
+    else
+	return 1
+    fi
+    findmnt --type tmpfs --notruncate --nofsroot --noheadings --list --output SIZE,TARGET | sort -hr | while read SIZE TARGET; do
+	case "$TARGET" in
+	    /dev/*|/var/*)
+		continue
+		;;
+	    ${HOME}/*|*/${UID}|*/${USER})
+		mkdir -p "$TARGET/git-amb" || continue
+		echo "moo" > "$TARGET/git-amb/.tmpfile-$$" || continue
+		rm -f "$TARGET/git-amb/.tmpfile-$$" || continue
+		echo "$TARGET/git-amb";
+		return 0
+		;;
+	    *)
+		mkdir -p "$TARGET/$USER/git-amb" || continue
+		echo "moo" > "$TARGET/$USER/git-amb/.tmpfile-$$" || continue
+		rm -f "$TARGET/$USER/git-amb/.tmpfile-$$" || continue
+		echo "$TARGET/$USER/git-amb"
+		return 0
+		;;
+	esac
+    done
+}
+
 amb_init() {
     clean_path
     setup_env
@@ -178,11 +215,26 @@ amb_init() {
     test "x$(git --git-dir="$GIT_DIR" rev-parse --is-inside-work-tree 2> /dev/null)" = "xtrue"
     top_srcdir="$(cd_to_toplevel && pwd)"
 
-    tmp="$(git --git-dir="$GIT_DIR" config amb.builddir)" || tmp="$GIT_DIR/amb/build"
+    amb_project_id="$(git --git-dir="$GIT_DIR" config amb.project-id)" || amb_project_id="PATH"
+    case "$amb_project_id" in
+	BASENAME)
+	    project_id="$(basename "$top_srcdir")"
+	    ;;
+	PATH)
+	    project_id="$(echo "$top_srcdir" | sed 's|/|_|g')"
+	    ;;
+	*)
+	    project_id="$amb_project_id"
+	    ;;
+    esac
+
+    amb_projrootdir="$(git --git-dir="$GIT_DIR" config amb.rootdir)/$project_id" || amb_projrootdir="$(gnu_find_rootdir)/$project_id" || amb_projrootdir="$GIT_DIR/amb"
+
+    tmp="$(git --git-dir="$GIT_DIR" config amb.builddir)" || tmp="${amb_projrootdir}/build"
     amb_builddir="$(cond_cat_path "${top_srcdir}" "$tmp")"
     top_builddir="$(cond_cat_path "${top_srcdir}" "$tmp" "${git_branch}")"
 
-    tmp="$(git --git-dir="$GIT_DIR" config amb.installdir)" || tmp="$GIT_DIR/amb/install"
+    tmp="$(git --git-dir="$GIT_DIR" config amb.installdir)" || tmp="${amb_projrootdir}/install"
     amb_installdir="$(cond_cat_path "${top_srcdir}" "$tmp")"
     top_installdir="$(cond_cat_path "${top_srcdir}" "$tmp" "$git_branch")"
 

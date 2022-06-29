@@ -99,44 +99,90 @@ Use
 to get and set the config values.
 If a config value is not set,
 .B git amb
-uses a built\-in default, which is not documented. In order to determine
-what the respective directories are, always run the
+uses a built\-in default which may or may not be documented below.
+.SS Directories
+In order to determine which directories git-amb actually uses, always run the
 .B git amb
 commands
 .I builddir
 and
 .I installdir
 instead of reading the config values.
-.SS amb.builddir
-Location of build tree, relative to top checkout (source) dir, or absolute.
-The branch name (or SHA in case of detached HEAD) will be appended to it.
-.SS amb.installdir
-Location of installation, relative to top checkout (source) dir, or absolute.
-The branch name (or SHA in case of detached HEAD) will be appended to it.
-.SS amb.params.autoreconf
+.TP
+.B amb.builddir
+Location of build tree, relative to top checkout (source) dir, or absolute. If not set, use a default based on \fBamb.rootdir\fR or the implementation defined git-amb rootdir default. The branch name (or SHA in case of detached HEAD) will be appended to it.
+.TP
+.B amb.installdir
+Location of installation, relative to top checkout (source) dir, or absolute. If not set, use a default based on \fBamb.rootdir\fR or the implementation defined git-amb rootdir default. The branch name (or SHA in case of detached HEAD) will be appended to it.
+.TP
+.B amb.rootdir
+The directory to put the builddir \fIbuild\fR and the installdir \fIinstall\fR into if \fBamb.builddir\fR and/or \fBamb.installdir\fR have not been set explicitly. If \fBamb.rootdir\fR is not set, a reasonable default value will be used in a place like e.g. the largest user writable RAM filesystem, somewhere in $HOME, or somewhere in the project's top source directory.
+.TP
+.B amb.project-id
+If \fBamb.rootdir\fR has not been configured, \fBamb.project\-id\fR will supply a project ID to use when composing the default value for \fBamb.rootdir\fR. Valid values are
+.RS
+.TP
+.I BASENAME
+to use just the project basename (e.g. \fIndim-git-utils\fR if the project is in \fI/home/usr/src/ndim-git-utils\fR)
+.TP
+.I PATH
+to use a mangled path (e.g. \fI_home_user_src_ndim-git-utils\fR if the project is in \fI/home/user/src/ndim-git-utils\fR)
+.TP
+.I "other"
+to use the string \fIother\fR verbatim, regardless of directory name, path etc.
+.RE
+.SS Parameters To Build Commands
+.TP
+.B amb.params.autoreconf
 A few parameters to append to the
 .I autoreconf
 command line by default. Multiple values are possible. The default is empty.
-.SS amb.params.configure
+.TP
+.B amb.params.configure
 A few parameters to append to the
 .I configure
 command line by default. Multiple values are possible. The default is empty.
-.SS amb.params.make
+.TP
+.B amb.params.make
 A few parameters to append to the
 .I make
 command line by default. Multiple values are possible. The default is empty. Will substitute the string \fB`%NPROC%`\fR with the number of CPUs as printed by \fBnproc(1)\fR, which can be useful for the \fI-j\fR and \fI-l\fR make arguments.
-.SS amb.env.set
+.SS Build Command Environment
+.TP
+.B amb.env.set
 A few environment variables to set.
-.SS amb.env.unset
+.TP
+.B amb.env.unset
 A few environment variables to unset.
-.SS amb.path.exclude
+.TP
+.B amb.path.exclude
 A few path components to exclude from
 .B $PATH
-.SS amb.path.include
+.TP
+.B amb.path.include
 A few path components to add to
 .B PATH
 environment variable.
 .SH EXAMPLES
+Show build and install directories to use (Note: the exact paths might differ depending on a number of factors):
+.nf
+  $ git amb builddir; git amb installdir
+  /home/$USER/src/ndim-git-utils/_build/main
+  /home/$USER/src/ndim-git-utils/_install/main
+.fi
+or (if \fBamb.project-id\fR is \fIPATH\fR)
+.nf
+  $ git amb builddir; git amb installdir
+  /tmp/$USER/git-amb/_home_$USER_src_ndim-git-utils/build/main
+  /tmp/$USER/git-amb/_home_$USER_src_ndim-git-utils/install/main
+.fi
+or (if \fBamb.project-id\fR is \fIBASENAME\fR)
+.nf
+  $ git amb builddir; git amb installdir
+  /tmp/$USER/git-amb/ndim-git-utils/build/main
+  /tmp/$USER/git-amb/ndim-git-utils/install/main
+.fi
+.PP
 Define local build dirs, relative to top source tree dir.
 .nf
   $ git config amb.builddir _build
