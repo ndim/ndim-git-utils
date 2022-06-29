@@ -163,16 +163,16 @@ Define some default parameters for builds of this project.
   $ git config --add amb.params.make 'CFLAGS="-std=c99 -pedantic -Wall -Wextra -Werror"'
 .fi
 .PP
-In the following example, we build two branches and compare their
-resulting installation trees. Please note that
+In the following example, we build two branches \fImain\fR and \fIfoo/bar\fR and compare their respective installation trees. Please note that
 .I "git amb make"
 automatically runs the necessary precursor steps.
 .nf
-  $ git checkout master
+  $ git checkout main
   $ git amb make install
   $ git checkout foo/bar
   $ git amb make dist install
-  $ diff \-ru $(git amb installdir) $(git amb installdir master)
+  $ diff \-ruN $(git amb installdir) $(git amb installdir main)
+  $ diff \-ruN $(git amb installdir) $(git amb installdir main) | cdiff
 .fi
 .PP
 The following example builds a dist tarball with all the checks and we
