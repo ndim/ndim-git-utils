@@ -1,7 +1,0 @@
-# -*- makefile -*-
-
-dist_doc_DATA += LICENSE.GPL LICENSE.MIT
-UPLOAD_FILES  += LICENSE.GPL LICENSE.MIT
-
-dist_doc_DATA += README.md
-UPLOAD_FILES  += README.md
