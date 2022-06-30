@@ -3,6 +3,7 @@
 git\-amb \- git automake build utitilty
 .SH SYNOPSIS
 .B "git amb"
+.RI [ options ]
 .RB "command"
 .RI [ params ]
 .SH DESCRIPTION
@@ -11,6 +12,13 @@ That makes it easy to compare build results from different branches.
 .PP
 This requires an automake based source tree which can build in a
 separate build directory.
+.SH "OPTIONS"
+.TP
+.BR "\-h" " " "\-\-help"
+Show this man page and exit.
+.TP
+.BR "\-V" " " "\-\-version"
+Print \fBgit\-amb\fR program version information and exit.
 .SH "COMMANDS"
 .SS "Build Commands"
 .TP

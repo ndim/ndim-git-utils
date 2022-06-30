@@ -117,9 +117,6 @@ setup_env() {
     IFS="$ifs"
 }
 
-clean_path
-setup_env
-
 # Run command with echo of command line.
 run_cmd() {
 	echo "CMD: $@"
@@ -155,6 +152,9 @@ cond_cat_path() {
 }
 
 amb_init() {
+    clean_path
+    setup_env
+
     if test "x$1" = "x"; then
 	# determine currently checked out branch
 	# use hash if we are on a detached HEAD
@@ -310,9 +310,27 @@ amb_shell() {
 # Abort on error
 set -e
 
-# The great command case
-command="$1"
-if shift; then
+# consume all recognized command line flags
+while test "$#" -gt 0; do
+    case "$1" in
+	-*|--*)
+	    die "$self: Invalid flag: \"$1\""
+	    ;;
+	*)
+	    # not a flag, proceed treating $1 as a command
+	    break
+	    ;;
+    esac
+    shift
+done
+
+# Determine git-amb command
+if test "$#" -eq 0; then # no command
+    amb_init
+    amb_printvars
+else # determine the command and execute it
+    command="$1"
+    shift
     case "$command" in
 	builddir)
 	    amb_init "$@"
@@ -373,12 +391,9 @@ if shift; then
 	    amb_printvars
 	    ;;
 	*)
-	    die "$self: Invalid command \"$command\""
+	    die "$self: Invalid command: \"$command\""
 	    ;;
     esac
-else
-    amb_init
-    amb_printvars
 fi
 
 # End of file.
