@@ -173,6 +173,8 @@ automatically runs the necessary precursor steps.
   $ git amb make dist install
   $ diff \-ruN $(git amb installdir) $(git amb installdir main)
   $ diff \-ruN $(git amb installdir) $(git amb installdir main) | cdiff
+  $ diff -u <(cd $(git amb installdir) && find . -type f | env LC_ALL=C sort) \
+  >    <(cd $(git amb installdir main) && find . -type f | env LC_ALL=C sort)
 .fi
 .PP
 The following example builds a dist tarball with all the checks and we
