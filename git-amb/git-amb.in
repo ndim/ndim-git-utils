@@ -94,7 +94,9 @@ clean_path() {
     fi
     PATH="$path"
     export PATH
-    echo "$self: Using PATH ${PATH}" >&2
+    if "$amb_flag_verbose"; then
+	echo "$self: Using PATH ${PATH}" >&2
+    fi
 }
 
 # Environment setup: (Un)set variables according to config.
@@ -105,13 +107,17 @@ setup_env() {
     local env
     for env in $(git --git-dir="$GIT_DIR" config --get-all amb.env.unset)
     do
-	echo "$self: Unsetting env var $env" >&2
+	if "$amb_flag_verbose"; then
+	    echo "$self: Unsetting env var $env" >&2
+	fi
 	unset "$env"
 	export "$env"
     done
     for env in $(git --git-dir="$GIT_DIR" config --get-all amb.env.set)
     do
-	echo "$self: Setting env var $env" >&2
+	if "$amb_flag_verbose"; then
+	    echo "$self: Setting env var $env" >&2
+	fi
 	export "$env"
     done
     IFS="$ifs"
@@ -310,9 +316,15 @@ amb_shell() {
 # Abort on error
 set -e
 
+# Command line flags
+amb_flag_verbose=false
+
 # consume all recognized command line flags
 while test "$#" -gt 0; do
     case "$1" in
+	-v|--verbose)
+	    amb_flag_verbose=true
+	    ;;
 	-*|--*)
 	    die "$self: Invalid flag: \"$1\""
 	    ;;

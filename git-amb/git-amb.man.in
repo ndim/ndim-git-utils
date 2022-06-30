@@ -17,6 +17,9 @@ separate build directory.
 .BR "\-h" " " "\-\-help"
 Show this man page and exit.
 .TP
+.BR "\-v" " " "\-\-verbose"
+Be verbose about the \fBgit\-amb\fR operation.
+.TP
 .BR "\-V" " " "\-\-version"
 Print \fBgit\-amb\fR program version information and exit.
 .SH "COMMANDS"
