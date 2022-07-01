@@ -1,15 +1,26 @@
 # -*- makefile-automake -*-
 
-gitexec_SCRIPTS += git-amb/git-amb
-EXTRA_DIST      += git-amb/git-amb.in
-UPLOAD_FILES    += git-amb/git-amb
+EXTRA_DIST                         += git-amb/git-amb.in
+gitexec_SCRIPTS                    += git-amb/git-amb
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT += git-amb/git-amb
+UPLOAD_FILES                       += git-amb/git-amb
+CLEANFILES                         += git-amb/git-amb
+git-amb/git-amb: $(srcdir)/git-amb/git-amb.in $(srcdir)/sed-subst.sh Makefile
+	$(srcdir)/sed-subst.sh $(srcdir)/git-amb/git-amb.in git-amb/git-amb $(SED_SUBST)
+	chmod +x git-amb/git-amb
 
-TESTS      += git-amb/test-git-amb-dirs.sh
 EXTRA_DIST += git-amb/test-git-amb-dirs.sh.in
+CLEANFILES += git-amb/test-git-amb-dirs.sh
+TESTS      += git-amb/test-git-amb-dirs.sh
+git-amb/test-git-amb-dirs.sh: $(srcdir)/git-amb/test-git-amb-dirs.sh.in $(srcdir)/sed-subst.sh Makefile
+	$(srcdir)/sed-subst.sh $(srcdir)/git-amb/test-git-amb-dirs.sh.in git-amb/test-git-amb-dirs.sh $(SED_SUBST)
+	chmod +x git-amb/test-git-amb-dirs.sh
 
-man1_MANS  += git-amb/git-amb.man
 EXTRA_DIST += git-amb/git-amb.man.in
+CLEANFILES += git-amb/git-amb.man
+man1_MANS  += git-amb/git-amb.man
+git-amb/git-amb.man: $(srcdir)/git-amb/git-amb.man.in $(srcdir)/sed-subst.sh Makefile
+	$(srcdir)/sed-subst.sh $(srcdir)/git-amb/git-amb.man.in git-amb/git-amb.man $(SED_SUBST)
 
 if HAVE_NDIM_MAN2TXT
 dist_doc_DATA += git-amb/git-amb.txt

@@ -1,6 +1,10 @@
 # -*- makefile-automake -*-
 
-gitexec_SCRIPTS += git-ndim-sh/git-ndim-sh
-EXTRA_DIST      += git-ndim-sh/git-ndim-sh.in
-UPLOAD_FILES    += git-ndim-sh/git-ndim-sh
+EXTRA_DIST                         += git-ndim-sh/git-ndim-sh.in
+gitexec_SCRIPTS                    += git-ndim-sh/git-ndim-sh
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT += git-ndim-sh/git-ndim-sh
+CLEANFILES                         += git-ndim-sh/git-ndim-sh
+UPLOAD_FILES                       += git-ndim-sh/git-ndim-sh
+git-ndim-sh/git-ndim-sh: $(srcdir)/git-ndim-sh/git-ndim-sh.in $(srcdir)/sed-subst.sh Makefile
+	$(srcdir)/sed-subst.sh $(srcdir)/git-ndim-sh/git-ndim-sh.in git-ndim-sh/git-ndim-sh $(SED_SUBST)
+	chmod +x git-ndim-sh/git-ndim-sh

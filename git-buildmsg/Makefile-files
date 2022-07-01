@@ -1,8 +1,12 @@
 # -*- makefile-automake -*-
 
-bin_SCRIPTS  += git-buildmsg/git-buildmsg
 EXTRA_DIST   += git-buildmsg/git-buildmsg.in
+bin_SCRIPTS  += git-buildmsg/git-buildmsg
+CLEANFILES   += git-buildmsg/git-buildmsg
 UPLOAD_FILES += git-buildmsg/git-buildmsg
+git-buildmsg/git-buildmsg: $(srcdir)/git-buildmsg/git-buildmsg.in $(srcdir)/sed-subst.sh Makefile
+	$(srcdir)/sed-subst.sh $(srcdir)/git-buildmsg/git-buildmsg.in git-buildmsg/git-buildmsg $(SED_SUBST)
+	chmod +x git-buildmsg/git-buildmsg
 
 TESTS += git-buildmsg-test
 check_PROGRAMS += git-buildmsg-test
@@ -13,8 +17,7 @@ dist_doc_DATA +=  git-buildmsg/README.git-buildmsg
 BUILT_SOURCES += git-buildmsg/git-buildmsg-test.c
 CLEANFILES    += git-buildmsg/git-buildmsg-test.c
 git-buildmsg/git-buildmsg-test.c: git-buildmsg/git-buildmsg
-	mkdir -p git-buildmsg
-	sh git-buildmsg/git-buildmsg --example --srcdir "$(top_srcdir)" \
+	./git-buildmsg/git-buildmsg --example --srcdir "$(top_srcdir)" \
 		--output git-buildmsg/git-buildmsg-test.c
 
 BUILT_SOURCES += git-buildmsg.stamp

@@ -9,6 +9,7 @@ doc_DATA =
 dist_doc_DATA =
 bin_PROGRAMS =
 check_PROGRAMS =
+noinst_DATA =
 noinst_PROGRAMS =
 bin_SCRIPTS =
 check_SCRIPTS =
@@ -23,6 +24,24 @@ export top_srcdir
 AM_CPPFLAGS = -I${top_builddir}/include
 
 ACLOCAL_AMFLAGS = --install
+
+
+EXTRA_DIST += sed-subst.sh
+export GREP
+export MKDIR_P
+export SED
+
+SED_SUBST  =
+
+SED_SUBST += -e 's|[@]PACKAGE_NAME@|$(PACKAGE_NAME)|g'
+SED_SUBST += -e 's|[@]PACKAGE_TARNAME@|$(PACKAGE_TARNAME)|g'
+SED_SUBST += -e 's|[@]PACKAGE_VERSION@|$(PACKAGE_VERSION)|g'
+
+SED_SUBST += -e 's|[@]gitexecdir@|$(gitexecdir)|g'
+SED_SUBST += -e 's|[@]mandir@|$(mandir)|g'
+SED_SUBST += -e 's|[@]prefix@|$(prefix)|g'
+
+SED_SUBST += -e 's|[@]top_srcdir@|$(top_srcdir)|g'
 
 include build-helpers/package-version.mk
 
@@ -42,16 +61,11 @@ if HAVE_NDIM_MAN2TXT
 endif
 
 
-all-local: INSTALL
-
-CLEANFILES += INSTALL
-EXTRA_DIST += INSTALL.in
-INSTALL: $(top_srcdir)/INSTALL.in Makefile
-	$(SED) \
-		-e 's,[@]mandir@,$(mandir),g' \
-		-e 's,[@]gitexecdir@,$(gitexecdir),g' \
-		-e 's,[@]prefix@,$(prefix),g' \
-		$(top_srcdir)/INSTALL.in > INSTALL
+EXTRA_DIST  += INSTALL.in
+noinst_DATA += INSTALL
+CLEANFILES  += INSTALL
+INSTALL: $(srcdir)/INSTALL.in $(srcdir)/sed-subst.sh Makefile
+	$(srcdir)/sed-subst.sh $(srcdir)/INSTALL.in INSTALL $(SED_SUBST)
 
 dist-hook: dist-hook-rm-INSTALL-file
 dist-hook-rm-INSTALL-file:

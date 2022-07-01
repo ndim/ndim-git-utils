@@ -8,6 +8,7 @@ CLEANFILES += $(PACKAGE_TARNAME).spec
 EXTRA_DIST += $(PACKAGE_TARNAME).spec
 EXTRA_DIST += package.spec.in
 $(PACKAGE_TARNAME).spec: $(top_srcdir)/package.spec.in Makefile
+	set -e; \
 	$(SED) \
 		-e 's,[@]distdir@,$(distdir),g' \
 		-e 's,[@]PACKAGE_NAME@,$(PACKAGE_NAME),g' \
@@ -15,7 +16,14 @@ $(PACKAGE_TARNAME).spec: $(top_srcdir)/package.spec.in Makefile
 		-e 's,[@]PACKAGE_URL@,$(PACKAGE_URL),g' \
 		-e "s,[@]RPM_VERSION@,$$(echo "$(PACKAGE_VERSION)" | $(SED) s/-.*//),g" \
 		-e "s,[@]RPM_RELEASE@,$$(echo "$(PACKAGE_VERSION)" | $(SED) s/.*-/git/),g" \
-		$(top_srcdir)/package.spec.in > $(PACKAGE_TARNAME).spec
+		$(top_srcdir)/package.spec.in > $(PACKAGE_TARNAME).spec.tmp.$$$$; \
+	if $(GREP) -n '@[A-Za-z0-9_]\{1,\}@' "$(PACKAGE_TARNAME).spec.tmp.$$$$"; then \
+	  echo "Error: Unsubstituted strings in input file: $(top_srcdir)/package.spec.in"; \
+	  rm -f "$(PACKAGE_TARNAME).spec.tmp.$$$$"; \
+	  exit 1; \
+	else \
+	  mv -f "$(PACKAGE_TARNAME).spec.tmp.$$$$" "$(PACKAGE_TARNAME).spec"; \
+	fi
 
 if DO_RPMBUILD
 

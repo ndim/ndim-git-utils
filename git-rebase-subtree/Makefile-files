@@ -1,13 +1,19 @@
 # -*- makefile-automake -*-
 
+EXTRA_DIST                         += git-rebase-subtree/git-rebase-subtree.in
+gitexec_SCRIPTS                    += git-rebase-subtree/git-rebase-subtree
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT += git-rebase-subtree/git-rebase-subtree
+CLEANFILES                         += git-rebase-subtree/git-rebase-subtree
+UPLOAD_FILES                       += git-rebase-subtree/git-rebase-subtree
+git-rebase-subtree/git-rebase-subtree: $(srcdir)/git-rebase-subtree/git-rebase-subtree.in $(srcdir)/sed-subst.sh Makefile
+	$(srcdir)/sed-subst.sh $(srcdir)/git-rebase-subtree/git-rebase-subtree.in git-rebase-subtree/git-rebase-subtree $(SED_SUBST)
+	chmod +x git-rebase-subtree/git-rebase-subtree
 
-gitexec_SCRIPTS  += git-rebase-subtree/git-rebase-subtree
-EXTRA_DIST       += git-rebase-subtree/git-rebase-subtree.in
-UPLOAD_FILES     += git-rebase-subtree/git-rebase-subtree
-
-man1_MANS  += git-rebase-subtree/git-rebase-subtree.man
 EXTRA_DIST += git-rebase-subtree/git-rebase-subtree.man.in
+man1_MANS  += git-rebase-subtree/git-rebase-subtree.man
+CLEANFILES += git-rebase-subtree/git-rebase-subtree.man
+git-rebase-subtree/git-rebase-subtree.man: $(srcdir)/git-rebase-subtree/git-rebase-subtree.man.in $(srcdir)/sed-subst.sh Makefile
+	$(srcdir)/sed-subst.sh $(srcdir)/git-rebase-subtree/git-rebase-subtree.man.in git-rebase-subtree/git-rebase-subtree.man $(SED_SUBST)
 
 if HAVE_NDIM_MAN2TXT
 dist_doc_DATA += git-rebase-subtree/git-rebase-subtree.txt

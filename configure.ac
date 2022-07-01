@@ -25,7 +25,9 @@ AM_INIT_AUTOMAKE([
 
 ########################################################################
 
+AC_PROG_GREP
 AC_PROG_SED
+
 AC_PROG_CC
 
 m4_pattern_forbid([NDIM_REQUIRE_POSIX_SH])dnl
@@ -50,19 +52,10 @@ NDIM_BUILD_RPMS()dnl
 
 ########################################################################
 
-AC_CONFIG_FILES([GNUmakefile])
-AC_CONFIG_FILES([Makefile])
-AC_CONFIG_FILES([git-amb/git-amb.man])
-AC_CONFIG_FILES([git-amb/git-amb],
-                [chmod +x git-amb/git-amb])
-AC_CONFIG_FILES([git-amb/test-git-amb-dirs.sh],
-                [chmod +x git-amb/test-git-amb-dirs.sh])
-AC_CONFIG_FILES([git-buildmsg/git-buildmsg],
-                [chmod +x git-buildmsg/git-buildmsg])
-AC_CONFIG_FILES([git-rebase-subtree/git-rebase-subtree],
-                [chmod +x git-rebase-subtree/git-rebase-subtree])
-AC_CONFIG_FILES([git-rebase-subtree/git-rebase-subtree.man])
-AC_CONFIG_FILES([git-ndim-sh/git-ndim-sh])
+AC_CONFIG_FILES([
+  GNUmakefile
+  Makefile
+])
 AC_OUTPUT
 
 ########################################################################
