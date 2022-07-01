@@ -1,4 +1,5 @@
-# -*- makefile -*-
+# -*- makefile-automake -*-
+
 gitexec_SCRIPTS += git-amb/git-amb
 EXTRA_DIST      += git-amb/git-amb.in
 UPLOAD_FILES    += git-amb/git-amb

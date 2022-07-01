@@ -1,4 +1,4 @@
-# -*- makefile -*-
+# -*- makefile-automake -*-
 
 dist_doc_DATA += LICENSE.GPL LICENSE.MIT
 UPLOAD_FILES  += LICENSE.GPL LICENSE.MIT

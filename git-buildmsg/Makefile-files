@@ -1,4 +1,5 @@
-# -*- makefile -*-
+# -*- makefile-automake -*-
+
 bin_SCRIPTS  += git-buildmsg/git-buildmsg
 EXTRA_DIST   += git-buildmsg/git-buildmsg.in
 UPLOAD_FILES += git-buildmsg/git-buildmsg

@@ -1,4 +1,5 @@
-# -*- makefile -*-
+# -*- makefile-automake -*-
+
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT += git-rebase-subtree/git-rebase-subtree
 
 gitexec_SCRIPTS  += git-rebase-subtree/git-rebase-subtree
