@@ -244,7 +244,12 @@ amb_init() {
 amb_autoreconf() {
     echo "$self: Running autoreconf for branch ${git_branch}"
     IFS="$LF"
-    run_cmd autoreconf -vis "$@" $(git --git-dir="$GIT_DIR" config --get-all amb.params.autoreconf) "$top_srcdir"
+    if git --git-dir="$GIT_DIR" config --get-all amb.params.autoreconf > /dev/null
+    then
+        run_cmd autoreconf "$@" $(git --git-dir="$GIT_DIR" config --get-all amb.params.autoreconf) "$top_srcdir"
+    else
+        run_cmd autoreconf -vis "$@" "$top_srcdir"
+    fi
     IFS="$ifs"
 }
 
