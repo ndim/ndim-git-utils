@@ -1,4 +1,4 @@
-.TH GIT-AMB 1 "@PACKAGE_TARNAME@ @PACKAGE_VERSION@" "2016\-07\-07" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
+.TH GIT-AMB 1 "@PACKAGE_TARNAME@ @PACKAGE_VERSION@" "2022\-10\-03" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
 .SH NAME
 git\-amb \- git automake build utitilty
 .SH SYNOPSIS
@@ -72,6 +72,9 @@ branches.
 .TP
 .B "git amb irun <shell_command...>"
 Run the given shell command in ${top_installdir}.
+.TP
+.B "git amb run <shell_command...>"
+Run the given shell command in ${top_builddir}.
 .TP
 .B "git amb sh [sh_params...]"
 Start shell in ${top_builddir}.
