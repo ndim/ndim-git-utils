@@ -76,7 +76,7 @@ jobs:
         run: set -x; ${ci_MAKE} CPPFLAGS="${OS_SPECIFIC_CPPFLAGS}"
 
       - name: 'make check'
-        run: set -x; ${ci_MAKE} CPPFLAGS="${OS_SPECIFIC_CPPFLAGS}" check
+        run: set -x; ${ci_MAKE} CPPFLAGS="${OS_SPECIFIC_CPPFLAGS}" check; s="$?"; if test "x$s" != x0; then cat test-suite.log; exit "$s"; fi
 
       - name: 'make install'
         run: set -x; ${ci_MAKE} CPPFLAGS="${OS_SPECIFIC_CPPFLAGS}" install
