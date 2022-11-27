@@ -76,6 +76,8 @@ jobs:
         run: set -x; ${ci_MAKE} CPPFLAGS="${OS_SPECIFIC_CPPFLAGS}"
 
       - name: 'make check'
+        # FIXME: macOS grep has issues with \{,50\}
+        if: runner.os != 'macOS'
         run: set -x; if ${ci_MAKE} CPPFLAGS="${OS_SPECIFIC_CPPFLAGS}" check; then :; else s="$?"; cat test-suite.log; exit "$s"; fi
 
       - name: 'make install'
