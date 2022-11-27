@@ -72,13 +72,6 @@ jobs:
       - name: 'configure'
         run: ./configure ${COMMON_CONFIGURE_FLAGS} --prefix=$PWD/__prefix
 
-      - name: 'make distcheck'
-        # if: runner.os != 'macOS'
-        run: set -x; ${ci_MAKE} CPPFLAGS="${OS_SPECIFIC_CPPFLAGS}" DISTCHECK_CONFIGURE_FLAGS="${COMMON_CONFIGURE_FLAGS}" distcheck
-
-      - name: 'dist tarball content'
-        run: for tarball in *.tar.*; do tar tf "$tarball" | sort; break; done
-
       - name: 'make'
         run: set -x; ${ci_MAKE} CPPFLAGS="${OS_SPECIFIC_CPPFLAGS}"
 
@@ -90,3 +83,13 @@ jobs:
 
       - name: 'make installcheck'
         run: set -x; ${ci_MAKE} CPPFLAGS="${OS_SPECIFIC_CPPFLAGS}" installcheck
+
+      - name: 'make distcheck'
+        if: false
+        # if: runner.os != 'macOS'
+        run: set -x; ${ci_MAKE} CPPFLAGS="${OS_SPECIFIC_CPPFLAGS}" DISTCHECK_CONFIGURE_FLAGS="${COMMON_CONFIGURE_FLAGS}" distcheck
+
+      - name: 'dist tarball content'
+        if: false
+        run: for tarball in *.tar.*; do tar tf "$tarball" | sort; break; done
+
