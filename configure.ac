@@ -1,6 +1,6 @@
 ########################################################################
 
-AC_PREREQ([2.69])
+AC_PREREQ([2.71])
 AC_INIT([ndims git utilities],
 	[m4_esyscmd([./build-helpers/package-version . version-stamp])],
 	[https://github.com/ndim/ndim-git-utils/issues],
@@ -14,7 +14,7 @@ AM_INIT_AUTOMAKE([
   -Wall
   -Werror
   foreign
-  1.14.1
+  1.16.4
   no-dist-gzip
   dist-xz
   subdir-objects
