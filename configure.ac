@@ -1,8 +1,10 @@
 ########################################################################
 
 AC_PREREQ([2.71])
+m4_define([ngu_version],
+          m4_esyscmd([./build-helpers/package-version . version-stamp]))
 AC_INIT([ndims git utilities],
-	[m4_esyscmd([./build-helpers/package-version . version-stamp])],
+	[m4_defn([ngu_version])],
 	[https://github.com/ndim/ndim-git-utils/issues],
 	[ndim-git-utils],
 	[https://github.com/ndim/ndim-git-utils/])
