@@ -7,7 +7,7 @@ AC_INIT([ndims git utilities],
 	[ndim-git-utils],
 	[https://github.com/ndim/ndim-git-utils/])
 AC_CONFIG_AUX_DIR([auto-aux])
-AC_CONFIG_HEADER([include/config.h])
+AC_CONFIG_HEADERS([include/config.h])
 AC_CONFIG_SRCDIR([git-amb/git-amb.in])
 AC_CONFIG_MACRO_DIRS([auto-m4 m4])
 AM_INIT_AUTOMAKE([
